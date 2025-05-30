@@ -1,0 +1,46 @@
+$ laravel new apps
+- None
+- Pest
+- SQLite
+- yes [ npm install npm run build ]
+
+
+$ composer require livewire/livewire
+$ npm install flowbite 
+
+php artisan make:component layouts/base/main --view
+php artisan make:component layouts/base/scriptjs --view
+php artisan make:component layouts/auth/wrapper --view
+php artisan make:component layouts/app/wrapper --view
+php artisan make:component layouts/home/wrapper --view
+php artisan make:component input/text --view
+php artisan make:component button/btn --view
+php artisan make:component navigasi/sidebar --view
+php artisan make:component navigasi/navbar --view
+php artisan make:component navigasi/navlink --view
+php artisan make:component icon/dashboard --view
+php artisan make:component icon/room --view
+php artisan make:component icon/products --view
+
+php artisan make:livewire auth/login
+php artisan make:livewire auth/register
+php artisan make:livewire auth/otp
+php artisan make:livewire auth/forgot-password
+php artisan make:livewire auth/reset-password
+php artisan make:livewire dashboard/dashboard-page
+php artisan make:livewire room/room-page
+php artisan make:livewire products/products-page
+php artisan make:livewire transaction/transaction-page
+php artisan make:livewire account/account-page
+php artisan make:livewire profile/profile-page
+php artisan make:livewire home/home-page
+
+php artisan make:model UserData -m
+php artisan make:model AuctioneerData -m
+php artisan make:model AuctioneerLog -m
+php artisan make:model Product -m
+php artisan make:model ImageProduct -m
+php artisan make:model AuctionRoom -m
+php artisan make:model AuctionParticipant -m
+php artisan make:model Bid -m
+php artisan make:model AuctionTransaction -m
