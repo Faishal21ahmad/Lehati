@@ -13,7 +13,16 @@ return new class extends Migration
     {
         Schema::create('auctioneer_logs', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('auctioneer_id')->constrained('auctioneer_data');
+            $table->foreignId('action_by')->constrained('users');
+            $table->enum('status', ['processing', 'approved', 'rejected', 'revoked']);
+            $table->text('notes')->nullable();
+            $table->dateTime('reviewed_at');
             $table->timestamps();
+
+            $table->index('auctioneer_id');
+            $table->index('action_by');
+            $table->index('status');
         });
     }
 

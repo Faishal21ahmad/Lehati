@@ -13,7 +13,15 @@ return new class extends Migration
     {
         Schema::create('auctioneer_data', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained('users');
+            $table->string('business_name', 255);
+            $table->string('business_address', 255);
+            $table->string('NPWP', 25);
+            $table->enum('status', ['request', 'processing', 'approved', 'rejected', 'revoked']);
             $table->timestamps();
+
+            $table->index('user_id');
+            $table->index('status');
         });
     }
 

@@ -13,7 +13,19 @@ return new class extends Migration
     {
         Schema::create('auction_transactions', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('bid_id')->constrained('bids');
+            $table->foreignId('user_id')->constrained('users');
+            $table->enum('status', ['unpaid', 'paid', 'failed']);
+            $table->string('payment_proof', 100)->nullable();
+            $table->text('notes')->nullable();
+            $table->decimal('amount_final', 15, 2);
+            $table->timestamp('payment_verified_at')->nullable();
             $table->timestamps();
+
+            $table->index('user_id');
+            $table->index('bid_id');
+            $table->index('status');
+            $table->index('created_at');
         });
     }
 

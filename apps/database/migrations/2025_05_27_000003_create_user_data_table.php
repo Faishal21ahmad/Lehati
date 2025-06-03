@@ -13,7 +13,14 @@ return new class extends Migration
     {
         Schema::create('user_data', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained('users');
+            $table->string('phone', 20)->nullable();
+            $table->string('address', 100)->nullable();
+            $table->string('nik')->unique();
+            $table->enum('gender', ['male', 'female']);
             $table->timestamps();
+
+            $table->index('user_id');
         });
     }
 

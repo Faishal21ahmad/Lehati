@@ -13,7 +13,12 @@ return new class extends Migration
     {
         Schema::create('image_products', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('product_id')->constrained('products');
+            $table->string('image_path', 100);
             $table->timestamps();
+
+            $table->index('product_id');
+            $table->index('created_at');
         });
     }
 

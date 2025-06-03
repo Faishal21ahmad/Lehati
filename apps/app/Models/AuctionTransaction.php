@@ -3,8 +3,33 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class AuctionTransaction extends Model
 {
-    //
+    use HasFactory;
+
+    protected $fillable = [
+        'bid_id',
+        'user_id',
+        'status',
+        'payment_proof',
+        'notes',
+        'amount_final',
+        'payment_verified_at'
+    ];
+
+    protected $casts = [
+        'payment_verified_at' => 'datetime',
+    ];
+
+    public function bid()
+    {
+        return $this->belongsTo(Bid::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
