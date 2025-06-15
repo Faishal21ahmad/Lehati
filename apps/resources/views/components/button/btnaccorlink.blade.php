@@ -2,11 +2,12 @@
     'href' => null,
     'color' => 'blue', // blue, red, green, gray, yellow
     'fullWidth' => false,
+    'padding' => 'px-4 py-2'
 ])
 
 @php
     // Base classes
-    $baseClasses = 'focus:outline-none focus:ring-4 font-medium rounded-lg text-sm px-4 py-2 text-center transition-colors hover:cursor-pointer';
+    $baseClasses = 'focus:outline-none focus:ring-4 font-medium rounded-lg text-sm  text-center transition-colors hover:cursor-pointer';
     
     // Color variants
     $colorClasses = [
@@ -21,9 +22,8 @@
     $widthClass = $fullWidth ? 'w-full' : '';
 @endphp
 
-<a  wire:navigate
-    href="{{ $href ?? '#' }}"
-    {{ $attributes->merge(['class' => "$baseClasses $colorClasses $widthClass "]) }}
->
-    {{ $slot }}
+<a href="{{ $href ?? '#' }}" >
+    <button type="button" {{ $attributes->merge(['type' => 'button', 'class' => "$baseClasses $colorClasses $widthClass $padding"]) }}>
+        {{ $slot }}
+    </button>
 </a>

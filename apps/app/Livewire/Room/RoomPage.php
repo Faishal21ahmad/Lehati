@@ -5,7 +5,7 @@ namespace App\Livewire\Room;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 
-#[Layout('components.layouts.app.wrapper')]
+#[Layout('components.layouts.app', ['title' => "Room"])]
 class RoomPage extends Component
 {
     public function render()

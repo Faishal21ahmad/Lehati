@@ -1,3 +1,3 @@
-<x-layouts.home.wrapper :title="__('Home')">
+<div class="">
     
-</x-layouts.home.wrapper>
+</div>

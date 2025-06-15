@@ -44,3 +44,26 @@ php artisan make:model AuctionRoom -m
 php artisan make:model AuctionParticipant -m
 php artisan make:model Bid -m
 php artisan make:model AuctionTransaction -m
+php artisan make:model Category -m
+
+php artisan make:factory UserData
+php artisan make:factory AuctioneerData
+php artisan make:factory AuctioneerLog
+php artisan make:factory Product
+php artisan make:factory ImageProduct
+php artisan make:factory AuctionRoom
+php artisan make:factory AuctionParticipant
+php artisan make:factory Bid
+php artisan make:factory AuctionTransaction
+php artisan make:factory Category
+
+php artisan make:seeder UserDataSeeder
+php artisan make:seeder AuctioneerDataSeeder
+php artisan make:seeder AuctioneerLogSeeder
+php artisan make:seeder ProductSeeder
+php artisan make:seeder ImageProductSeeder
+php artisan make:seeder AuctionRoomSeeder
+php artisan make:seeder AuctionParticipantSeeder
+php artisan make:seeder BidSeeder
+php artisan make:seeder AuctionTransactionSeeder
+php artisan make:seeder CategorySeeder

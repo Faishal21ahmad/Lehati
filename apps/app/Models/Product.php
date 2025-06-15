@@ -11,6 +11,7 @@ class Product extends Model
 
     protected $fillable = [
         'auctioneer_id',
+        'category_id',
         'product_name',
         'description',
         'quantity',
@@ -21,6 +22,10 @@ class Product extends Model
     public function auctioneer()
     {
         return $this->belongsTo(AuctioneerData::class);
+    }
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 
     public function images()

@@ -63,7 +63,6 @@ class User extends Authenticatable
             ->implode('');
     }
 
-
     public function userData()
     {
         return $this->hasOne(UserData::class);

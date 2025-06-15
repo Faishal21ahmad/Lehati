@@ -18,20 +18,31 @@ enum Role: string
     {
         return match ($this) {
             self::administrator => [
-                'manage_users',
+                'administrator',
+                'manage_account',
+                'create_admin',
+                'create_',
                 'manage_lelang',
-                'approve_lelang',
-                'full_access',
+                'manage_room',
+                'manage_transaction',
+                'manage_category',
+                'manage_auctioneer',
+                'manage_bidder',
+                'room_participant',
+                'room'
             ],
             self::admin => [
+                'admin',
                 'manage_lelang',
                 'approve_lelang',
             ],
             self::auctioneer => [
+                'auctioneer',
                 'create_lelang',
                 'edit_lelang',
             ],
             self::bidder => [
+                'bidder',
                 'ikut_lelang',
             ],
         };

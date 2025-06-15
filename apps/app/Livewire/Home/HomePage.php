@@ -5,7 +5,7 @@ namespace App\Livewire\Home;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 
-#[Layout('components.layouts.home.wrapper')]
+#[Layout('components.layouts.home', ['title' => "Home"])]
 class HomePage extends Component
 {
     public function render()

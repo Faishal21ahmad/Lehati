@@ -6,7 +6,7 @@
 ])
 
     <a 
-        wire:navigate.hover
+        wire:navigate
         href="{{ $href ?? '#' }}"
         {{-- @click.prevent="window.Livewire.navigate('{{ $link }}')" --}}
         type="button"
@@ -16,7 +16,9 @@
             'text-white bg-blue-600 dark:bg-blue-700' => $active
         ]) }}
     >
-        @if($icon)
+        @if($icon === 'none')
+            <span class=""></span>
+        @elseif($icon)
             <x-dynamic-component 
                 :component="'icon.' . $icon" 
                 @class([
