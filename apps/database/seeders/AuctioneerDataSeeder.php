@@ -17,9 +17,12 @@ class AuctioneerDataSeeder extends Seeder
     {
         $auctioneers = User::where('role', 'auctioneer')->get();
 
+        $i = 0;
+
         foreach ($auctioneers as $auctioneer) {
             $auctioneerData = AuctioneerData::factory()->create([
                 'user_id' => $auctioneer->id,
+                'business_name' => 'Pak Tani' . $i++,
                 'status' => 'approved'
             ]);
 

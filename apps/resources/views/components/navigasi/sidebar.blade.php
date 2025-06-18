@@ -51,7 +51,7 @@ $user = Auth::user();
 
         <!-- Navigasi -->
         <div class="flex-1 overflow-y-auto px-3 py-4 space-y-2 font-medium">
-            @canany(["bidder","administrator"])
+            @canany(["bidder","auctioneer","administrator"])
                 <div class="border border-gray-300 dark:border-gray-600 rounded-full"></div>
                 <span class="text-gray-400 text-sm py-5 px-2">Bidder</span>
                 <x-navigasi.navlink href="{{ route('dashboard') }}" :icon="'diagram'" :active="request()->routeIs('dashboard')">Dashboard</x-navigasi.navlink>

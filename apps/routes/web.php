@@ -21,9 +21,11 @@ use App\Livewire\Products\ProductDetail;
 use App\Livewire\Profile\DataUser;
 use App\Livewire\Profile\Password;
 use App\Livewire\Room\ManageRoomPage;
+use App\Livewire\Room\Room;
 use App\Livewire\Transaction\TransactionPage;
 
 Route::get('/', HomePage::class)->name('home');
+Route::get('room/{coderoom}', Room::class)->name('room.detail');
 Route::middleware('guest')->group(function () {
     Route::get('login', Login::class)->name('login');
     Route::post('alogin', Login::class)->name('alogin');
@@ -56,7 +58,6 @@ Route::middleware('auth')->group(function () {
     Route::get('products', ProductsPage::class)->name('products');
     Route::get('products/create', ProductAdd::class)->name('product.create');
     Route::get('products/detail/{id}', ProductDetail::class)->name('product.detail');
-
 });
 
 

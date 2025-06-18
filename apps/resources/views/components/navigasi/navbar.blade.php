@@ -1,10 +1,18 @@
 <nav class="bg-gray-100 dark:bg-gray-800 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
-    <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+    <div class="max-w-screen-2xl flex flex-wrap items-center justify-between mx-auto p-4">
         <x-button.logoapp href="{{ route('home') }}" icon="genjie" title="Lehati" />
 
         <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse gap-2">
-            <x-button.btnaccorlink href="{{ route('login') }}" color="blue" class="">Login</x-button.btnaccorlink>
-            <x-button.btnaccorlink href="{{ route('dashboard') }}" color="blue" class="">dashboard</x-button.btnaccorlink>
+        @if (Route::has('login'))
+            @auth
+                <x-button.btnaccorlink href="{{ route('dashboard') }}" color="blue" class="">dashboard</x-button.btnaccorlink>
+            @else
+                <x-button.btnaccorlink href="{{ route('login') }}" color="blue" class="">Login</x-button.btnaccorlink>
+                @if (Route::has('register'))
+                    <x-button.btnaccorlink href="{{ route('register') }}" color="blue" class="">Register</x-button.btnaccorlink>
+                @endif
+            @endauth
+        @endif
         </div>
         <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
             <button type="button" data-collapse-toggle="navbar-search" aria-controls="navbar-search" aria-expanded="false" class="md:hidden text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 me-1">
