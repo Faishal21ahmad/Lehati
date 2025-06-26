@@ -10,22 +10,17 @@ class Product extends Model
     use HasFactory;
 
     protected $fillable = [
-        'auctioneer_id',
-        'category_id',
+        'user_id',
         'product_name',
         'description',
         'quantity',
-        'unit',
+        'units',
         'status'
     ];
 
-    public function auctioneer()
+    public function user()
     {
-        return $this->belongsTo(AuctioneerData::class);
-    }
-    public function category()
-    {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(User::class);
     }
 
     public function images()
@@ -33,8 +28,8 @@ class Product extends Model
         return $this->hasMany(ImageProduct::class);
     }
 
-    public function auctionRooms()
+    public function Rooms()
     {
-        return $this->hasMany(AuctionRoom::class);
+        return $this->hasMany(Room::class);
     }
 }

@@ -11,7 +11,7 @@ class Bid extends Model
 
     protected $fillable = [
         'participan_id',
-        'auction_room_id',
+        'room_id',
         'amount',
         'is_winner'
     ];
@@ -22,16 +22,16 @@ class Bid extends Model
 
     public function participant()
     {
-        return $this->belongsTo(AuctionParticipant::class, 'participan_id');
+        return $this->belongsTo(Participant::class, 'participan_id');
     }
 
-    public function auctionRoom()
+    public function Room()
     {
-        return $this->belongsTo(AuctionRoom::class);
+        return $this->belongsTo(Room::class);
     }
 
     public function transaction()
     {
-        return $this->hasOne(AuctionTransaction::class, 'bid_id');
+        return $this->hasOne(Transaction::class, 'bid_id');
     }
 }

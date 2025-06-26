@@ -16,24 +16,8 @@ class UserSeeder extends Seeder
         User::factory()->create([
             'name' => 'Galuh 1',
             'email' => 'galuhmiftakhurahman@students.amikom.ac.id',
-            'role' => 'administrator',
+            'role' => 'admin',
         ]);
-
-        for ($i = 1; $i <= 2; $i++) {
-            User::factory()->create([
-                'name' => 'galuhAdmin' . $i,
-                'email' => 'galuhAdmin' . $i . '@example.com',
-                'role' => 'admin',
-            ]);
-        }
-
-        for ($i = 1; $i <= 4; $i++) {
-            User::factory()->create([
-                'name' => 'galuh' . $i,
-                'email' => 'galuh' . $i . '@example.com',
-                'role' => 'auctioneer',
-            ]);
-        }
 
         for ($i = 1; $i <= 20; $i++) {
             User::factory()->create([

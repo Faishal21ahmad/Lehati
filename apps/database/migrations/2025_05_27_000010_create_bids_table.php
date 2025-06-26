@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('bids', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('participan_id')->constrained('auction_participants');
-            $table->foreignId('auction_room_id')->constrained('auction_rooms');
+            $table->foreignId('participan_id')->constrained('participants');
+            $table->foreignId('room_id')->constrained('rooms');
             $table->decimal('amount', 15, 2);
             $table->boolean('is_winner')->default(false);
             $table->timestamps();
 
-            $table->index('auction_room_id');
+            $table->index('room_id');
             $table->index('participan_id');
             $table->index('is_winner');
         });

@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Room;
 
-use App\Models\AuctionRoom;
+use App\Models\Room as Rooms;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 use SebastianBergmann\CodeUnit\FunctionUnit;
@@ -13,7 +13,7 @@ class Room extends Component
     public $room;
     public function mount($coderoom)
     {
-        $this->room = AuctionRoom::where('room_code', $coderoom)->first();
+        $this->room = Rooms::where('room_code', $coderoom)->first();
     }
 
     public function render()

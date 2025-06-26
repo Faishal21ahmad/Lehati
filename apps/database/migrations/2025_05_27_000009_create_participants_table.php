@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('auction_participants', function (Blueprint $table) {
+        Schema::create('participants', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('auction_room_id')->constrained('auction_rooms');
-            $table->enum('status', ['joined', 'rejected']);
+            $table->foreignId('room_id')->constrained('rooms');
+            $table->enum('status', ['joined', 'rejected','left'])->default('joined');
             $table->timestamps();
 
-            $table->index('auction_room_id');
+            $table->index('room_id');
             $table->index('user_id');
             $table->index('status');
         });
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('auction_participants');
+        Schema::dropIfExists('participants');
     }
 };

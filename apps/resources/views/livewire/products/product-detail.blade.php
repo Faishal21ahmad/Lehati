@@ -8,20 +8,12 @@
     <div class="lg:w-1/2">
         <form wire:submit="updateProduct">
             <x-input.input type="text" id="name_product" name="name_product" label="Name Product" placeholder="Cabe" required error="{{ $errors->first('name_product') }}"/>
-            
-            <x-input.select 
-                name="category" 
-                label="Category" 
-                placeholder="Pilih Category" 
-                value="{{ $category }}"
-                :options="$categories"
-                error="{{ $errors->first('category') }}"
-            />
 
             <div class="flex gap-4 w-full">
                 <x-input.input type="number" id="quantity" name="quantity" label="Quantity" placeholder="1" required error="{{ $errors->first('quantity') }}"/>
                 <x-input.select 
-                    name="unit" 
+                    name="units"
+                    id="units" 
                     label="Unit"
                     placeholder="Pilih unit" 
                     :options="[
@@ -30,9 +22,10 @@
                         ['value' => 'ons', 'label' => 'Ons'],
                         ['value' => 'ikat', 'label' => 'Ikat']
                     ]" 
-                    error="{{ $errors->first('unit') }}"
+                    error="{{ $errors->first('units') }}"
                 />
             </div>
+            <p>{{ $errors->first('units') }}</p>
             <x-input.textarea 
                 name="description" 
                 id="description" 
@@ -51,7 +44,7 @@
                 error="{{ $errors->first('fileproduct.*') }}"
             />
             <x-button.btn type="submit" class="">Submit</x-button.btn>
-            <x-button.btnaccorlink type="button" href="{{ Route('products',) }}" color="yellow">Cencel</x-button.btnaccorlink>
+            <x-button.btnaccorlink type="button" href="{{ Route('products') }}" color="yellow">Cencel</x-button.btnaccorlink>
         </form>
     </div>
 </div>

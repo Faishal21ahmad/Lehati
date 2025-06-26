@@ -13,17 +13,15 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('auctioneer_id')->constrained('auctioneer_data');
-            $table->foreignId('category_id')->constrained('categories');
+            $table->foreignId('user_id')->constrained('users');
             $table->string('product_name', 40);
             $table->string('description', 200);
             $table->integer('quantity');
-            $table->enum('unit', ['kg', 'ton', 'ons', 'ikat']);
+            $table->enum('units', ['kg', 'ton', 'ons', 'ikat']);
             $table->enum('status', ['available', 'sold']);
             $table->timestamps();
 
-            $table->index('auctioneer_id');
-            $table->index('category_id');
+            $table->index('user_id');
             $table->index('status');
         });
     }

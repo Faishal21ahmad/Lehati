@@ -34,10 +34,9 @@ class ProductFactory extends Factory
                 'Terong',
                 'Kacang Panjang'
             ]),
-            'category_id' => $this->faker->numberBetween(1, 2), // Assuming you have 5 categories
             'description' => $this->faker->sentence,
             'quantity' => $this->faker->numberBetween(1, 100),
-            'unit' => $this->faker->randomElement(['kg', 'ton', 'ons', 'ikat']),
+            'units' => $this->faker->randomElement(['kg', 'ton', 'ons', 'ikat']),
             'status' => $this->faker->randomElement(['available', 'sold']),
             'created_at' => now(),
             'updated_at' => now(),

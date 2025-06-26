@@ -11,14 +11,11 @@ use Illuminate\Support\Facades\Auth;
 class ProductsPage extends Component
 {
     public $products = [];
-    public $auctioneerData;
 
     public function mount()
     {
         $user = Auth::user();
-        $this->products = Product::where('auctioneer_id', $user->auctioneerData->id)
-            ->latest()
-            ->get();
+        $this->products = Product::all();
     }
 
     public function render()

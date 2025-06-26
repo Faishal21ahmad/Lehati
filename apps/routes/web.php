@@ -36,19 +36,15 @@ Route::middleware('guest')->group(function () {
     Route::get('otp', Otp::class)->name('otp');
     Route::get('resend-otp', Otp::class)->name('resend-otp');
 });
+
 Route::middleware('auth')->group(function () {
     Route::get('dashboard', DashboardPage::class)->name('dashboard');
-
     Route::get('room', RoomPage::class)->name('room');
     Route::get('transaction', TransactionPage::class)->name('transaction');
     Route::get('account', AccountPage::class)->name('account');
-    Route::get('userup', UserupPage::class)->name('userup');
-    Route::get('category', CategoryPage::class)->name('category');
-
     Route::get('profile/profile', ProfilePage::class)->name('profile');
     Route::get('profile/userdata', DataUser::class)->name('profile.data');
     Route::get('profile/password', Password::class)->name('profile.password');
-
     Route::get('logout', Logout::class)->name('logout');
 });
 
@@ -59,13 +55,3 @@ Route::middleware('auth')->group(function () {
     Route::get('products/create', ProductAdd::class)->name('product.create');
     Route::get('products/detail/{id}', ProductDetail::class)->name('product.detail');
 });
-
-
-
-
-
-
-
-// Route::post('logout', App\Livewire\Actions\Logout::class)
-//     ->name('logout');
-// Route::get('resend-otp');

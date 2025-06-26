@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\Bid;
-use App\Models\AuctionRoom;
+use App\Models\Room;
 use Illuminate\Database\Seeder;
-use App\Models\AuctionParticipant;
+use App\Models\Participant;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class BidsSeeder extends Seeder
@@ -15,7 +15,7 @@ class BidsSeeder extends Seeder
      */
     public function run(): void
     {
-        $participants = AuctionParticipant::all();
+        $participants = Participant::all();
 
         foreach ($participants as $participant) {
             $bidCount = rand(1, 5);
@@ -23,13 +23,13 @@ class BidsSeeder extends Seeder
             for ($i = 0; $i < $bidCount; $i++) {
                 Bid::factory()->create([
                     'participan_id' => $participant->id,
-                    'auction_room_id' => $participant->auction_room_id,
+                    'room_id' => $participant->room_id,
                 ]);
             }
         }
 
         // Set one bid as winner for each room
-        $rooms = AuctionRoom::all();
+        $rooms = Room::all();
         foreach ($rooms as $room) {
             $winnerBid = $room->bids()->inRandomOrder()->first();
             if ($winnerBid) {

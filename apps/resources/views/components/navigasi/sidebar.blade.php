@@ -51,7 +51,7 @@ $user = Auth::user();
 
         <!-- Navigasi -->
         <div class="flex-1 overflow-y-auto px-3 py-4 space-y-2 font-medium">
-            @canany(["bidder","auctioneer","administrator"])
+            @canany(["bidder"])
                 <div class="border border-gray-300 dark:border-gray-600 rounded-full"></div>
                 <span class="text-gray-400 text-sm py-5 px-2">Bidder</span>
                 <x-navigasi.navlink href="{{ route('dashboard') }}" :icon="'diagram'" :active="request()->routeIs('dashboard')">Dashboard</x-navigasi.navlink>
@@ -59,32 +59,18 @@ $user = Auth::user();
                 <x-navigasi.navlink href="{{ route('transaction') }}" :icon="'transaction'" :active="request()->routeIs('transaction')">Transactions</x-navigasi.navlink>
             @endcanany
 
-            @canany(["auctioneer","administrator"])
-                <div class="border border-gray-300 dark:border-gray-600 rounded-full"></div>
-                <span class="text-gray-400 text-sm py-5 px-2">Auctioneer</span>
-                <x-navigasi.navlink href="{{ route('dashboard') }}" :icon="'diagram'" :active="request()->routeIs('dashboard')">Dashboard</x-navigasi.navlink>
-                <x-navigasi.navlink href="{{ route('products') }}" :icon="'products'" :active="request()->routeIs('products')">Product</x-navigasi.navlink>
-                <x-navigasi.navlink href="{{ route('room.manage') }}" :icon="'room'" :active="request()->routeIs('room.manage')">Manage Room</x-navigasi.navlink>
-                <x-navigasi.navlink href="{{ route('transaction') }}" :icon="'transaction'" :active="request()->routeIs('transaction')">Transactions</x-navigasi.navlink>
-            @endcanany
-            
-            @canany(["admin","administrator"])
+            @canany(["admin"])
                 <div class="border border-gray-300 dark:border-gray-600 rounded-full"></div>
                 <span class="text-gray-400 text-sm py-5 px-2">Admin</span>
                 <x-navigasi.navlink href="{{ route('dashboard') }}" :icon="'diagram'" :active="request()->routeIs('dashboard')">Dashboard</x-navigasi.navlink>
                 <x-navigasi.navlink href="{{ route('products') }}" :icon="'products'" :active="request()->routeIs('products')">Product</x-navigasi.navlink>
-                <x-navigasi.navlink href="{{ route('category') }}" :icon="'category'" :active="request()->routeIs('category')">Category</x-navigasi.navlink>
-                <x-navigasi.navlink href="{{ route('category') }}" :icon="'auctioneer'" :active="request()->routeIs('category')">Auctioneer</x-navigasi.navlink>
-                <x-navigasi.navlink href="{{ route('category') }}" :icon="'inboxrequest'" :active="request()->routeIs('category')">Inbox Request</x-navigasi.navlink>
-                <x-navigasi.navlink href="{{ route('category') }}" :icon="'category'" :active="request()->routeIs('category')">Category</x-navigasi.navlink>
-            @endcanany
-            
-            @canany(["administrator"])
+                <x-navigasi.navlink href="{{ route('room.manage') }}" :icon="'room'" :active="request()->routeIs('room.manage')">Room</x-navigasi.navlink>
+                <x-navigasi.navlink href="{{ route('transaction') }}" :icon="'transaction'" :active="request()->routeIs('transaction')">Transactions</x-navigasi.navlink>
                 <x-navigasi.navlink href="{{ route('account') }}" :icon="'users'" :active="request()->routeIs('account')">Account</x-navigasi.navlink>
             @endcanany
+            
             <div class="border border-gray-300 dark:border-gray-600 rounded-full"></div>
             <x-navigasi.navlink href="{{ route('profile') }}" :icon="'profile'" :active="request()->routeIs('profile','profile.data','profile.password')">Profile</x-navigasi.navlink>
-            <x-navigasi.navlink href="{{ route('userup') }}" :icon="'userup'" :active="request()->routeIs('userup')">Upgrade to Auctioner</x-navigasi.navlink>
             <x-navigasi.navlink href="{{ url('logout') }}" :icon="'userlogout'" :active="request()->routeIs('logout')">Logout</x-navigasi.navlink>
         </div>
 

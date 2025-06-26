@@ -20,7 +20,7 @@
                         <x-table.tr>
                             <x-table.td>{{ $loop->iteration }}</x-table.td>
                             <x-table.td>{{ $product->product_name }}</x-table.td>
-                            <x-table.td>{{ $product->quantity }} {{ $product->unit }}</x-table.td>
+                            <x-table.td>{{ $product->quantity }} {{ $product->units }}</x-table.td>
                             <x-table.td>{{ $product->status }}</x-table.td>
                             <x-table.td> 
                                 <x-button.btnaccorlink href="{{ Route('product.detail',$product->id) }}" color="blue" padding="px-3 py-1">Detail</x-button.btnaccorlink>

@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Home;
 
-use App\Models\AuctionRoom;
+use App\Models\Room;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 
@@ -14,8 +14,8 @@ class HomePage extends Component
 
     public function mount(): void
     {
-        $this->room = AuctionRoom::get();
-        $this->roomupcoming = AuctionRoom::where('status', 'upcoming')->get();
+        $this->room = Room::get();
+        $this->roomupcoming = Room::where('status', 'upcoming')->get();
     }
 
 

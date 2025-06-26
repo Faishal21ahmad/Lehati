@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class AuctionParticipant extends Model
+class Participant extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'user_id',
-        'auction_room_id',
+        'room_id',
         'status'
     ];
 
@@ -22,9 +22,9 @@ class AuctionParticipant extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function auctionRoom()
+    public function Room()
     {
-        return $this->belongsTo(AuctionRoom::class);
+        return $this->belongsTo(Room::class);
     }
 
     public function bids()

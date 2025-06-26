@@ -68,38 +68,28 @@ class User extends Authenticatable
         return $this->hasOne(UserData::class);
     }
 
-    public function auctioneerData()
-    {
-        return $this->hasOne(AuctioneerData::class);
-    }
-
-    public function auctioneerLogs()
-    {
-        return $this->hasMany(AuctioneerLog::class, 'action_by');
-    }
-
     public function products()
     {
-        return $this->hasManyThrough(Product::class, AuctioneerData::class);
+        return $this->hasManyThrough(Product::class, User::class);
     }
 
-    public function auctionRooms()
+    public function Rooms()
     {
-        return $this->hasManyThrough(AuctionRoom::class, AuctioneerData::class);
+        return $this->hasManyThrough(Room::class, User::class);
     }
 
-    public function auctionParticipants()
+    public function Participants()
     {
-        return $this->hasMany(AuctionParticipant::class);
+        return $this->hasMany(Participant::class);
     }
 
     public function bids()
     {
-        return $this->hasManyThrough(Bid::class, AuctionParticipant::class, 'user_id', 'participan_id');
+        return $this->hasManyThrough(Bid::class, Participant::class, 'user_id', 'participan_id');
     }
 
     public function transactions()
     {
-        return $this->hasMany(AuctionTransaction::class);
+        return $this->hasMany(Transaction::class);
     }
 }

@@ -4,10 +4,10 @@ namespace Database\Seeders;
 
 use App\Models\Bid;
 use Illuminate\Database\Seeder;
-use App\Models\AuctionTransaction;
+use App\Models\Transaction;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-class AuctionTransactionSeeder extends Seeder
+class TransactionSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -17,8 +17,8 @@ class AuctionTransactionSeeder extends Seeder
         $winnerBids = Bid::where('is_winner', true)->get();
         
         foreach ($winnerBids as $bid) {
-            AuctionTransaction::factory()->create([
-                'bid_id' => $bid->id,
+            Transaction::factory()->create([
+                'bid_id' => $bid->id, 
                 'user_id' => $bid->participant->user_id,
                 'amount_final' => $bid->amount
             ]);

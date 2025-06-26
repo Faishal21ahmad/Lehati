@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('auction_rooms', function (Blueprint $table) {
+        Schema::create('rooms', function (Blueprint $table) {
             $table->id();
             $table->string('room_code', 8)->unique();
             $table->string('title_room', 30);
-            $table->foreignId('auctioneer_id')->constrained('auctioneer_data');
+            $table->foreignId('user_id')->constrained('users');
             $table->foreignId('product_id')->constrained('products');
             $table->string('description', 200);
             $table->enum('status', ['upcoming', 'ongoing', 'ended', 'cancelled']);
@@ -25,7 +25,7 @@ return new class extends Migration
             $table->dateTime('end_time');
             $table->timestamps();
 
-            $table->index('auctioneer_id');
+            $table->index('user_id');
             $table->index('room_code');
             $table->index('status');
         });
@@ -36,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('auction_rooms');
+        Schema::dropIfExists('rooms');
     }
 };

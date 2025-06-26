@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class AuctionRoom extends Model
+class Room extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'room_code',
         'title_room',
-        'auctioneer_id',
+        'user_id',
         'product_id',
         'description',
         'status',
@@ -27,9 +27,9 @@ class AuctionRoom extends Model
         'end_time' => 'datetime',
     ];
 
-    public function auctioneer()
+    public function user()
     {
-        return $this->belongsTo(AuctioneerData::class);
+        return $this->belongsTo(User::class);
     }
 
     public function product()
@@ -39,7 +39,7 @@ class AuctionRoom extends Model
 
     public function participants()
     {
-        return $this->hasMany(AuctionParticipant::class, 'auction_room_id');
+        return $this->hasMany(Participant::class, 'room_id');
     }
 
     public function bids()
