@@ -1,6 +1,11 @@
 @props([
-    'fileproduct' => []
+    'fileproduct' => [],
+    'wight' => 'w-full h-56 md:h-96',
 ])
+
+@php
+
+@endphp
 
 <div 
     x-data="carousel()"
@@ -8,11 +13,12 @@
     @mouseenter="pause()"
     @mouseleave="play()"
     id="default-carousel" 
-    class="relative lg:w-2/4"
+    class="relative "
     wire:ignore
 >
     <!-- Carousel wrapper -->
-    <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
+    <div class="{{ $wight }} relative overflow-hidden rounded-lg 
+    ">
         <template x-for="(image, index) in images" :key="index">
             <div 
                 x-show="activeIndex === index"

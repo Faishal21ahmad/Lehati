@@ -4,7 +4,7 @@ $user = Auth::user();
 @endphp
 
 
-<div class="flex" 
+<div class="flex " 
     x-data="{
     sidebarOpen: window.innerWidth >= 768,
     isMobile() { return window.innerWidth < 768; }
@@ -42,7 +42,7 @@ $user = Auth::user();
         x-transition:enter-end="opacity-100 translate-x-0"
         x-transition:leave-start="opacity-100 translate-x-0"
         x-transition:leave-end="opacity-0 -translate-x-full"
-        class="fixed top-0 left-0 z-40 w-64 h-screen bg-gray-100 dark:bg-gray-800 flex flex-col">
+        class="fixed top-0 left-0 z-40 w-64 h-screen shadow-md bg-white dark:bg-gray-800 flex flex-col">
 
         <!-- Logo Besar -->
         <div class="flex items-center justify-center h-16 px-4 mt-4 shrink-0">
@@ -75,8 +75,8 @@ $user = Auth::user();
         </div>
 
         <!-- Info User di bawah -->
-        <div id="userinformasi" class="shrink-0 p-4 bg-gray-100 dark:bg-gray-800">
-            <div class="bg-white dark:bg-gray-700 rounded-lg shadow-md p-3">
+        <div id="userinformasi" class="shrink-0 p-4">
+            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg shadow-md p-3">
                 <div class="flex items-center space-x-3">
                     <div class="relative">
                         <div class="w-8 h-8 rounded-full bg-blue-500 dark:bg-blue-600 flex items-center justify-center text-white font-medium text-sm">

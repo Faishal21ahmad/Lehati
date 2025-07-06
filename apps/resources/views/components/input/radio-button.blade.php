@@ -8,7 +8,7 @@
     'disabled' => false,
     'error' => null,
     'helpText' => null,
-    'gridCols' => 'md:grid-cols-2' // Default 2 columns
+    'gridCols' => 'md:grid-cols-2', // Default 2 columns
     'error' => null
 ])
 

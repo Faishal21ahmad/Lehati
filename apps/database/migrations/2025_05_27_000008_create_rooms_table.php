@@ -14,10 +14,9 @@ return new class extends Migration
         Schema::create('rooms', function (Blueprint $table) {
             $table->id();
             $table->string('room_code', 8)->unique();
-            $table->string('title_room', 30);
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('product_id')->constrained('products');
-            $table->string('description', 200);
+            $table->string('room_notes', 200);
             $table->enum('status', ['upcoming', 'ongoing', 'ended', 'cancelled']);
             $table->decimal('starting_price', 15, 2);
             $table->decimal('min_bid_step', 15, 2);

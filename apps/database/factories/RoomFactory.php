@@ -21,8 +21,7 @@ class RoomFactory extends Factory
 
         return [
             'room_code' => 'RM' . $this->faker->unique()->numberBetween(1000, 9999),
-            'title_room' => $this->faker->words(3, true),
-            'description' => $this->faker->sentence,
+            'room_notes' => $this->faker->sentence,
             'status' => $this->faker->randomElement(['upcoming', 'ongoing', 'ended', 'cancelled']),
             'starting_price' => $this->faker->randomFloat(2, 10000, 100000),
             'min_bid_step' => $this->faker->randomFloat(2, 1000, 5000),

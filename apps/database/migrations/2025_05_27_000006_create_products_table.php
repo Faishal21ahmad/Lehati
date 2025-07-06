@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('description', 200);
             $table->integer('quantity');
             $table->enum('units', ['kg', 'ton', 'ons', 'ikat']);
-            $table->enum('status', ['available', 'sold']);
+            $table->enum('status', ['available', 'use', 'sold']);
             $table->timestamps();
 
             $table->index('user_id');

@@ -4,7 +4,7 @@
     'options' => [],
     'gridCols' => 'md:grid-cols-2',
     'error' => null,
-    'helpText' => null
+    'helpText' => null,
     'error' => null
 ])
 

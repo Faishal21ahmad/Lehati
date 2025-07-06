@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Enums\Role;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
@@ -21,6 +22,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Carbon::setLocale('id');
         foreach (Role::cases() as $role) {
             foreach ($role->permissions() as $permission) {
                 Gate::define($permission, function ($user) use ($permission) {

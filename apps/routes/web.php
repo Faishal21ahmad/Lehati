@@ -1,31 +1,33 @@
 <?php
 
 use App\Livewire\Auth\Otp;
+use App\Livewire\Room\Room;
 use App\Livewire\Auth\Login;
 use Illuminate\Routing\Router;
-use App\Livewire\Actions\Logout;
 use App\Livewire\Auth\Register;
 use App\Livewire\Home\HomePage;
 use App\Livewire\Room\RoomPage;
+use App\Livewire\Actions\Logout;
+use App\Livewire\Profile\DataUser;
+use App\Livewire\Profile\Password;
 use App\Livewire\Userup\UserupPage;
 use App\Livewire\Auth\ResetPassword;
 use App\Livewire\Account\AccountPage;
 use App\Livewire\Auth\ForgotPassword;
-use App\Livewire\Category\CategoryPage;
-use App\Livewire\Profile\ProfilePage;
-use Illuminate\Support\Facades\Route;
-use App\Livewire\Products\ProductsPage;
-use App\Livewire\Dashboard\DashboardPage;
 use App\Livewire\Products\ProductAdd;
-use App\Livewire\Products\ProductDetail;
-use App\Livewire\Profile\DataUser;
-use App\Livewire\Profile\Password;
+use App\Livewire\Profile\ProfilePage;
 use App\Livewire\Room\ManageRoomPage;
-use App\Livewire\Room\Room;
+use Illuminate\Support\Facades\Route;
+use App\Livewire\Products\ProductForm;
+use App\Livewire\Category\CategoryPage;
+use App\Livewire\Products\ProductsPage;
+use App\Livewire\Products\ProductDetail;
+use App\Livewire\Dashboard\DashboardPage;
+use App\Livewire\Room\RoomForm;
 use App\Livewire\Transaction\TransactionPage;
 
 Route::get('/', HomePage::class)->name('home');
-Route::get('room/{coderoom}', Room::class)->name('room.detail');
+
 Route::middleware('guest')->group(function () {
     Route::get('login', Login::class)->name('login');
     Route::post('alogin', Login::class)->name('alogin');
@@ -49,9 +51,19 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('room/manage', ManageRoomPage::class)->name('room.manage');
-    Route::get('room/manage/partisipan', ManageRoomPage::class)->name('room.manage.partisipan');
     Route::get('products', ProductsPage::class)->name('products');
-    Route::get('products/create', ProductAdd::class)->name('product.create');
-    Route::get('products/detail/{id}', ProductDetail::class)->name('product.detail');
+    Route::get('product/create', ProductForm::class)->name('product.create');
+    Route::get('product/{id}/edit', ProductForm::class)->name('product.edit');
+});
+
+Route::get('room/{coderoom}/detail', Room::class)->name('room.detail');
+Route::middleware('auth')->group(function () {
+
+    Route::get('rooms', ManageRoomPage::class)->name('room.manage');
+    Route::get('room/create', RoomForm::class)->name('room.create');
+    Route::get('room/{coderoom}/edit', RoomForm::class)->name('room.edit');
+
+
+
+    Route::get('room/manage/partisipan', ManageRoomPage::class)->name('room.manage.partisipan');
 });

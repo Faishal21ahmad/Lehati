@@ -2,7 +2,7 @@
     <x-layouts.app-header :title="__('Products')" :description="__('Manage Your Product ')" />
 
     <div class="">
-        <x-button.btnaccorlink class="mb-4" href="{{ route('product.create') }}">
+        <x-button.btnaccorlink navigate=true class="mb-4" href="{{ route('product.create') }}">
             {{ __('Add Product') }}
         </x-button.btnaccorlink>
 
@@ -22,8 +22,8 @@
                             <x-table.td>{{ $product->product_name }}</x-table.td>
                             <x-table.td>{{ $product->quantity }} {{ $product->units }}</x-table.td>
                             <x-table.td>{{ $product->status }}</x-table.td>
-                            <x-table.td> 
-                                <x-button.btnaccorlink href="{{ Route('product.detail',$product->id) }}" color="blue" padding="px-3 py-1">Detail</x-button.btnaccorlink>
+                            <x-table.td class="flex md:flex-wrap gap-2"> 
+                                <x-button.btnaccorlink href="{{ Route('product.edit',$product->id) }}" color="blue" padding="px-3 py-1">Detail</x-button.btnaccorlink>
                                 <x-button.btn color="red" padding="px-3 py-1">Delete</x-button.btn>
                             </x-table.td>  
                         </x-table.tr>

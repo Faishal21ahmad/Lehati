@@ -1,7 +1,7 @@
 @props([
-    'name' => null,
     'type' => 'text',
-    'id' => $name,
+    'id' => null,
+    'name' => $id,
     'options' => [
         [
             'value' => '1',
@@ -45,7 +45,7 @@
         
         @foreach($options as $option)
             <option 
-                value="{{ $option['value'] }}" 
+                value={{ $option['value'] }}
                 @if( $option['value'] == $value) selected @endif
             >
                 {{ $option['label'] }}

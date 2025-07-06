@@ -1,6 +1,6 @@
 @props([
-    'name' => null,
-    'id' => '',
+    'id' => null,
+    'name' => $id,
     'label' => 'Upload file',
     'multiple' => false,
     'accept' => null, // e.g. 'image/*', '.pdf,.docx', etc
@@ -21,7 +21,7 @@
         {{-- name="{{ $name }}" --}}
         wire:model='{{ $name }}'
         type="file"
-        autocomplete="{{ $name }}"
+        {{-- autocomplete="{{ $name }}" --}}
         @if($multiple) multiple @endif
         @if($accept) accept="{{ $accept }}" @endif
         @if($disabled) disabled @endif

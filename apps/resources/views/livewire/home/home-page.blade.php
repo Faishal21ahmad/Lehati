@@ -6,15 +6,15 @@
     <section class="w-full flex flex-nowrap overflow-auto overflow-x-visible gap-4 mx-auto p-4">
         @foreach ($roomupcoming as $item)
             <x-card.card :data="$item" />
-            <x-card.card :data="$item" />
+            {{-- <x-card.card :data="$item" /> --}}
         @endforeach
     </section>
 
     <h1 class="text-xl dark:text-white py-4 pl-7">All Product</h1>
-    <section class="w-full flex flex-wrap items-center justify-center gap-4 mx-auto p-4 ">
+    <section class="w-full flex flex-wrap items-center gap-4 mx-auto p-4 ">
         @foreach ($room as $item)
             <x-card.card :data="$item" />
-            <x-card.card :data="$item" />
+            {{-- <x-card.card :data="$item" /> --}}
         @endforeach
     </section>
         

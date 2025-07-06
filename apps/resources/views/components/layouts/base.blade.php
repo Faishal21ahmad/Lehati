@@ -9,6 +9,9 @@
     <title>{{ $title ?? config('app.name') }}</title>
     {{ $head ?? '' }}
     @if (session('toast'))
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             Livewire.dispatch('showToast', @json(session('toast')));
@@ -16,10 +19,13 @@
     </script>
 @endif
 </head>
-<body class="bg-white dark:bg-gray-900">
+<body class="bg-gray-50 dark:bg-gray-900">
 
     @livewire('toast')
     {{ $slot }}
     @livewireScripts
+
+    <!-- Flatpickr JS -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 </body>
 </html>

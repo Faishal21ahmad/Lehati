@@ -2,7 +2,8 @@
     'href' => null,
     'color' => 'blue', // blue, red, green, gray, yellow
     'fullWidth' => false,
-    'padding' => 'px-4 py-2'
+    'padding' => 'px-4 py-2',
+    'navigate' => false,
 ])
 
 @php
@@ -22,7 +23,7 @@
     $widthClass = $fullWidth ? 'w-full' : '';
 @endphp
 
-<a href="{{ $href ?? '#' }}" >
+<a href="{{ $href ?? '#' }}" @if($navigate) wire:navigate  @endif>
     <button type="button" {{ $attributes->merge(['type' => 'button', 'class' => "$baseClasses $colorClasses $widthClass $padding"]) }}>
         {{ $slot }}
     </button>
