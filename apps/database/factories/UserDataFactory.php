@@ -19,7 +19,7 @@ class UserDataFactory extends Factory
         return [
             'phone' => '082100000000',
             'address' => $this->faker->address,
-            'NIK' => $this->faker->unique()->numerify('################'),
+            'nik' => $this->faker->unique()->numerify('################'),
             'gender' => $this->faker->randomElement(['male', 'female']),
             'created_at' => now(),
             'updated_at' => now(),

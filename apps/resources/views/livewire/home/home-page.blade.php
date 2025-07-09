@@ -1,22 +1,40 @@
 <div class="">
     <div class="max-w-screen-2xl mx-auto mt-20">
-    {{-- <div class="mt-26 items-center mx-auto justify-center max-w-screen-2xl grid grid-cols-5 grid-rows-4 gap-4 "> --}}
 
-    <h1 class="text-xl dark:text-white py-4 pl-7">Up Coming</h1>
-    <section class="w-full flex flex-nowrap overflow-auto overflow-x-visible gap-4 mx-auto p-4">
-        @foreach ($roomupcoming as $item)
-            <x-card.card :data="$item" />
-            {{-- <x-card.card :data="$item" /> --}}
-        @endforeach
-    </section>
+        <x-input.search id="search" class="w-[90%] mx-auto" />
+        {{-- hanya tampil saat TIDAK melakukan pencarian --}}
+        @if(empty($query))
+            @if($ongoing->isNotEmpty())
+                <h1 class="text-xl dark:text-white py-4 pl-7">On Going</h1>
+                <section class="w-full flex flex-nowrap overflow-auto overflow-x-visible gap-4 mx-auto p-4 scrollbar-hide ">
+                    @foreach ($ongoing as $item)
+                        <x-card.card :data="$item" />
+                    @endforeach
+                </section>
+            @endif
 
-    <h1 class="text-xl dark:text-white py-4 pl-7">All Product</h1>
-    <section class="w-full flex flex-wrap items-center gap-4 mx-auto p-4 ">
-        @foreach ($room as $item)
-            <x-card.card :data="$item" />
-            {{-- <x-card.card :data="$item" /> --}}
-        @endforeach
-    </section>
-        
+            @if ($roomupcoming->isNotEmpty())
+                <h1 class="text-xl dark:text-white py-4 pl-7">Up Coming</h1>
+                <section class="w-full flex flex-nowrap overflow-auto overflow-x-visible gap-4 mx-auto p-4 scrollbar-hide">
+                    @foreach ($roomupcoming as $item)
+                        <x-card.card :data="$item" />
+                    @endforeach
+                </section>
+            @endif
+        @endif
+
+        {{-- bagian pencarian & all product --}}
+        @if($rooms->isNotEmpty())
+            <h1 class="text-xl dark:text-white py-4 pl-7">
+                {{ empty($query) ? 'All Product' : 'Search Result' }}
+            </h1>
+            <section class="w-full flex flex-wrap items-center gap-4 mx-auto p-4 ">
+                @foreach($rooms as $item)
+                    <x-card.card :data="$item" />
+                @endforeach
+            </section>
+        @elseif(!empty($query))
+            <p class="text-center text-gray-400 dark:text-gray-500 py-8">Tidak ada hasil untuk "{{ $query }}"</p>
+        @endif
     </div>
 </div>

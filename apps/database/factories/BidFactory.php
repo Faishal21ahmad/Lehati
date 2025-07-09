@@ -17,7 +17,7 @@ class BidFactory extends Factory
     public function definition(): array
     {
         return [
-            'amount' => $this->faker->randomFloat(2, 10000, 200000),
+            'amount' => $this->faker->randomFloat(10000, 2000000),
             'is_winner' => false,
             'created_at' => now(),
             'updated_at' => now(),

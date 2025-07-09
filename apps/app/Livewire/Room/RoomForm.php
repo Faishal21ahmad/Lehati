@@ -5,21 +5,24 @@ namespace App\Livewire\Room;
 use App\Models\Room;
 use App\Models\Product;
 use Livewire\Component;
+use Livewire\WithPagination;
 use Livewire\Attributes\Layout;
 use Illuminate\Support\Facades\Auth;
 
 #[Layout('components.layouts.app', ['title' => "Room"])]
 class RoomForm extends Component
 {
+    use WithPagination;
+
+
     public $roomId;
-    public $coderoom, $status, $room_notes, $user_id, $starting_price,  $min_bid_step, $product, $start_time, $end_time;
+    public $coderoom, $partisipantjoin, $status, $room_notes, $user_id, $starting_price,  $min_bid_step, $product, $start_time, $end_time;
     public $products = [];
+    public $partisipans, $countpartisipantjoin, $countpartisipantleave, $countpartisipantrejected;
 
     public function mount($coderoom = null)
     {
         $user = Auth::user();
-
-
 
         if ($coderoom) {
             $room = Room::where('room_code', $coderoom)->firstOrFail();
@@ -34,6 +37,13 @@ class RoomForm extends Component
             $this->room_notes = $room->room_notes;
             $this->start_time = $room->start_time;
             $this->end_time = $room->end_time;
+
+            $this->partisipantjoin = $room->participants->where('status', 'joined');
+
+            $this->countpartisipantjoin     = $room->participants->where('status', 'joined')->count();
+            $this->countpartisipantleave    = $room->participants->where('status', 'left')->count();
+            $this->countpartisipantrejected = $room->participants->where('status', 'rejected')->count();
+
 
             $this->products = Product::where(['user_id' => $user->id])
                 ->get()

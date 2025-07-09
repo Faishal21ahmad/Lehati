@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             BidsSeeder::class,
             TransactionSeeder::class,
             ImageProductSeeder::class,
+            UserDataSeeder::class,
         ]);
     }
 }

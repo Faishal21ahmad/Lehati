@@ -15,7 +15,7 @@ class RoomSeeder extends Seeder
     public function run(): void
     {
         $products = Product::all();
-        
+
         foreach ($products as $product) {
             Room::factory()->create([
                 'user_id' => $product->user_id,

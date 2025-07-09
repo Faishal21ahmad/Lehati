@@ -3,11 +3,9 @@
     :title="$roomId ? __('Detail Room') : __('Add Room')"
     {{-- :description="__('Create New Room Auctioneer')"  --}}
     :description="$roomId ? __('Detail Room Product') : __('Create New Room Auctioneer')" 
-    
-    
     />
 
-    <div class="w-full flex lg:flex-row flex-col-reverse gap-4 mt-4">
+    <div class="w-full flex lg:flex-row flex-col gap-4 mt-4">
         <div class="w-full">
             <form wire:submit.prevent="save" enctype="multipart/form-data">
                 @if ($roomId)
@@ -34,6 +32,69 @@
                 </div>
             </form>
         </div>
-        <div class="w-full"></div>
+        <div class="w-full ">
+            @if ($roomId)
+            <section id="cardInformation" class="w-full flex flex-col gap-2">
+                <h1>Participant</h1>
+                <div class="flex gap-2 w-full">
+                    <div class="w-full p-2 text-center rounded-md shadow-md bg-white dark:bg-gray-800">
+                        <h1 class="font-semibold text-lg">Join</h1>
+                        <p>{{ $countpartisipantjoin }}</p>
+                    </div>
+                    <div class="w-full p-2 text-center rounded-md shadow-md bg-white dark:bg-gray-800">
+                        <h1 class="font-semibold text-lg">Leave</h1>
+                        <p>{{ $countpartisipantleave }}</p>
+                    </div>
+                    <div class="w-full p-2 text-center rounded-md shadow-md bg-white dark:bg-gray-800">
+                        <h1 class="font-semibold text-lg">Rejected</h1>
+                        <p>{{ $countpartisipantrejected }}</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="detailPartisipan" class="mt-2 w-full">
+                <x-table.table class="w-full">
+                    <x-table.thead>
+                        <x-table.th>No</x-table.th>
+                        <x-table.th>Code User</x-table.th>
+                        <x-table.th>Username</x-table.th>
+                        <x-table.th>Status</x-table.th>
+                        <x-table.th>action</x-table.th>
+                    </x-table.thead>
+                    <x-table.tbody>
+                            {{-- {{ $countpartisipantjoin }} --}}
+                        @forelse($partisipantjoin as $partisipant)
+                            <x-table.tr>
+                                {{-- <x-table.td>{{ ($partisipantjoin->currentPage() - 1) * $partisipantjoin->perPage() + $loop->iteration }}</x-table.td> --}}
+                                <x-table.td>{{ $loop->iteration }}</x-table.td>
+                                
+                                <x-table.td>{{ $partisipant->user->code_user }}</x-table.td>
+                                <x-table.td>{{ $partisipant->user->name }}</x-table.td>
+                                <x-table.td>{{ $partisipant->status }}</x-table.td>
+
+                                <x-table.td class="flex md:flex-wrap gap-2"> 
+                                    <x-button.btn color="red" padding="px-3 py-1">Reject</x-button.btn>
+                                </x-table.td>  
+                            </x-table.tr>
+                        @empty
+                            <x-table.tr class="w-full">
+                                <x-table.td colspan="6" class="text-center py-4">No Room found</x-table.td>
+                            </x-table.tr>
+                        @endforelse
+                    </x-table.tbody>
+                </x-table.table>
+                <div class="mt-4">
+                    {{-- {{ $partisipantjoin->links() }} --}}
+                </div>
+            </section>
+            @endif
+        </div>
     </div>
 </div>
+
+
+
+ {{-- <x-button.btnaccorlink href="{{ Route('room.edit',$room->room_code) }}" color="blue" padding="px-3 py-1">Detail</x-button.btnaccorlink> --}}
+                                    {{-- <x-button.btnaccorlink href="{{ Route('room.detail', $room->room_code) }}" color="yellow" padding="px-3 py-1">Preview</x-button.btnaccorlink> --}}
+                                    {{-- <x-button.btnaccorlink href="{{ Route('room.edit',$room->room_code) }}" color="green" padding="px-3 py-1">Start</x-button.btnaccorlink> --}}
+                {{-- <p>{{ $partisipans }}</p> --}}

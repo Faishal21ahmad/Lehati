@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Home;
 
+use Carbon\Carbon;
+
 use App\Models\Room;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
@@ -10,18 +12,41 @@ use Livewire\Attributes\Layout;
 class HomePage extends Component
 {
     public $room;
-    public $roomupcoming;
-
-    public function mount(): void
-    {
-        $this->room = Room::get();
-        $this->roomupcoming = Room::where('status', 'upcoming')->get();
-    }
-
-
+    public $roomupcoming = null;
+    public $ongoing = null;
+    public $query = '';
 
     public function render()
     {
-        return view('livewire.home.home-page');
+        $time = Carbon::now();
+
+        // Upcoming
+        $this->roomupcoming = Room::with('product')
+            ->where('start_time', '>', $time)
+            ->get();
+
+        // Ongoing
+        $this->ongoing = Room::with('product')
+            ->where('start_time', '<=', $time)
+            ->where('end_time', '>=', $time)
+            ->get();
+
+        // All Room + Search
+        $rooms = Room::with('product') // eager load relasi
+            ->when($this->query, function ($queryBuilder) {
+                $queryBuilder->where(function ($subQuery) {
+                    $subQuery->where('room_code', 'like', '%' . $this->query . '%')
+                        ->orWhere('status', 'like', '%' . $this->query . '%')
+                        ->orWhereHas('product', function ($q) {
+                            $q->where('product_name', 'like', '%' . $this->query . '%');
+                        });
+                });
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('livewire.home.home-page', [
+            'rooms' => $rooms,
+        ]);
     }
 }

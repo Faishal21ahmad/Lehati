@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Account\AccountDetail;
 use App\Livewire\Auth\Otp;
 use App\Livewire\Room\Room;
 use App\Livewire\Auth\Login;
@@ -43,7 +44,6 @@ Route::middleware('auth')->group(function () {
     Route::get('dashboard', DashboardPage::class)->name('dashboard');
     Route::get('room', RoomPage::class)->name('room');
     Route::get('transaction', TransactionPage::class)->name('transaction');
-    Route::get('account', AccountPage::class)->name('account');
     Route::get('profile/profile', ProfilePage::class)->name('profile');
     Route::get('profile/userdata', DataUser::class)->name('profile.data');
     Route::get('profile/password', Password::class)->name('profile.password');
@@ -62,8 +62,11 @@ Route::middleware('auth')->group(function () {
     Route::get('rooms', ManageRoomPage::class)->name('room.manage');
     Route::get('room/create', RoomForm::class)->name('room.create');
     Route::get('room/{coderoom}/edit', RoomForm::class)->name('room.edit');
-
-
-
     Route::get('room/manage/partisipan', ManageRoomPage::class)->name('room.manage.partisipan');
+});
+
+Route::middleware('auth')->group(function () {
+
+    Route::get('accounts', AccountPage::class)->name('accounts');
+    Route::get('account/{usercode}/edit', AccountDetail::class)->name('account.edit');
 });

@@ -63,9 +63,9 @@ class User extends Authenticatable
             ->implode('');
     }
 
-    public function userData()
+    public function userdata()
     {
-        return $this->hasOne(UserData::class);
+        return $this->hasOne(UserData::class, 'user_id', 'id');
     }
 
     public function products()

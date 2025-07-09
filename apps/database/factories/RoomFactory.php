@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use Faker\Factory as FakerFactory;
+
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,15 +18,29 @@ class RoomFactory extends Factory
      */
     public function definition(): array
     {
+        $faker = FakerFactory::create('id_ID');
+        $roomNotesList = [
+            'Ruang lelang akan dibuka 10 menit sebelum waktu mulai.',
+            'Harap pastikan koneksi internet stabil selama sesi lelang.',
+            'Peserta diwajibkan membaca syarat dan ketentuan sebelum mulai.',
+            'Penawaran tertinggi otomatis ditampilkan secara real-time.',
+            'Lelang ini bersifat publik dan terbuka untuk semua pengguna.',
+            'Ruang ini hanya untuk produk hasil pertanian segar.',
+            'Sesi lelang akan berakhir otomatis sesuai waktu yang ditentukan.',
+            'Pastikan Anda sudah login sebelum mengikuti lelang.',
+            'Admin akan memantau jalannya lelang secara langsung.',
+            'Catatan: tidak ada biaya tambahan untuk bergabung di ruang ini.'
+        ];
+
         $startTime = $this->faker->dateTimeBetween('now', '+1 week');
         $endTime = $this->faker->dateTimeBetween($startTime, '+2 weeks');
 
         return [
             'room_code' => 'RM' . $this->faker->unique()->numberBetween(1000, 9999),
-            'room_notes' => $this->faker->sentence,
+            'room_notes' => $faker->randomElement($roomNotesList),
             'status' => $this->faker->randomElement(['upcoming', 'ongoing', 'ended', 'cancelled']),
-            'starting_price' => $this->faker->randomFloat(2, 10000, 100000),
-            'min_bid_step' => $this->faker->randomFloat(2, 1000, 5000),
+            'starting_price' => $this->faker->numberBetween(10000, 50000000),
+            'min_bid_step' => $this->faker->numberBetween(1000, 50000),
             'start_time' => $startTime,
             'end_time' => $endTime,
             'created_at' => now(),

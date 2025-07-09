@@ -2,6 +2,7 @@
     <x-layouts.app-header :title="__('Rooms')" :description="__('Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellat, dolorem.')" />
 
     <x-table.table class="lg:w-3/4">
+        
         <x-table.thead>
             <x-table.th>no</x-table.th>
             <x-table.th>Room</x-table.th>
