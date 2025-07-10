@@ -1,16 +1,17 @@
 <?php
 
-use App\Livewire\Account\AccountDetail;
 use App\Livewire\Auth\Otp;
 use App\Livewire\Room\Room;
 use App\Livewire\Auth\Login;
 use Illuminate\Routing\Router;
 use App\Livewire\Auth\Register;
 use App\Livewire\Home\HomePage;
+use App\Livewire\Room\RoomForm;
 use App\Livewire\Room\RoomPage;
 use App\Livewire\Actions\Logout;
 use App\Livewire\Profile\DataUser;
 use App\Livewire\Profile\Password;
+use App\Livewire\Room\LiveBidding;
 use App\Livewire\Userup\UserupPage;
 use App\Livewire\Auth\ResetPassword;
 use App\Livewire\Account\AccountPage;
@@ -20,12 +21,13 @@ use App\Livewire\Profile\ProfilePage;
 use App\Livewire\Room\ManageRoomPage;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Products\ProductForm;
+use App\Livewire\Account\AccountDetail;
 use App\Livewire\Category\CategoryPage;
 use App\Livewire\Products\ProductsPage;
 use App\Livewire\Products\ProductDetail;
 use App\Livewire\Dashboard\DashboardPage;
-use App\Livewire\Room\RoomForm;
 use App\Livewire\Transaction\TransactionPage;
+use App\Livewire\Transaction\ManageTransactionPage;
 
 Route::get('/', HomePage::class)->name('home');
 
@@ -43,7 +45,6 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('dashboard', DashboardPage::class)->name('dashboard');
     Route::get('room', RoomPage::class)->name('room');
-    Route::get('transaction', TransactionPage::class)->name('transaction');
     Route::get('profile/profile', ProfilePage::class)->name('profile');
     Route::get('profile/userdata', DataUser::class)->name('profile.data');
     Route::get('profile/password', Password::class)->name('profile.password');
@@ -58,15 +59,21 @@ Route::middleware('auth')->group(function () {
 
 Route::get('room/{coderoom}/detail', Room::class)->name('room.detail');
 Route::middleware('auth')->group(function () {
-
     Route::get('rooms', ManageRoomPage::class)->name('room.manage');
     Route::get('room/create', RoomForm::class)->name('room.create');
     Route::get('room/{coderoom}/edit', RoomForm::class)->name('room.edit');
     Route::get('room/manage/partisipan', ManageRoomPage::class)->name('room.manage.partisipan');
+    Route::get('room/{coderoom}/roombidding', LiveBidding::class)->name('room.bidding');
 });
 
 Route::middleware('auth')->group(function () {
-
     Route::get('accounts', AccountPage::class)->name('accounts');
     Route::get('account/{usercode}/edit', AccountDetail::class)->name('account.edit');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('transaction', TransactionPage::class)->name('transaction');
+    Route::get('transactions', ManageTransactionPage::class)->name('transaction.manage');
+    Route::get('transactions/{code_transaksi}/detail', ManageTransactionPage::class)->name('transaction.detail');
+
 });

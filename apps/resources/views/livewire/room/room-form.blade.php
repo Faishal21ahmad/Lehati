@@ -28,14 +28,18 @@
                 
                 <div class="mt-2">
                     <x-button.btn type="submit">{{ $roomId ? 'Update' : 'Simpan' }}</x-button.btn>
+                    @if ($roomId && $status != "ended" && $status != "cancelled")
+                        <x-button.btn wire:click="startbidding" color="green">Start Room</x-button.btn>    
+                    @endif
                     <x-button.btnaccorlink navigate=true type="button" href="{{ Route('room.manage') }}" color="yellow">Back</x-button.btnaccorlink>
+
                 </div>
             </form>
         </div>
         <div class="w-full ">
             @if ($roomId)
             <section id="cardInformation" class="w-full flex flex-col gap-2">
-                <h1>Participant</h1>
+                <h1>Participants</h1>
                 <div class="flex gap-2 w-full">
                     <div class="w-full p-2 text-center rounded-md shadow-md bg-white dark:bg-gray-800">
                         <h1 class="font-semibold text-lg">Join</h1>
@@ -62,18 +66,14 @@
                         <x-table.th>action</x-table.th>
                     </x-table.thead>
                     <x-table.tbody>
-                            {{-- {{ $countpartisipantjoin }} --}}
                         @forelse($partisipantjoin as $partisipant)
                             <x-table.tr>
-                                {{-- <x-table.td>{{ ($partisipantjoin->currentPage() - 1) * $partisipantjoin->perPage() + $loop->iteration }}</x-table.td> --}}
                                 <x-table.td>{{ $loop->iteration }}</x-table.td>
-                                
                                 <x-table.td>{{ $partisipant->user->code_user }}</x-table.td>
                                 <x-table.td>{{ $partisipant->user->name }}</x-table.td>
                                 <x-table.td>{{ $partisipant->status }}</x-table.td>
-
                                 <x-table.td class="flex md:flex-wrap gap-2"> 
-                                    <x-button.btn color="red" padding="px-3 py-1">Reject</x-button.btn>
+                                    <x-button.btn wire:click="rejectpartisipan({{ $partisipant->user->id }})" color="red" padding="px-3 py-1">Reject</x-button.btn>
                                 </x-table.td>  
                             </x-table.tr>
                         @empty
@@ -83,9 +83,6 @@
                         @endforelse
                     </x-table.tbody>
                 </x-table.table>
-                <div class="mt-4">
-                    {{-- {{ $partisipantjoin->links() }} --}}
-                </div>
             </section>
             @endif
         </div>

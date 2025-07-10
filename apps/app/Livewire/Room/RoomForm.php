@@ -2,18 +2,20 @@
 
 namespace App\Livewire\Room;
 
+use Carbon\Carbon;
 use App\Models\Room;
 use App\Models\Product;
 use Livewire\Component;
+use App\Models\Participant;
 use Livewire\WithPagination;
 use Livewire\Attributes\Layout;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 #[Layout('components.layouts.app', ['title' => "Room"])]
 class RoomForm extends Component
 {
     use WithPagination;
-
 
     public $roomId;
     public $coderoom, $partisipantjoin, $status, $room_notes, $user_id, $starting_price,  $min_bid_step, $product, $start_time, $end_time;
@@ -131,12 +133,85 @@ class RoomForm extends Component
             $this->dispatch(
                 'showToast',
                 message: __('Gagal di simpan'),
-                type: 'danger',
+                type: 'error',
                 duration: 5000
             );
             return;
         }
     }
+
+    public function rejectpartisipan($code = null)
+    {
+        try {
+            Participant::updateOrCreate(
+                [
+                    'user_id' => $code,
+                    'room_id' => $this->roomId
+                ],
+                [
+                    'status' => 'rejected'
+                ]
+            );
+            session()->flash('toast', [
+                'id' => uniqid(), // Simpan ID di session
+                'message' => __('Berhasil Reject'),
+                'type' => 'success',
+                'duration' => 5000
+            ]);
+        } catch (ValidationException $e) {
+            session()->flash('toast', [
+                'id' => uniqid(), // Simpan ID di session
+                'message' => __('Gagal Reject'),
+                'type' => 'error',
+                'duration' => 5000
+            ]);
+        }
+
+        $this->redirectIntended(default: route('room.edit', $this->coderoom, absolute: false));
+    }
+
+    public function startbidding()
+    {
+        $timenow = Carbon::now();
+
+        if ($this->status == 'ended') {
+            // abort(403, 'Auction Room cancelled');
+            $this->redirectIntended(default: route('room.detail', $this->coderoom, absolute: false));
+        } else {
+            if ($timenow > $this->start_time) {
+                $time = "true";
+                Room::updateOrCreate(
+                    [
+                        'room_code' => $this->coderoom,
+                    ],
+                    [
+                        'status' => 'ongoing'
+                    ]
+                );
+
+                session()->flash('toast', [
+                    'id' => uniqid(), // Simpan ID di session
+                    'message' => __('Auction is open'),
+                    'type' => 'success',
+                    'duration' => 5000
+                ]);
+                $this->redirectIntended(default: route('room.bidding', $this->coderoom, absolute: false));
+            } else {
+                // $time = "false";
+                $this->dispatch(
+                    'showToast',
+                    message: "It's not time yet",
+                    type: 'error', // 'error', 'success' ,'info'
+                    duration: 5000
+                );
+            }
+        }
+
+
+        // dd($time);
+        // $this->redirectIntended(default: route('room.bidding', $this->coderoom, absolute: false), navigate: true);
+    }
+
     public function render()
     {
         return view('livewire.room.room-form');

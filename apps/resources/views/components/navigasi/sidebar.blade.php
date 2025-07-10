@@ -65,7 +65,7 @@ $user = Auth::user();
                 <x-navigasi.navlink href="{{ route('dashboard') }}" :icon="'diagram'" :active="request()->routeIs('dashboard')">Dashboard</x-navigasi.navlink>
                 <x-navigasi.navlink href="{{ route('products') }}" :icon="'products'" :active="request()->routeIs('products')">Product</x-navigasi.navlink>
                 <x-navigasi.navlink href="{{ route('room.manage') }}" :icon="'room'" :active="request()->routeIs('room.manage')">Room</x-navigasi.navlink>
-                <x-navigasi.navlink href="{{ route('transaction') }}" :icon="'transaction'" :active="request()->routeIs('transaction')">Transactions</x-navigasi.navlink>
+                <x-navigasi.navlink href="{{ route('transaction.manage') }}" :icon="'transaction'" :active="request()->routeIs('transaction.manage')">Transactions</x-navigasi.navlink>
                 <x-navigasi.navlink href="{{ route('accounts') }}" :icon="'users'" :active="request()->routeIs('accounts')">Account</x-navigasi.navlink>
             @endcanany
             

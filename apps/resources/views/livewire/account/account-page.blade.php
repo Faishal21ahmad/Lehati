@@ -5,6 +5,7 @@
 
         <x-input.search id="search"  />
 
+
         <x-table.table class="lg:w-3/4">
             <x-table.thead>
                 <x-table.th>no</x-table.th>

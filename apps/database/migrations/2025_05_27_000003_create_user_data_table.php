@@ -18,6 +18,9 @@ return new class extends Migration
             $table->string('address', 100)->nullable();
             $table->string('nik')->unique();
             $table->enum('gender', ['male', 'female']);
+            $table->string('bank_name')->nullable();
+            $table->string('bank_number')->nullable();
+
             $table->timestamps();
 
             $table->index('user_id');

@@ -48,7 +48,6 @@ class ProductForm extends Component
         ]);
         $user = Auth::user();
         $product = Product::updateOrCreate(
-
             ['id' => $this->productId],
             [
                 'user_id' => $user->id,
@@ -74,7 +73,7 @@ class ProductForm extends Component
             'type' => 'success',
             'duration' => 5000
         ]);
-
+        // $this->redirectIntended(default: route('product.edit', ['id' => $product->id], absolute: false), navigate: true);
         return redirect()->route('product.edit', ['id' => $product->id]);
     }
 
@@ -94,21 +93,21 @@ class ProductForm extends Component
                 ])
                 ->toArray();
 
-            // Kirim notifikasi toast
-            $this->dispatch(
-                'showToast',
-                message: __('Gambar berhasil dihapus.'),
-                type: 'success',
-                duration: 5000
-            );
+            session()->flash('toast', [
+                'id' => uniqid(), // Simpan ID di session
+                'message' => __('Gambar berhasil dihapus.'),
+                'type' => 'success',
+                'duration' => 5000
+            ]);
         } else {
-            $this->dispatch(
-                'showToast',
-                message: __('Gambar berhasil dihapus.'),
-                type: 'success',
-                duration: 5000
-            );
+            session()->flash('toast', [
+                'id' => uniqid(), // Simpan ID di session
+                'message' => __('Gambar Gagal dihapus.'),
+                'type' => 'danger',
+                'duration' => 5000
+            ]);
         }
+        $this->redirectIntended(default: route('product.edit', $this->productId, absolute: false));
     }
 
 

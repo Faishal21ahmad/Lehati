@@ -23,6 +23,8 @@ class UserDataSeeder extends Seeder
             'address' => 'Jl. Magelang No. 1',
             'nik' => '1234567890123456',
             'gender' => 'female',
+            'bank_name' => 'BRI',
+            'bank_number' => '54344323523235',
             'created_at' => now(),
             'updated_at' => now(),
         ]);

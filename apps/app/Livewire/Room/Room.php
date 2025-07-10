@@ -2,11 +2,12 @@
 
 namespace App\Livewire\Room;
 
+use Carbon\Carbon;
+use Livewire\Component;
 use App\Models\Participant;
 use App\Models\Room as Rooms;
-use Illuminate\Support\Facades\Auth;
-use Livewire\Component;
 use Livewire\Attributes\Layout;
+use Illuminate\Support\Facades\Auth;
 use SebastianBergmann\CodeUnit\FunctionUnit;
 
 #[Layout('components.layouts.home', ['title' => "Home"])]
@@ -16,14 +17,12 @@ class Room extends Component
     public $images = [];
     public $partisipants = [];
 
-
     public function mount($coderoom)
     {
         $this->room = Rooms::where('room_code', $coderoom)->first();
         if (!$this->room) {
             abort(404, 'Room not found');
         }
-
 
         $this->images = $this->room->product->images->map(function ($img) {
             return ['id' => $img->id, 'image_path' => $img->image_path];
@@ -95,6 +94,37 @@ class Room extends Component
             ->exists();
     }
 
+    public function startbidding()
+    {
+        $timenow = Carbon::now();
+
+        if ($timenow > $this->room->start_time) {
+            if ($this->room->status === 'ongoing') {
+                session()->flash('toast', [
+                    'id' => uniqid(), // Simpan ID di session
+                    'message' => __('start bid'),
+                    'type' => 'success',
+                    'duration' => 5000
+                ]);
+                $this->redirectIntended(default: route('room.bidding', $this->room->room_code, absolute: false));
+            } else {
+                $this->dispatch(
+                    'showToast',
+                    message: "Auction has not been opened by admin, Please wait",
+                    type: 'info', // 'error', 'success' ,'info'
+                    duration: 5000
+                );
+            }
+        } else {
+            // $time = "false";
+            $this->dispatch(
+                'showToast',
+                message: "It's not time yet",
+                type: 'error', // 'error', 'success' ,'info'
+                duration: 5000
+            );
+        }
+    }
 
     public function render()
     {

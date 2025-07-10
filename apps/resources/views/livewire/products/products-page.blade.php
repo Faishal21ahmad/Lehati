@@ -25,13 +25,15 @@
                             <x-table.td>{{ $product->product_name }}</x-table.td>
                             <x-table.td>{{ $product->quantity }} {{ $product->units }}</x-table.td>
                             <x-table.td>
-                                @if ($product->status == 'sold')
-                                    <span class="px-3 py-1 bg-red-500 rounded-full text-white font-semibold">Sold</span> 
-                                @elseif ($product->status == 'use')
-                                    <span class="px-3 py-1 bg-yellow-500 rounded-full text-white font-semibold">Use</span> 
-                                @elseif ($product->status == 'available')
-                                    <span class="px-3 py-1 bg-green-500 rounded-full text-white font-semibold">Available</span> 
-                                @endif
+                               <span @class([
+                                    'px-3 py-1 rounded-full text-white font-semibold',
+                                    'bg-red-500' => $product->status === 'sold',
+                                    'bg-yellow-500' => $product->status === 'use',
+                                    'bg-green-500' => $product->status === 'available',
+                                ])>
+                                    {{ Str::title($product->status) }}
+                                </span>
+
                             </x-table.td>
                             <x-table.td class="flex md:flex-wrap gap-2"> 
                                 <x-button.btnaccorlink href="{{ Route('product.edit', $product->id) }}" color="blue" padding="px-3 py-1">Detail</x-button.btnaccorlink>

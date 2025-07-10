@@ -1,0 +1,16 @@
+version: '3.9'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lehati
+    restart: always
+    ports:
+      - "4444:80"
+      - "404:443"
+      - "404:443/udp"
+    volumes:
+      - ./apps:/var/www/html
+      - ./ssl:/etc/ssl/certs
+    network_mode: bridge

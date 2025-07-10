@@ -1,6 +1,5 @@
 <div class="px-6 pt-2 md:p-8 md:ml-64 text-black dark:text-white">
-    <x-layouts.app-header :title="__('Transactions')" :description="__('Your Data Transaction')" />
-    
+    <x-layouts.app-header :title="__('Transactions')" :description="__('Manage all Transaction')" />
     <div class="flex flex-col gap-2">
         <x-input.search id="search"  />
         <x-table.table class="lg:w-3/4">
@@ -8,8 +7,8 @@
                 <x-table.th>no</x-table.th>
                 <x-table.th>Code Transaction</x-table.th>
                 <x-table.th>Status</x-table.th>
+                <x-table.th>Code User</x-table.th>
                 <x-table.th>Code Room</x-table.th>
-                <x-table.th>Product</x-table.th>
                 <x-table.th>action</x-table.th>
             </x-table.thead>
             <x-table.tbody>
@@ -20,18 +19,16 @@
                         
                         <x-table.td>{{ $transaction->code_transaksi }}</x-table.td>
                         <x-table.td>
-                            @if ($transaction->status == 'unpaid')
-                                <span class="bg-red-700 rounded-full text-white px-3 py-1">{{ $transaction->status }}</span>
-                            @elseif ($transaction->status == 'paid')
-                                <span class="bg-yellow-700  rounded-full text-white px-3 py-1">{{ $transaction->status }}</span>
-                            @elseif ($transaction->status == 'failed')
-                                <span class="bg-red-700  rounded-full text-white px-3 py-1">{{ $transaction->status }}</span>
-                            @elseif ($transaction->status == 'success')
-                                <span class="bg-green-700  rounded-full text-white px-3 py-1">{{ $transaction->status }}</span>
-                            @endif
+                           <span @class(['rounded-full text-white px-3 py-1',
+                                'bg-red-700' => in_array($transaction->status, ['unpaid', 'failed']),
+                                'bg-yellow-700' => $transaction->status === 'paid',
+                                'bg-green-700' => $transaction->status === 'success',
+                            ])>
+                                {{ Str::title($transaction->status) }}
+                            </span>
                         </x-table.td>
+                        <x-table.td>{{ $transaction->user->code_user }}</x-table.td>
                         <x-table.td>{{ $transaction->bid->room->room_code }}</x-table.td>
-                        <x-table.td>{{ $transaction->bid->room->product->product_name }}</x-table.td>
                         <x-table.td class="flex md:flex-wrap gap-2"> 
                             <x-button.btnaccorlink href="{{ Route('transaction.detail', $transaction->code_transaksi) }}" color="blue" padding="px-3 py-1">Detail</x-button.btnaccorlink>
                         </x-table.td>  

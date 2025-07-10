@@ -26,7 +26,16 @@
                             <x-table.td>{{ ($rooms->currentPage() - 1) * $rooms->perPage() + $loop->iteration }}</x-table.td>
                             <x-table.td>{{ $room->room_code }}</x-table.td>
                             <x-table.td>{{ $room->product->product_name }}</x-table.td>
-                            <x-table.td>{{ $room->status }}</x-table.td>
+                            <x-table.td>
+                                <span @class(['rounded-full text-white px-3 py-1',
+                                'bg-red-700' => $room->status === 'cancelled',
+                                'bg-yellow-700' => $room->status === 'upcoming',
+                                'bg-green-700' => $room->status === 'ongoing',
+                                'bg-gray-700' => $room->status === 'ended',
+                                ])>
+                                    {{ Str::title($room->status) }}
+                                </span>
+                            </x-table.td>
                             <x-table.td>{{ $room->start_time }}</x-table.td>
                             <x-table.td class="flex md:flex-wrap gap-2"> 
                                 <x-button.btnaccorlink href="{{ Route('room.edit',$room->room_code) }}" color="blue" padding="px-3 py-1">Detail</x-button.btnaccorlink>
