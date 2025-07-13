@@ -24,7 +24,7 @@ $user = Auth::user();
 
     <!-- Logo kecil di mobile -->
     <div class="md:hidden inline-flex items-center p-2 mt-2">
-        <x-button.logoapp href="{{ route('home') }}" icon="genjie" title="Lehati" size="small" />
+        <x-button.logoapp href="{{ route('home') }}" icon="aloevera" title="Lehati" size="small" />
     </div>
 
     <!-- Overlay di mobile -->
@@ -46,7 +46,7 @@ $user = Auth::user();
 
         <!-- Logo Besar -->
         <div class="flex items-center justify-center h-16 px-4 mt-4 shrink-0">
-            <x-button.logoapp href="{{ route('home') }}" icon="genjie" title="Lehati" size="large" />
+            <x-button.logoapp href="{{ route('home') }}" icon="aloevera" title="Lehati" size="large" />
         </div>
 
         <!-- Navigasi -->
@@ -64,7 +64,7 @@ $user = Auth::user();
                 <span class="text-gray-400 text-sm py-5 px-2">Admin</span>
                 <x-navigasi.navlink href="{{ route('dashboard') }}" :icon="'diagram'" :active="request()->routeIs('dashboard')">Dashboard</x-navigasi.navlink>
                 <x-navigasi.navlink href="{{ route('products') }}" :icon="'products'" :active="request()->routeIs('products')">Product</x-navigasi.navlink>
-                <x-navigasi.navlink href="{{ route('room.manage') }}" :icon="'room'" :active="request()->routeIs('room.manage')">Room</x-navigasi.navlink>
+                <x-navigasi.navlink href="{{ route('rooms') }}" :icon="'room'" :active="request()->routeIs('room.manage')">Room</x-navigasi.navlink>
                 <x-navigasi.navlink href="{{ route('transaction.manage') }}" :icon="'transaction'" :active="request()->routeIs('transaction.manage')">Transactions</x-navigasi.navlink>
                 <x-navigasi.navlink href="{{ route('accounts') }}" :icon="'users'" :active="request()->routeIs('accounts')">Account</x-navigasi.navlink>
             @endcanany

@@ -13,8 +13,24 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
-        Product::factory(5)->create([
-            'user_id' => 1
+        Product::factory()->create([
+            'user_id' => 1,
+            'status' => 'available'
+        ]);
+        Product::factory()->create([
+            'user_id' => 1,
+            'units' => 'ton',
+            'status' => 'use'
+        ]);
+        Product::factory()->create([
+            'user_id' => 1,
+            'units' => 'kg',
+            'status' => 'use'
+        ]);
+        Product::factory()->create([
+            'user_id' => 1,
+            'units' => 'ton',
+            'status' => 'sold'
         ]);
     }
 }

@@ -19,7 +19,7 @@ class ParticipationSeeder extends Seeder
         $bidders = User::where('role', 'bidder')->get();
 
         foreach ($rooms as $room) {
-            $participants = $bidders->random(15);
+            $participants = $bidders->random(10);
 
             foreach ($participants as $bidder) {
                 Participant::factory()->create([

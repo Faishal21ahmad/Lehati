@@ -38,14 +38,39 @@ class ProductForm extends Component
 
     public function save()
     {
-        // dd($this);
         $this->validate([
-            'product_name' => 'required|string|max:255',
+            'product_name' => 'required|string|max:40',
             'quantity' => 'required|integer|min:1',
             'units' => 'required|in:kg,ton,ons,ikat',
-            'description' => 'nullable|string',
+            'description' => 'nullable|string|max:200',
             'newImages.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ], [
+            // product_name
+            'product_name.required' => 'Nama produk wajib diisi.',
+            'product_name.string'   => 'Nama produk harus berupa teks.',
+            'product_name.max'      => 'Nama produk maksimal 40 karakter.',
+
+            // quantity
+            'quantity.required' => 'Jumlah wajib diisi.',
+            'quantity.integer'  => 'Jumlah harus berupa angka.',
+            'quantity.min'      => 'Jumlah minimal adalah 1.',
+
+            // units
+            'units.required' => 'Satuan wajib dipilih.',
+            'units.in'       => 'Satuan harus salah satu dari: kg, ton, ons, atau ikat.',
+
+            // description
+            'description.string' => 'Deskripsi harus berupa teks.',
+            'description.max'    => 'Deskripsi maksimal 200 karakter.',
+
+            // newImages.*
+            'newImages.*.image' => 'Setiap file harus berupa gambar.',
+            'newImages.*.mimes' => 'Gambar harus berformat jpeg, png, jpg, atau gif.',
+            'newImages.*.max'   => 'Ukuran setiap gambar maksimal 2MB.',
         ]);
+
+
+
         $user = Auth::user();
         $product = Product::updateOrCreate(
             ['id' => $this->productId],

@@ -18,9 +18,7 @@ class ProfilePage extends Component
     public function mount()
     {
         $user = Auth::user();
-        // $userData = UserData::where('user_id', $user->id)->first();
 
-        // Initialize properties or fetch user data
         $this->name = $user->name ?? '';
         $this->code_user = $user->code_user ?? '';
         $this->email = $user->email ?? '';
@@ -31,7 +29,6 @@ class ProfilePage extends Component
     {
         $this->validate([
             'name' => ['required', 'string', 'max:255'],
-            // 'email' => ['required', 'email', 'max:255', 'unique:users,email,' . Auth::id()],
         ]);
 
         try {
@@ -39,7 +36,6 @@ class ProfilePage extends Component
             $user->update([
                 'name' => $this->name,
                 'updated_at' => now(),
-                // 'email' => $this->email,
             ]);
 
             $this->dispatch(

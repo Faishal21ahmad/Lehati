@@ -1,6 +1,6 @@
 
     <div class="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
-        <x-layouts.auth-header title="Lehati" description="Please enter your credentials to login." icon="genjie" />
+        <x-layouts.auth-header title="Lehati" description="Please enter your credentials to login." icon="aloevera" />
         @if (session('status'))
             <div class="w-full max-w-md px-4 mb-4">
                 <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400">

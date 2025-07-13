@@ -23,12 +23,14 @@ class HomePage extends Component
         // Upcoming
         $this->roomupcoming = Room::with('product')
             ->where('start_time', '>', $time)
+            ->where('status', 'upcoming')
             ->get();
 
         // Ongoing
         $this->ongoing = Room::with('product')
             ->where('start_time', '<=', $time)
             ->where('end_time', '>=', $time)
+            ->where('status', 'ongoing')
             ->get();
 
         // All Room + Search
@@ -42,6 +44,7 @@ class HomePage extends Component
                         });
                 });
             })
+            ->whereIn('status', ['upcoming', 'ongoing'])
             ->orderBy('created_at', 'desc')
             ->get();
 

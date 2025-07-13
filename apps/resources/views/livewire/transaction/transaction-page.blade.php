@@ -17,23 +17,20 @@
                     <x-table.tr>
                         {{-- <x-table.td>{{ $loop->iteration }}</x-table.td> --}}
                         <x-table.td>{{ ($transactions->currentPage() - 1) * $transactions->perPage() + $loop->iteration }}</x-table.td>
-                        
                         <x-table.td>{{ $transaction->code_transaksi }}</x-table.td>
                         <x-table.td>
-                            @if ($transaction->status == 'unpaid')
-                                <span class="bg-red-700 rounded-full text-white px-3 py-1">{{ $transaction->status }}</span>
-                            @elseif ($transaction->status == 'paid')
-                                <span class="bg-yellow-700  rounded-full text-white px-3 py-1">{{ $transaction->status }}</span>
-                            @elseif ($transaction->status == 'failed')
-                                <span class="bg-red-700  rounded-full text-white px-3 py-1">{{ $transaction->status }}</span>
-                            @elseif ($transaction->status == 'success')
-                                <span class="bg-green-700  rounded-full text-white px-3 py-1">{{ $transaction->status }}</span>
-                            @endif
+                            <span @class(['rounded-full text-white px-3 py-1',
+                                'bg-red-700' => in_array($transaction->status, ['unpaid', 'failed']),
+                                'bg-yellow-700' => $transaction->status === 'payment-verification',
+                                'bg-green-700' => $transaction->status === 'success',
+                            ])>
+                                {{ Str::title($transaction->status) }}
+                            </span>
                         </x-table.td>
                         <x-table.td>{{ $transaction->bid->room->room_code }}</x-table.td>
                         <x-table.td>{{ $transaction->bid->room->product->product_name }}</x-table.td>
                         <x-table.td class="flex md:flex-wrap gap-2"> 
-                            <x-button.btnaccorlink href="{{ Route('transaction.detail', $transaction->code_transaksi) }}" color="blue" padding="px-3 py-1">Detail</x-button.btnaccorlink>
+                            <x-button.btnaccorlink href="{{ Route('transaction.detail', $transaction->code_transaksi) }}" color="blue" padding="px-3 py-1">Pay</x-button.btnaccorlink>
                         </x-table.td>  
                     </x-table.tr>
                 @empty

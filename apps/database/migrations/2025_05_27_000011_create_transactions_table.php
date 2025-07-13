@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->string('code_transaksi', 10)->unique();
+            $table->string('code_transaksi', 13)->unique();
             $table->foreignId('bid_id')->constrained('bids');
             $table->foreignId('user_id')->constrained('users');
-            $table->enum('status', ['unpaid', 'paid', 'failed', 'success']);
+            $table->enum('status', ['unpaid', 'payment-verification', 'failed', 'success']);
             $table->string('payment_proof', 100)->nullable();
             $table->text('notes')->nullable();
             $table->decimal('amount_final', 15, 2);

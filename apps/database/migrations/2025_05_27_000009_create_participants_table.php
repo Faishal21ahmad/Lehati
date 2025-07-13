@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('room_id')->constrained('rooms');
-            $table->enum('status', ['joined', 'rejected','left'])->default('joined');
+            $table->enum('status', ['joined', 'rejected','leave'])->default('joined');
             $table->timestamps();
 
             $table->index('room_id');

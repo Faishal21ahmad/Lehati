@@ -14,7 +14,11 @@ class UserData extends Model
         'phone',
         'address',
         'nik',
-        'gender'
+        'gender',
+        'bank',
+        'bank_name',
+        'bank_number',
+
     ];
 
     public function user()

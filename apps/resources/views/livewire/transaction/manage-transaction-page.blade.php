@@ -21,7 +21,7 @@
                         <x-table.td>
                            <span @class(['rounded-full text-white px-3 py-1',
                                 'bg-red-700' => in_array($transaction->status, ['unpaid', 'failed']),
-                                'bg-yellow-700' => $transaction->status === 'paid',
+                                'bg-yellow-700' => $transaction->status === 'payment-verification',
                                 'bg-green-700' => $transaction->status === 'success',
                             ])>
                                 {{ Str::title($transaction->status) }}
@@ -30,7 +30,7 @@
                         <x-table.td>{{ $transaction->user->code_user }}</x-table.td>
                         <x-table.td>{{ $transaction->bid->room->room_code }}</x-table.td>
                         <x-table.td class="flex md:flex-wrap gap-2"> 
-                            <x-button.btnaccorlink href="{{ Route('transaction.detail', $transaction->code_transaksi) }}" color="blue" padding="px-3 py-1">Detail</x-button.btnaccorlink>
+                            <x-button.btnaccorlink href="{{ Route('transaction.detail', $transaction->code_transaksi) }}" color="blue" padding="px-3 py-1">Pay</x-button.btnaccorlink>
                         </x-table.td>  
                     </x-table.tr>
                 @empty

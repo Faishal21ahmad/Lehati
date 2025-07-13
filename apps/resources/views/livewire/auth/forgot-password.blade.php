@@ -1,5 +1,5 @@
 <div class="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
-    <x-layouts.auth-header title="Lehati" description="Confirm Your Email" icon="genjie"/>
+    <x-layouts.auth-header title="Lehati" description="Confirm Your Email" icon="aloevera"/>
     @if (session('status'))
         <div class="mb-4 text-sm font-medium text-green-600">{{ session('status') }}</div>
     @endif

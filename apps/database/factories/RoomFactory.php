@@ -39,7 +39,7 @@ class RoomFactory extends Factory
             'room_code' => 'RM' . $this->faker->unique()->numberBetween(1000, 9999),
             'room_notes' => $faker->randomElement($roomNotesList),
             'status' => $this->faker->randomElement(['upcoming', 'ongoing', 'ended', 'cancelled']),
-            'starting_price' => $this->faker->numberBetween(10000, 50000000),
+            'starting_price' => $this->faker->numberBetween(10000, 5000000),
             'min_bid_step' => $this->faker->numberBetween(1000, 50000),
             'start_time' => $startTime,
             'end_time' => $endTime,

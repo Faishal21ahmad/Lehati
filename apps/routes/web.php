@@ -26,6 +26,7 @@ use App\Livewire\Category\CategoryPage;
 use App\Livewire\Products\ProductsPage;
 use App\Livewire\Products\ProductDetail;
 use App\Livewire\Dashboard\DashboardPage;
+use App\Livewire\Transaction\TransactionForm;
 use App\Livewire\Transaction\TransactionPage;
 use App\Livewire\Transaction\ManageTransactionPage;
 
@@ -44,7 +45,6 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('dashboard', DashboardPage::class)->name('dashboard');
-    Route::get('room', RoomPage::class)->name('room');
     Route::get('profile/profile', ProfilePage::class)->name('profile');
     Route::get('profile/userdata', DataUser::class)->name('profile.data');
     Route::get('profile/password', Password::class)->name('profile.password');
@@ -54,15 +54,15 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('products', ProductsPage::class)->name('products');
     Route::get('product/create', ProductForm::class)->name('product.create');
-    Route::get('product/{id}/edit', ProductForm::class)->name('product.edit');
+    Route::get('product/{id}/detailmanage', ProductForm::class)->name('product.edit');
 });
 
 Route::get('room/{coderoom}/detail', Room::class)->name('room.detail');
 Route::middleware('auth')->group(function () {
-    Route::get('rooms', ManageRoomPage::class)->name('room.manage');
+    Route::get('room', RoomPage::class)->name('room');
+    Route::get('rooms', ManageRoomPage::class)->name('rooms');
     Route::get('room/create', RoomForm::class)->name('room.create');
-    Route::get('room/{coderoom}/edit', RoomForm::class)->name('room.edit');
-    Route::get('room/manage/partisipan', ManageRoomPage::class)->name('room.manage.partisipan');
+    Route::get('room/{coderoom}/detailmanage', RoomForm::class)->name('room.edit');
     Route::get('room/{coderoom}/roombidding', LiveBidding::class)->name('room.bidding');
 });
 
@@ -74,6 +74,5 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('transaction', TransactionPage::class)->name('transaction');
     Route::get('transactions', ManageTransactionPage::class)->name('transaction.manage');
-    Route::get('transactions/{code_transaksi}/detail', ManageTransactionPage::class)->name('transaction.detail');
-
+    Route::get('transaction/{codetransaksi}/detail', TransactionForm::class)->name('transaction.detail');
 });

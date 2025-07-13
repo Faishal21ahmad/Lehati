@@ -1,11 +1,11 @@
-<div class="max-w-screen-2xl p-4 mx-auto mt-20 text-white">
+<div class="max-w-screen-2xl p-4 mx-auto mt-20 dark:text-white">
     
     <section class="flex flex-col md:flex-row w-full gap-4" >
         <div id="images" class="md:w-[30%] w-full flex flex-col gap-4">
-            <div class="w-full shadow-md bg-white dark:bg-slate-800 rounded-lg ">
+            <div class="w-full shadow-sm bg-white dark:bg-slate-800 rounded-lg ">
                 <x-carousel.carousel :fileproduct="$images" wight="h-[300px] md:h-[200px] lg:h-[300px]" />
             </div>
-            <div class="p-4 dark:bg-slate-800 rounded-lg flex gap-2">
+            <div class="p-4 flex gap-2 bg-white dark:bg-slate-800 rounded-lg shadow-sm">
                 <div class="">
                     <p>Room Code</p>
                     <p>Name Product</p>
@@ -30,14 +30,14 @@
             @endcan
         </div>
         <div id="bid" class="w-full md:w-[70%] flex flex-col gap-4">
-            <div id="topbid" class="p-4 dark:bg-slate-800 rounded-lg ">
+            <div id="topbid" class="p-4 bg-white dark:bg-slate-800 rounded-lg shadow-sm">
                 <div class="w-full h-[100px] flex flex-col items-center justify-center ">
-                    <h1 class="text-3xl font-bold">Rp. {{ number_format($topBid->amount , 0, ',', '.') }}</h1>
+                    <h1 class="text-3xl font-bold">Rp. {{ number_format($topBid->amount ?? 0 , 0, ',', '.') }}</h1>
                     <span class="">Top Bid</span>
                 </div>
                 <div class="w-full h-[50px] flex flex-row gap-4 text-xl font-semibold items-center justify-center ">
-                    <p>{{ $topBid->participant->user->name }}</p>
-                    <p>{{ $topBid->participant->user->code_user }}</p>
+                    <p>{{ $topBid->participant->user->name ?? 'user' }}</p>
+                    <p>{{ $topBid->participant->user->code_user ?? '-----' }}</p>
                 </div>
             </div>
             @can('bidder')

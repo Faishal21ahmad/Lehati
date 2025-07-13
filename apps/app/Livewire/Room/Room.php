@@ -3,6 +3,7 @@
 namespace App\Livewire\Room;
 
 use Carbon\Carbon;
+use App\Models\Bid;
 use Livewire\Component;
 use App\Models\Participant;
 use App\Models\Room as Rooms;
@@ -16,28 +17,33 @@ class Room extends Component
     public $room;
     public $images = [];
     public $partisipants = [];
+    public $transaksiWinner;
+    public $user;
 
     public function mount($coderoom)
     {
         $this->room = Rooms::where('room_code', $coderoom)->first();
+        $this->partisipants = $this->room->partisipants;
+        $this->user = Auth::user();
+
         if (!$this->room) {
             abort(404, 'Room not found');
         }
-
         $this->images = $this->room->product->images->map(function ($img) {
             return ['id' => $img->id, 'image_path' => $img->image_path];
         })->toArray();
-
-        $this->partisipants = $this->room->partisipants;
+        $this->transaksiWinner = Bid::where('room_id', $this->room->id)
+            ->where('is_winner', true)
+            ->latest('created_at') // urutkan dari yang terbaru
+            ->first();
     }
 
+    // function button joinRoom (user join room lelang)
     public function joinRoom()
     {
-        $user = Auth::user();
-
-        if (!$user) {
+        if (!$this->user) {
             return redirect()->route('login');
-        } elseif (!$user->userdata) {
+        } elseif (!$this->user->userdata) {
             session()->flash('toast', [
                 'id' => uniqid(), // Simpan ID di session
                 'message' => __('Update Your Data !'),
@@ -49,7 +55,7 @@ class Room extends Component
 
         Participant::updateOrCreate(
             [
-                'user_id' => $user->id,
+                'user_id' => $this->user->id,
                 'room_id' => $this->room->id,
             ],
             [
@@ -64,36 +70,35 @@ class Room extends Component
             duration: 5000
         );
     }
-
+    // function button leaveRoom (keluar room)
     public function leaveRoom()
     {
-        $user = Auth::user();
-
-        if (!$user) {
+        if (!$this->user) {
             return redirect()->route('login');
         }
 
-        Participant::where('user_id', $user->id)
+        Participant::where('user_id', $this->user->id)
             ->where('room_id', $this->room->id)
-            ->update(['status' => 'left']);
+            ->update(['status' => 'leave']);
 
         $this->dispatch(
             'showToast',
-            message: 'Left Room !',
+            message: 'Leave Room !',
             type: 'success', // 'error', 'success' ,'info'
             duration: 5000
         );
     }
+    // pengecekan apakah user join room ini
     public function isJoined()
     {
-        $user = Auth::user();
         return $this->room
             ->participants()
-            ->where('user_id', $user->id)
+            ->where('user_id', $this->user->id)
             ->where('status', 'joined')
             ->exists();
     }
 
+    // function button starbidding (memulai ke halaman Livebidding)
     public function startbidding()
     {
         $timenow = Carbon::now();

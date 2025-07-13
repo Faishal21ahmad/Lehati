@@ -12,9 +12,7 @@ use Livewire\WithPagination;
 class TransactionPage extends Component
 {
     use WithPagination;
-
     public $query = '';
-
     public function updatingQuery()
     {
         $this->resetPage(); // agar halaman balik ke page 1 saat cari
@@ -46,7 +44,6 @@ class TransactionPage extends Component
             })
             ->latest()
             ->paginate(10);
-
 
         return view('livewire.transaction.transaction-page', [
             'transactions' => $transactions

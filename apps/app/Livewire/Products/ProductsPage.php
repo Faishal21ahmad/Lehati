@@ -23,7 +23,6 @@ class ProductsPage extends Component
                     ->orWhere('quantity', 'like', '%' . $this->query . '%')
                     ->orWhere('status', 'like', '%' . $this->query . '%')
                     ->orWhere('units', 'like', '%' . $this->query . '%');
-                    
             })
             ->orderBy('product_name', 'asc')
             ->paginate(10);

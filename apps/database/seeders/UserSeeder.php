@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
             'role' => 'admin',
         ]);
 
-        for ($i = 1; $i <= 15; $i++) {
+        for ($i = 1; $i <= 10; $i++) {
             User::factory()->create([
                 'name' => 'miftah' . $i,
                 'email' => 'miftah' . $i . '@example.com',

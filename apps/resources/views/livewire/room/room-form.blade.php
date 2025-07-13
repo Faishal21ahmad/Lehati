@@ -6,13 +6,12 @@
     />
 
     <div class="w-full flex lg:flex-row flex-col gap-4 mt-4">
-        <div class="w-full">
+        <div class="w-full flex flex-col gap-5">
             <form wire:submit.prevent="save" enctype="multipart/form-data">
                 @if ($roomId)
                     <x-input.input type="text" id="coderoom" label="Room Code" disabled/>
                     <x-input.select id="product" label="Product" placeholder="Pilih Product" :options="$products" disabled error="{{ $errors->first('product') }}" />
                     <x-input.input type="text" id="status" label="Status" disabled/>
-                
                 @endif
                 @if (!$roomId)
                     <x-input.select id="product" label="Select Product" placeholder="Pilih Product" :options="$products" error="{{ $errors->first('product') }}" />
@@ -27,29 +26,51 @@
                 <x-input.textarea id="room_notes" label="Room Notes" placeholder="" error="{{ $errors->first('room_notes') }}"/>
                 
                 <div class="mt-2">
+                    <x-button.btnaccorlink navigate=true type="button" href="{{ Route('rooms') }}" color="yellow">Back</x-button.btnaccorlink>
                     <x-button.btn type="submit">{{ $roomId ? 'Update' : 'Simpan' }}</x-button.btn>
                     @if ($roomId && $status != "ended" && $status != "cancelled")
                         <x-button.btn wire:click="startbidding" color="green">Start Room</x-button.btn>    
+                        <x-button.btn wire:click="cancelRoom" color="yellow">Cencel Room</x-button.btn>    
                     @endif
-                    <x-button.btnaccorlink navigate=true type="button" href="{{ Route('room.manage') }}" color="yellow">Back</x-button.btnaccorlink>
-
                 </div>
             </form>
+            <hr>
         </div>
-        <div class="w-full ">
+        <div class="w-full flex flex-col gap-3">
+            @if($status =="ended")
+            <section class="">
+                <h1 class="font-semibold px-3 py-1">Winner</h1>
+                <div class="flex w-full gap-2 p-4 bg-white dark:bg-gray-800 rounded-md shadow-sm">
+                    <div class="">
+                        <p>Highest Bid</p>
+                        <p>Code User</p>
+                        <p>Name User</p>
+                        <p>ID Transaction</p>
+                    </div>
+                    <div class="">
+                        <p>: Rp. {{ number_format($transaksiWinner->amount, 0, ',', '.') }}</p>
+                        <p>: {{ $transaksiWinner->participant->user->code_user }}</p>
+                        <p>: {{ $transaksiWinner->participant->user->name }}</p>
+                        <p class="">: <x-button.accorlink class="font-semibold" href="{{ Route('transaction.detail', $transaksiWinner->transaction->code_transaksi) }}">{{ $transaksiWinner->transaction->code_transaksi }}</x-button.accorlink></p>
+                        {{-- <p>: </p> --}}
+                    </div>
+                </div>
+                {{-- {{ $transaksiWinner }} --}}
+            </section>
+            @endif
             @if ($roomId)
             <section id="cardInformation" class="w-full flex flex-col gap-2">
-                <h1>Participants</h1>
+                <h1 class="font-semibold px-3 py-1">Participants</h1>
                 <div class="flex gap-2 w-full">
-                    <div class="w-full p-2 text-center rounded-md shadow-md bg-white dark:bg-gray-800">
+                    <div class="w-full p-2 text-center rounded-md shadow-sm bg-white dark:bg-gray-800">
                         <h1 class="font-semibold text-lg">Join</h1>
                         <p>{{ $countpartisipantjoin }}</p>
                     </div>
-                    <div class="w-full p-2 text-center rounded-md shadow-md bg-white dark:bg-gray-800">
+                    <div class="w-full p-2 text-center rounded-md shadow-sm bg-white dark:bg-gray-800">
                         <h1 class="font-semibold text-lg">Leave</h1>
                         <p>{{ $countpartisipantleave }}</p>
                     </div>
-                    <div class="w-full p-2 text-center rounded-md shadow-md bg-white dark:bg-gray-800">
+                    <div class="w-full p-2 text-center rounded-md shadow-sm bg-white dark:bg-gray-800">
                         <h1 class="font-semibold text-lg">Rejected</h1>
                         <p>{{ $countpartisipantrejected }}</p>
                     </div>

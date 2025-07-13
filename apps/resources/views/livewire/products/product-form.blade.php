@@ -18,14 +18,11 @@
                             ['value' => 'ons', 'label' => 'Ons'],
                             ['value' => 'ikat', 'label' => 'Ikat']
                         ]" 
-                        error="{{ $errors->first('units') }}"
-                    />
+                        error="{{ $errors->first('units') }}" />
                 </div>
     
                 <x-input.textarea name="description" id="description" label="Description" placeholder="" error="{{ $errors->first('description') }}"/>
-                <x-input.file id="newImages" label="Picture Product" accept="image/*" :multiple="true" helpText="Upload your photo product (jpeg, png, jpg)" error="{{ $errors->first('newImages.*') }}"
-                    />
-    
+                <x-input.file id="newImages" label="Picture Product" accept="image/*" :multiple="true" helpText="Upload your photo product (jpeg, png, jpg)" error="{{ $errors->first('newImages.*') }}"/>
     
                 {{-- Preview gambar baru --}}
                 @if ($newImages)
@@ -45,23 +42,23 @@
         <div class="w-full">
             {{-- Gambar yang sudah ada --}}
             @if ($existingImages)
-                    <x-carousel.carousel :fileproduct="$existingImages" class="w-full"  />
-                    <div class="mt-4 ">
-                        <p class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Gambar yang sudah ada:</p>
-                        <div class="flex gap-2 flex-wrap overflow-auto">
-                            {{-- Tampilkan gambar yang sudah ada --}}
-                            @foreach ($existingImages as $image)
-                                <div class="relative group">
-                                    <img src="{{ asset('storage/' . $image['image_path']) }}" class="w-20 h-20 object-cover rounded shadow" />
-                                    <button type="button" wire:click="removeImage({{ $image['id'] }})"
-                                        class="absolute top-0 right-0 bg-red-500 text-white text-md px-2 rounded-full group-hover:block hidden hover:cursor-pointer">
-                                        &times;
-                                    </button>
-                                </div>
-                            @endforeach
-                        </div>
+                <x-carousel.carousel :fileproduct="$existingImages" class="w-full"  />
+                <div class="mt-4 ">
+                    <p class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Gambar yang sudah ada:</p>
+                    <div class="flex gap-2 flex-wrap overflow-auto">
+                        {{-- Tampilkan gambar yang sudah ada --}}
+                        @foreach ($existingImages as $image)
+                            <div class="relative group">
+                                <img src="{{ asset('storage/' . $image['image_path']) }}" class="w-20 h-20 object-cover rounded shadow" />
+                                <button type="button" wire:click="removeImage({{ $image['id'] }})"
+                                    class="absolute top-0 right-0 bg-red-500 text-white text-md px-2 rounded-full group-hover:block hidden hover:cursor-pointer">
+                                    &times;
+                                </button>
+                            </div>
+                        @endforeach
                     </div>
-                @endif
+                </div>
+            @endif
         </div>
     </div>
 </div>

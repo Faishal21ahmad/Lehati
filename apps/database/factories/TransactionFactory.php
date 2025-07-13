@@ -17,9 +17,8 @@ class TransactionFactory extends Factory
     public function definition(): array
     {
         return [
-            'code_transaksi' => fn() => now()->format('dmy') . $this->faker->unique()->numberBetween(1000, 9999),
-            'status' => $this->faker->randomElement(['unpaid', 'paid', 'failed', 'success']),
-            'payment_proof' => $this->faker->optional()->imageUrl(),
+            'code_transaksi' =>  fn() => now()->format('dmy') . 'TRF' . $this->faker->unique()->numberBetween(1000, 9999),
+            'status' => $this->faker->randomElement(['unpaid', 'payment-verification', 'failed', 'success']),
             'notes' => $this->faker->optional()->sentence,
             'amount_final' => $this->faker->randomFloat(2, 10000, 200000),
             'payment_verified_at' => $this->faker->optional()->dateTimeThisMonth,

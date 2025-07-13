@@ -15,15 +15,30 @@ class BidsSeeder extends Seeder
      */
     public function run(): void
     {
+
+
         $participants = Participant::all();
+        $lastBidAmounts = [];
 
         foreach ($participants as $participant) {
+            $roomId = $participant->room_id;
+
+            // Mulai dari nilai awal jika belum ada
+            if (!isset($lastBidAmounts[$roomId])) {
+                $lastBidAmounts[$roomId] = rand(100000, 5000000); // Bid awal per room
+            }
+
             $bidCount = rand(1, 5);
 
             for ($i = 0; $i < $bidCount; $i++) {
+                // Tambahkan jumlah acak agar terus naik
+                $increment = rand(1000, 10000);
+                $lastBidAmounts[$roomId] += $increment;
+
                 Bid::factory()->create([
                     'participan_id' => $participant->id,
-                    'room_id' => $participant->room_id,
+                    'room_id' => $roomId,
+                    'amount' => $lastBidAmounts[$roomId],
                 ]);
             }
         }

@@ -49,12 +49,12 @@ class Login extends Component
             RateLimiter::hit($this->throttleKey());
             $this->dispatch(
                 'showToast',
-                message: __('auth.failed'),
+                message: __('Auth Failed'),
                 type: 'error',
                 duration: 5000
             );
             throw ValidationException::withMessages([
-                'email' => __('auth.failed'),
+                'email' => __('Auth Failed'),
             ]);
         }
         RateLimiter::clear($this->throttleKey());

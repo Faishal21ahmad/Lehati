@@ -18,7 +18,6 @@ class ResetPassword extends Component
     public function mount($token): void
     {
         $this->token = $token;
-
         // Ambil email dari request jika ada
         $this->email = request()->query('email', '');
     }

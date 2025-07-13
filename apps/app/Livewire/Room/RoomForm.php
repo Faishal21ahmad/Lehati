@@ -3,12 +3,15 @@
 namespace App\Livewire\Room;
 
 use Carbon\Carbon;
+use App\Models\Bid;
 use App\Models\Room;
 use App\Models\Product;
 use Livewire\Component;
 use App\Models\Participant;
 use Livewire\WithPagination;
 use Livewire\Attributes\Layout;
+use PhpParser\Node\Stmt\TryCatch;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
@@ -21,6 +24,7 @@ class RoomForm extends Component
     public $coderoom, $partisipantjoin, $status, $room_notes, $user_id, $starting_price,  $min_bid_step, $product, $start_time, $end_time;
     public $products = [];
     public $partisipans, $countpartisipantjoin, $countpartisipantleave, $countpartisipantrejected;
+    public $transaksiWinner;
 
     public function mount($coderoom = null)
     {
@@ -43,9 +47,13 @@ class RoomForm extends Component
             $this->partisipantjoin = $room->participants->where('status', 'joined');
 
             $this->countpartisipantjoin     = $room->participants->where('status', 'joined')->count();
-            $this->countpartisipantleave    = $room->participants->where('status', 'left')->count();
+            $this->countpartisipantleave    = $room->participants->where('status', 'leave')->count();
             $this->countpartisipantrejected = $room->participants->where('status', 'rejected')->count();
 
+            $this->transaksiWinner = Bid::where('room_id', $this->roomId)
+                ->where('is_winner', true)
+                ->latest('created_at') // urutkan dari yang terbaru
+                ->first();
 
             $this->products = Product::where(['user_id' => $user->id])
                 ->get()
@@ -70,17 +78,45 @@ class RoomForm extends Component
         }
     }
 
+    // Menyimpan data baru dan pembaruan data Room 
     public function save()
     {
-        // $this->validate([
-        //     'coderoom' => 'required|string|max:255',
-        //     'product' => 'required|exists:products,id',
-        //     'starting_price' => 'required|numeric|min:0',
-        //     'min_bid_step' => 'required|numeric|min:0',
-        //     'room_notes' => 'nullable|string|max:1000',
-        //     'start_time' => 'required|date',
-        //     'end_time' => 'required|date|after:start_time',
-        // ]);
+        $this->validate([
+            'product' => 'required|exists:products,id',
+            'starting_price' => 'required|numeric|min:0',
+            'min_bid_step' => 'required|numeric|min:0',
+            'start_time' => 'required|date',
+            'end_time' => 'required|date|after:start_time',
+            'room_notes' => 'nullable|string|max:200',
+        ], [
+            // product
+            'product.required' => 'Produk wajib dipilih.',
+            'product.exists'   => 'Produk yang dipilih tidak valid.',
+
+            // starting_price
+            'starting_price.required' => 'Harga awal wajib diisi.',
+            'starting_price.numeric'  => 'Harga awal harus berupa angka.',
+            'starting_price.min'      => 'Harga awal tidak boleh kurang dari 0.',
+
+            // min_bid_step
+            'min_bid_step.required' => 'Kelipatan bid minimal wajib diisi.',
+            'min_bid_step.numeric'  => 'Kelipatan bid minimal harus berupa angka.',
+            'min_bid_step.min'      => 'Kelipatan bid minimal tidak boleh kurang dari 0.',
+
+            // start_time
+            'start_time.required' => 'Waktu mulai wajib diisi.',
+            'start_time.date'     => 'Format waktu mulai tidak valid.',
+
+            // end_time
+            'end_time.required' => 'Waktu berakhir wajib diisi.',
+            'end_time.date'     => 'Format waktu berakhir tidak valid.',
+            'end_time.after'    => 'Waktu berakhir harus setelah waktu mulai.',
+
+            // room_notes
+            'room_notes.string' => 'Catatan harus berupa teks.',
+            'room_notes.max'    => 'Catatan maksimal 200 karakter.',
+        ]);
+
 
         // Siapkan nilai room_code
         $this->coderoom = $this->roomId ? $this->coderoom : 'RM' . fake()->unique()->numberBetween(1000, 9999);
@@ -94,7 +130,7 @@ class RoomForm extends Component
                 [
                     'room_code' => $this->coderoom,
                     'user_id' => $this->user_id,
-                    'status' => 'upcoming',
+                    'status' => !$this->roomId ? 'upcoming' : $this->status,
                     'room_notes' => $this->room_notes,
                     'product_id' => $this->product,
                     'starting_price' => $this->starting_price,
@@ -140,6 +176,7 @@ class RoomForm extends Component
         }
     }
 
+    // Menolak Atau mengeluarkan Partisipan dari Room
     public function rejectpartisipan($code = null)
     {
         try {
@@ -170,16 +207,21 @@ class RoomForm extends Component
         $this->redirectIntended(default: route('room.edit', $this->coderoom, absolute: false));
     }
 
+    // Memulai Lelang oleh Admin
     public function startbidding()
     {
         $timenow = Carbon::now();
 
         if ($this->status == 'ended') {
-            // abort(403, 'Auction Room cancelled');
-            $this->redirectIntended(default: route('room.detail', $this->coderoom, absolute: false));
+            session()->flash('toast', [
+                'id' => uniqid(), // Simpan ID di session
+                'message' => __('The Room Has Ended'),
+                'type' => 'error',
+                'duration' => 5000
+            ]);
+            $this->redirectIntended(default: route('room.edit', $this->coderoom, absolute: false));
         } else {
             if ($timenow > $this->start_time) {
-                $time = "true";
                 Room::updateOrCreate(
                     [
                         'room_code' => $this->coderoom,
@@ -197,7 +239,6 @@ class RoomForm extends Component
                 ]);
                 $this->redirectIntended(default: route('room.bidding', $this->coderoom, absolute: false));
             } else {
-                // $time = "false";
                 $this->dispatch(
                     'showToast',
                     message: "It's not time yet",
@@ -206,10 +247,63 @@ class RoomForm extends Component
                 );
             }
         }
+    }
+
+    // Membatalkan ruang lelang 
+    public function cancelRoom()
+    {
+        // validasi status room whether status ended ? 
+        // update ststus room to cancelled
+        // update ststus partisipan to rejected
+        // update ststus product to available
+        if ($this->status == 'ended') {
+            session()->flash('toast', [
+                'id' => uniqid(), // Simpan ID di session
+                'message' => __('The Room Has Ended'),
+                'type' => 'error',
+                'duration' => 5000
+            ]);
+            $this->redirectIntended(default: route('room.edit', $this->coderoom, absolute: false), navigate: false);
+        } else {
+            try {
+                DB::beginTransaction();
+
+                Room::updateOrCreate([
+                    'room_code' => $this->coderoom,
+                ], [
+                    'status' => 'cancelled'
+                ]);
+
+                Participant::where('room_id', $this->roomId)
+                    ->where('status', 'joined') // misalnya hanya yang masih joined
+                    ->update(['status' => 'rejected']);
 
 
-        // dd($time);
-        // $this->redirectIntended(default: route('room.bidding', $this->coderoom, absolute: false), navigate: true);
+                Product::updateOrCreate([
+                    'id' => $this->product
+                ], [
+                    'status' => 'available'
+                ]);
+
+                session()->flash('toast', [
+                    'id' => uniqid(), // Simpan ID di session
+                    'message' => __('Room is cancelled'),
+                    'type' => 'error',
+                    'duration' => 5000
+                ]);
+                $this->redirectIntended(default: route('room.edit', $this->coderoom, absolute: false), navigate: false);
+
+                DB::commit();
+            } catch (ValidationException $e) {
+                DB::rollBack();
+                $this->dispatch(
+                    'showToast',
+                    message: $e,
+                    type: 'error', // 'error', 'success' ,'info'
+                    duration: 5000
+                );
+            }
+        }
     }
 
     public function render()
@@ -217,3 +311,11 @@ class RoomForm extends Component
         return view('livewire.room.room-form');
     }
 }
+
+// try {
+//     DB::beginTransaction();
+//     //model
+//     DB::commit();
+// } catch (ValidationException $e) {
+//     DB::rollBack();
+// }

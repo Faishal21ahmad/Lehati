@@ -1,5 +1,5 @@
 <div class="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
-    <x-layouts.auth-header title="Lehati" description="Enter your OTP" icon="genjie"/>
+    <x-layouts.auth-header title="Lehati" description="Enter your OTP" icon="aloevera"/>
     {{-- Body --}}
     <form wire:submit="otp" class="max-w-sm mx-auto">
         <div class="flex justify-center mb-2 space-x-2 rtl:space-x-reverse">

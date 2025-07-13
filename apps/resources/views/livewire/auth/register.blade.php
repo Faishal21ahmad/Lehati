@@ -1,5 +1,5 @@
 <div class="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
-    <x-layouts.auth-header title="Lehati" description="Registrasi New Account" icon="genjie"/>
+    <x-layouts.auth-header title="Lehati" description="Registrasi New Account" icon="aloevera"/>
 
     <form wire:submit="register" class="w-full max-w-md px-4 mx-auto">
         <x-input.input type="text" id="name" name="name" label="Username" placeholder="Joko" required error="{{ $errors->first('name') }}"/>

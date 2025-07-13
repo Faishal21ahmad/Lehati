@@ -17,7 +17,7 @@ class ParticipantFactory extends Factory
     public function definition(): array
     {
         return [
-            'status' => $this->faker->randomElement(['joined', 'rejected','left']),
+            'status' => $this->faker->randomElement(['joined', 'rejected','leave']),
             'created_at' => now(),
             'updated_at' => now(),
         ];

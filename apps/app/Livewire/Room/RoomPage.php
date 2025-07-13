@@ -31,10 +31,14 @@ class RoomPage extends Component
 
                 $q->where(function ($query) use ($search) {
                     $query->where('status', 'like', "%{$search}%")
-                        ->orWhereHas('room', fn($q) =>
+                        ->orWhereHas(
+                            'room',
+                            fn($q) =>
                             $q->where('room_code', 'like', "%{$search}%")
                         )
-                        ->orWhereHas('room.product', fn($q) =>
+                        ->orWhereHas(
+                            'room.product',
+                            fn($q) =>
                             $q->where('product_name', 'like', "%{$search}%")
                         );
                 });

@@ -18,8 +18,8 @@ class DatabaseSeeder extends Seeder
             ProductSeeder::class,
             RoomSeeder::class,
             ParticipationSeeder::class,
-            BidsSeeder::class,
-            TransactionSeeder::class,
+            // BidsSeeder::class,
+            // TransactionSeeder::class,
             ImageProductSeeder::class,
             UserDataSeeder::class,
         ]);
