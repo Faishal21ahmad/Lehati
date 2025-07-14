@@ -17,7 +17,7 @@ use Illuminate\Validation\ValidationException;
 class LiveBidding extends Component
 {
     public $room;
-    public $product, $images, $bids, $topBid, $bidnew, $participant;
+    public $product, $images, $bids, $topBid, $bidnew, $participant, $topBidAmount;
 
     public function mount($coderoom)
     {
@@ -25,22 +25,28 @@ class LiveBidding extends Component
         $user = Auth::user();
         $timenow = Carbon::now();
 
-        // Pengecekan hanya untuk role user
+        // Pengecekan untuk role user
         if ($user->role->value !== 'admin') {
+            // Pengecekan User yang login apakah termasuk peserta Room Lelang 
             $isParticipant = Participant::where('user_id', $user->id)
                 ->where('room_id', $this->room->id)
                 ->where('status', 'joined')
                 ->exists(); // true/false
 
+            // Penolakan Jika User bukan peserta 
             if (! $isParticipant) {
                 abort(403, 'You do not have access to this room.');
             }
+            // Penolakan jika status Room telah cancelled
             if ($this->room->status == 'cancelled') {
                 abort(403, 'Auction Room cancelled');
             }
+            // Penolakan 
             if ($this->room->status === 'ended' || $timenow > $this->room->end_time) {
                 return $this->redirectIntended(route('room.detail', $this->room->room_code, absolute: false));
             }
+
+        // pengecekan selain role admin 
         } else {
             if ($this->room->status === 'ended' || $timenow > $this->room->end_time) {
                 return $this->redirectIntended(route('room.edit', $this->room->room_code, absolute: false));
@@ -50,6 +56,7 @@ class LiveBidding extends Component
         $this->product = $this->room->product;
         $this->bids = $this->room->bids()->orderBy('id', 'desc')->get();
         $this->topBid = $this->room->bids()->orderByDesc('id')->first();
+        $this->topBidAmount = $this->topBid->amount ?? $this->room->starting_price;
 
         $this->participant = Participant::where('user_id', $user->id)
             ->where('room_id', $this->room->id)
@@ -81,9 +88,9 @@ class LiveBidding extends Component
             ]);
             return $this->redirectIntended(default: route('room.detail', $this->room->room_code, absolute: false));
         } else {
-            $amount = $this->topBid->amount ?? 0;
-            $selisih = $this->bidnew - $amount;
-            if ($this->bidnew < $amount) {
+            // $amount = $this->topBid->amount ?? $this->room->starting_price;
+            $selisih = $this->bidnew - $this->topBidAmount;
+            if ($this->bidnew < $this->topBidAmount) {
                 $this->dispatch(
                     'showToast',
                     message: "Bids must not be below the highest price",

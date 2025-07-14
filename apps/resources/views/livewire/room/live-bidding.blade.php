@@ -1,11 +1,11 @@
 <div class="max-w-screen-2xl p-4 mx-auto mt-20 dark:text-white">
-    
     <section class="flex flex-col md:flex-row w-full gap-4" >
         <div id="images" class="md:w-[30%] w-full flex flex-col gap-4">
-            <div class="w-full shadow-sm bg-white dark:bg-slate-800 rounded-lg ">
+            <div class="w-full shadow-sm bg-white dark:bg-gray-800 rounded-lg ">
                 <x-carousel.carousel :fileproduct="$images" wight="h-[300px] md:h-[200px] lg:h-[300px]" />
             </div>
-            <div class="p-4 flex gap-2 bg-white dark:bg-slate-800 rounded-lg shadow-sm">
+             {{-- Informasi Room --}}
+            <div id="informasi-room" class="p-4 flex gap-2 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
                 <div class="">
                     <p>Room Code</p>
                     <p>Name Product</p>
@@ -21,6 +21,7 @@
                     <p>: Rp. {{ number_format($room->min_bid_step , 0, ',', '.') }}</p>
                 </div>
             </div>
+            {{-- Button EndRoom  --}}
             @can('admin')
             <div class="">
                 <x-button.btn class="w-full" color="red" wire:click="endRoom">
@@ -30,9 +31,10 @@
             @endcan
         </div>
         <div id="bid" class="w-full md:w-[70%] flex flex-col gap-4">
-            <div id="topbid" class="p-4 bg-white dark:bg-slate-800 rounded-lg shadow-sm">
+            {{-- Informasi TopBid / Bid Tertinggi --}}
+            <div id="topbid" class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
                 <div class="w-full h-[100px] flex flex-col items-center justify-center ">
-                    <h1 class="text-3xl font-bold">Rp. {{ number_format($topBid->amount ?? 0 , 0, ',', '.') }}</h1>
+                    <h1 class="text-3xl font-bold">Rp. {{ number_format($this->topBidAmount ?? 0 , 0, ',', '.') }}</h1>
                     <span class="">Top Bid</span>
                 </div>
                 <div class="w-full h-[50px] flex flex-row gap-4 text-xl font-semibold items-center justify-center ">
@@ -40,8 +42,10 @@
                     <p>{{ $topBid->participant->user->code_user ?? '-----' }}</p>
                 </div>
             </div>
+
+            {{-- Form Bid Submit --}}
             @can('bidder')
-                <div id="allbid" class="p-4 dark:bg-slate-800 rounded-lg">
+                <div id="form-bid" class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
                     <form wire:submit="saveNewBid">
                         <x-input.input type="number" id="bidnew" label="Bid" placeholder="10000" error="{{ $errors->first('password') }}"/>
                         <x-button.btn type="submit" class="w-full">Submit</x-button.btn>
@@ -49,10 +53,10 @@
                 </div>
             @endcan
 
+            {{-- Tabel Informasi Bid history --}}
             <x-table.table class="w-full">
                 <x-table.thead>
                     <x-table.th>no</x-table.th>
-                    {{-- <x-table.th>id</x-table.th> --}}
                     <x-table.th>Code User</x-table.th>
                     <x-table.th>Amount</x-table.th>
                 </x-table.thead>
@@ -60,7 +64,6 @@
                     @forelse($bids as $bid)
                         <x-table.tr>
                             <x-table.td>{{ $loop->iteration }}</x-table.td>
-                            {{-- <x-table.th>{{ $bid->id }}</x-table.th> --}}
                             <x-table.td>{{ $bid->participant->user->code_user }}</x-table.td>
                             <x-table.td>Rp. {{ number_format($bid->amount, 0, ',', '.') }}</x-table.td>
                         </x-table.tr>
