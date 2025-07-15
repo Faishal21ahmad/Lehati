@@ -1,9 +1,7 @@
 <?php
 
 namespace App\Livewire\Home;
-
 use Carbon\Carbon;
-
 use App\Models\Room;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
@@ -18,15 +16,14 @@ class HomePage extends Component
 
     public function render()
     {
+        // Ambil waktu server
         $time = Carbon::now();
-
-        // Upcoming
+        // Ambil data room Upcoming
         $this->roomupcoming = Room::with('product')
             ->where('start_time', '>', $time)
             ->where('status', 'upcoming')
             ->get();
-
-        // Ongoing
+        // Ambil data room Ongoing
         $this->ongoing = Room::with('product')
             ->where('start_time', '<=', $time)
             ->where('end_time', '>=', $time)

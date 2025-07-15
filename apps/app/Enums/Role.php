@@ -17,12 +17,9 @@ enum Role: string
         return match ($this) {
             self::admin => [
                 'admin',
-                'manage_lelang',
-                'approve_lelang',
             ],
             self::bidder => [
                 'bidder',
-                'ikut_lelang',
             ],
         };
     }

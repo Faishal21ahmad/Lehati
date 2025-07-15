@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Room;
 
+use App\Models\Product;
 use App\Models\Room;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -14,11 +15,50 @@ class ManageRoomPage extends Component
     use WithPagination;
 
     public $query = ''; // properti pencarian
+    public $showModal = false;
+    public $deleteId = '';
+    public $roomcode = '';
+
+    // function konfirmasi delete 
+    public function confirmDelete($id)
+    {
+        $this->deleteId = $id;
+        $this->roomcode = Room::find($id)->room_code;
+        $this->showModal = true;
+    }
+
+    // Function Delete 
+    public function delete()
+    {
+        try {
+            $rm = Room::find($this->deleteId);
+            // update status product 
+            Product::where('id', $rm->product_id)
+                ->update(['status' => 'available']);
+            // softdelete room
+            Room::findOrFail($this->deleteId)->delete();
+            $this->deleteId = null;
+            $this->showModal = false;
+
+            $this->dispatch( // triger notifikasi 
+                'showToast',
+                message: 'Delete success !',
+                type: 'success', // 'error', 'success' ,'info'
+                duration: 5000
+            );
+        } catch (\Exception $e) {
+            $this->dispatch( // triger notifikasi 
+                'showToast',
+                message: 'Cannot be deleted, because the data has been used',
+                type: 'error', // 'error', 'success' ,'info'
+                duration: 5000
+            );
+        }
+    }
 
     public function render()
-    {
+    {   // Ambil data Room + query search
         $user = Auth::user();
-
         $rooms = Room::with('product') // eager load relasi
             ->where('user_id', $user->id)
             ->when($this->query, function ($queryBuilder) {

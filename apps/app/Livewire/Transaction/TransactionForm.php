@@ -25,10 +25,9 @@ class TransactionForm extends Component
         $this->imagepayprof = $this->transaksi->payment_proof ?? null;
     }
 
-
-    // upload Bukti Pembayaran
+    // Upload Bukti Pembayaran
     public function paymenproof()
-    {
+    {   // validasi input bukti pembayaran
         $this->validate([
             'filepayment' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048', // max dalam KB (2048 KB = 2 MB)
         ], [
@@ -41,7 +40,9 @@ class TransactionForm extends Component
         try {
             DB::beginTransaction();
             if (!empty($this->filepayment)) {
+                // Simpan Image ke storage 
                 $path = $this->filepayment->store('payproof', 'public');
+                // update data transaksi 
                 Transaction::updateOrCreate([
                     'code_transaksi' => $this->transaksi->code_transaksi
                 ], [
@@ -49,13 +50,21 @@ class TransactionForm extends Component
                     'status' => 'payment-verification'
                 ]);
             }
+
+            session()->flash('toast', [ // triger notifikasi 
+                'id' => uniqid(),
+                'message' => __('Upload Transaction successful'),
+                'type' => 'success',
+                'duration' => 5000
+            ]);
+
             $this->redirectIntended(default: route('transaction.detail', $this->transaksi->code_transaksi, absolute: false));
             DB::commit();
         } catch (ValidationException $e) {
             DB::rollBack();
-            $this->dispatch(
+            $this->dispatch( // triger notifikasi 
                 'showToast',
-                message: $e,
+                message: 'Upload failed',
                 type: 'error', // 'error', 'success' ,'info'
                 duration: 5000
             );
@@ -64,7 +73,7 @@ class TransactionForm extends Component
 
     // Verfikasi Pembayaran oleh Admin
     public function paymenVerification()
-    {
+    {   // validasi input verfikasi pembayaran 
         $this->validate([
             'status' => 'required',
             'notes' => 'nullable|string',
@@ -77,7 +86,6 @@ class TransactionForm extends Component
             DB::beginTransaction();
 
             $product = $this->transaksi->bid->room->product;
-
             $status = $this->status === 'approve' ? 'success' : 'failed';
             $productStatus = $this->status === 'approve' ? 'sold' : 'available';
 
@@ -94,14 +102,21 @@ class TransactionForm extends Component
                 'payment_verified_at' => now(),
             ]);
 
+            session()->flash('toast', [ // triger notifikasi 
+                'id' => uniqid(),
+                'message' => __('Verification successful'),
+                'type' => 'success',
+                'duration' => 5000
+            ]);
+
             $this->redirectIntended(default: route('transaction.detail', $this->transaksi->code_transaksi, absolute: false));
 
             DB::commit();
         } catch (ValidationException $e) {
             DB::rollBack();
-            $this->dispatch(
+            $this->dispatch( // triger notifikasi 
                 'showToast',
-                message: $e,
+                message: 'Verification failed',
                 type: 'error', // 'error', 'success' ,'info'
                 duration: 5000
             );

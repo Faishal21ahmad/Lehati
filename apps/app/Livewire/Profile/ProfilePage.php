@@ -18,7 +18,6 @@ class ProfilePage extends Component
     public function mount()
     {
         $user = Auth::user();
-
         $this->name = $user->name ?? '';
         $this->code_user = $user->code_user ?? '';
         $this->email = $user->email ?? '';
@@ -38,15 +37,14 @@ class ProfilePage extends Component
                 'updated_at' => now(),
             ]);
 
-            $this->dispatch(
+            $this->dispatch( // triger notifikasi 
                 'showToast',
                 message: 'Profile updated successfully!',
                 type: 'success', // 'error', 'success' ,'info'
                 duration: 5000
             );
         } catch (\Illuminate\Validation\ValidationException $e) {
-            // Handle validation errors
-            $this->dispatch(
+            $this->dispatch( // triger notifikasi 
                 'showToast',
                 message: 'Validation failed: ' . $e->getMessage(),
                 type: 'error', // 'error', 'success' ,'info'

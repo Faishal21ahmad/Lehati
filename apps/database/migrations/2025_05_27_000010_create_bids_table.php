@@ -13,11 +13,16 @@ return new class extends Migration
     {
         Schema::create('bids', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('participan_id')->constrained('participants');
-            $table->foreignId('room_id')->constrained('rooms');
+            // $table->unsignedBigInteger('participan_id')->constrained('participants')->onDelete('restrict');
+            // $table->unsignedBigInteger('room_id')->constrained('rooms')->onDelete('restrict');
+            // $table->foreignId('participan_id')->constrained()->onDelete('restrict');
+            // $table->foreignId('room_id')->constrained()->onDelete('restrict');
+            $table->foreignId('participan_id')->references('id')->on('participants')->restrictOnDelete();;
+            $table->foreignId('room_id')->references('id')->on('rooms')->restrictOnDelete();;
             $table->decimal('amount', 15, 2);
             $table->boolean('is_winner')->default(false);
             $table->timestamps();
+            $table->softDeletes();
 
             $table->index('room_id');
             $table->index('participan_id');

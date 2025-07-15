@@ -49,6 +49,10 @@
                     wire:model="gender"
                     error="{{ $errors->first('gender') }}"
                 />
+                <x-input.input id="bank" label="Bank" placeholder="BRI" required error="{{ $errors->first('bank') }}"/>
+                <x-input.input id="bank_name" label="Username Bank" placeholder="Freya" required error="{{ $errors->first('bank_name') }}"/>
+                <x-input.input id="bank_number" label="Account Number" placeholder="08xx" required error="{{ $errors->first('bank_number') }}"/>
+
                 <x-button.btn type="submit" color="blue">Save</x-button.btn>
             </form>
         </div>

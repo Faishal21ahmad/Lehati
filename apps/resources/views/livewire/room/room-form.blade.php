@@ -1,7 +1,6 @@
 <div class="px-6 pt-2 md:p-8 md:ml-64  text-black dark:text-white">
     <x-layouts.app-header
     :title="$roomId ? __('Detail Room') : __('Add Room')"
-    {{-- :description="__('Create New Room Auctioneer')"  --}}
     :description="$roomId ? __('Detail Room Product') : __('Create New Room Auctioneer')" 
     />
 
@@ -16,15 +15,13 @@
                 @if (!$roomId)
                     <x-input.select id="product" label="Select Product" placeholder="Pilih Product" :options="$products" error="{{ $errors->first('product') }}" />
                 @endif
-                
                 <x-input.input type="number" id="starting_price" label="Starting Price" placeholder="Rp 100.000" required error="{{ $errors->first('starting_price') }}"/>
                 <x-input.input type="number" id="min_bid_step" label="Minimum Bid" placeholder="Rp 20.000" required error="{{ $errors->first('min_bid_step') }}"/>
-                    <div class="flex gap-4">
-                        <x-input.datepicker id="start_time" label="Start Time" error="{{ $errors->first('start_time') }}" value="{{ old('start_time', $start_time) }}"/>
-                        <x-input.datepicker id="end_time" label="End Time" error="{{ $errors->first('end_time') }}" value="{{ old('end_time', $end_time) }}"/>
-                    </div>
+                <div class="flex gap-4">
+                    <x-input.datepicker id="start_time" label="Start Time" error="{{ $errors->first('start_time') }}" value="{{ old('start_time', $start_time) }}"/>
+                    <x-input.datepicker id="end_time" label="End Time" error="{{ $errors->first('end_time') }}" value="{{ old('end_time', $end_time) }}"/>
+                </div>
                 <x-input.textarea id="room_notes" label="Room Notes" placeholder="" error="{{ $errors->first('room_notes') }}"/>
-                
                 <div class="mt-2">
                     <x-button.btnaccorlink navigate=true type="button" href="{{ Route('rooms') }}" color="yellow">Back</x-button.btnaccorlink>
                     <x-button.btn type="submit">{{ $roomId ? 'Update' : 'Simpan' }}</x-button.btn>
@@ -52,10 +49,8 @@
                         <p>: {{ $transaksiWinner->participant->user->code_user }}</p>
                         <p>: {{ $transaksiWinner->participant->user->name }}</p>
                         <p class="">: <x-button.accorlink class="font-semibold" href="{{ Route('transaction.detail', $transaksiWinner->transaction->code_transaksi) }}">{{ $transaksiWinner->transaction->code_transaksi }}</x-button.accorlink></p>
-                        {{-- <p>: </p> --}}
                     </div>
                 </div>
-                {{-- {{ $transaksiWinner }} --}}
             </section>
             @endif
             @if ($roomId)
@@ -109,10 +104,3 @@
         </div>
     </div>
 </div>
-
-
-
- {{-- <x-button.btnaccorlink href="{{ Route('room.edit',$room->room_code) }}" color="blue" padding="px-3 py-1">Detail</x-button.btnaccorlink> --}}
-                                    {{-- <x-button.btnaccorlink href="{{ Route('room.detail', $room->room_code) }}" color="yellow" padding="px-3 py-1">Preview</x-button.btnaccorlink> --}}
-                                    {{-- <x-button.btnaccorlink href="{{ Route('room.edit',$room->room_code) }}" color="green" padding="px-3 py-1">Start</x-button.btnaccorlink> --}}
-                {{-- <p>{{ $partisipans }}</p> --}}

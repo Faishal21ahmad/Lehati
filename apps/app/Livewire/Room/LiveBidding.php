@@ -32,7 +32,6 @@ class LiveBidding extends Component
                 ->where('room_id', $this->room->id)
                 ->where('status', 'joined')
                 ->exists(); // true/false
-
             // Penolakan Jika User bukan peserta 
             if (! $isParticipant) {
                 abort(403, 'You do not have access to this room.');
@@ -41,36 +40,39 @@ class LiveBidding extends Component
             if ($this->room->status == 'cancelled') {
                 abort(403, 'Auction Room cancelled');
             }
-            // Penolakan 
+            // Penolakan ketika status room ended endtime
             if ($this->room->status === 'ended' || $timenow > $this->room->end_time) {
+                session()->flash('toast', [
+                    'id' => uniqid(), // Simpan ID di session
+                    'message' => __(),
+                    'type' => 'success',
+                    'duration' => 5000
+                ]);
                 return $this->redirectIntended(route('room.detail', $this->room->room_code, absolute: false));
             }
-
-        // pengecekan selain role admin 
+            // pengecekan selain role admin 
         } else {
+            // Penolakan ketika status room ended endtime
             if ($this->room->status === 'ended' || $timenow > $this->room->end_time) {
                 return $this->redirectIntended(route('room.edit', $this->room->room_code, absolute: false));
             }
         }
-
         $this->product = $this->room->product;
         $this->bids = $this->room->bids()->orderBy('id', 'desc')->get();
         $this->topBid = $this->room->bids()->orderByDesc('id')->first();
         $this->topBidAmount = $this->topBid->amount ?? $this->room->starting_price;
-
         $this->participant = Participant::where('user_id', $user->id)
             ->where('room_id', $this->room->id)
             ->where('status', 'joined')
             ->first();
-
         $this->images = $this->room->product->images->map(function ($img) {
             return ['id' => $img->id, 'image_path' => $img->image_path];
         })->toArray();
     }
 
-    // save databid baru 
+    // save Data Bid baru 
     public function saveNewBid()
-    {
+    {   // validasi input bid baru 
         $this->validate([
             'bidnew' => 'required|numeric|min:0',
         ], [
@@ -78,20 +80,21 @@ class LiveBidding extends Component
             'bidnew.numeric'  => 'Nominal bid harus berupa angka.',
             'bidnew.min'      => 'Nominal bid tidak boleh kurang dari 0.',
         ]);
-
+        // Pengecekan status room 
         if ($this->room->status === 'ended' || $this->room->status === 'cancelled') {
-            session()->flash('toast', [
-                'id' => uniqid(), // Simpan ID di session
+            session()->flash('toast', [ // triger notifikasi 
+                'id' => uniqid(),
                 'message' => __('Room ' . $this->room->status),
                 'type' => 'success',
                 'duration' => 5000
             ]);
             return $this->redirectIntended(default: route('room.detail', $this->room->room_code, absolute: false));
         } else {
-            // $amount = $this->topBid->amount ?? $this->room->starting_price;
+            // Perhitungan selisih dari bid tertinggi dengan bid baru 
             $selisih = $this->bidnew - $this->topBidAmount;
-            if ($this->bidnew < $this->topBidAmount) {
-                $this->dispatch(
+            // pengecekan jika bid baru kurang dari sama dengan topbid (nilai bid tertinggi)
+            if ($this->bidnew <= $this->topBidAmount) {
+                $this->dispatch( // triger notifikasi 
                     'showToast',
                     message: "Bids must not be below the highest price",
                     type: 'error', // 'error', 'success' ,'info'
@@ -101,8 +104,9 @@ class LiveBidding extends Component
                     'bidnew' => __('Bids must not be below the highest price'),
                 ]);
             } else {
+                // Pengecekan jika selisih kurang dari sama dengan minimum bid 
                 if ($selisih <= $this->room->min_bid_step) {
-                    $this->dispatch(
+                    $this->dispatch( // triger notifikasi 
                         'showToast',
                         message: "Minimum bid difference",
                         type: 'error', // 'error', 'success' ,'info'
@@ -112,16 +116,17 @@ class LiveBidding extends Component
                         'bidnew' => __('Minimum bid difference Rp.' . number_format($this->room->min_bid_step, 0, ',', '.')),
                     ]);
                 } else {
+                    // simpan jika lolos dari semua pengecekan
                     Bid::create([
                         'participan_id' => $this->participant->id,
                         'room_id' => $this->room->id,
                         'amount' => $this->bidnew,
                     ]);
 
-                    session()->flash('toast', [
-                        'id' => uniqid(), // Simpan ID di session
+                    session()->flash('toast', [ // triger notifikasi 
+                        'id' => uniqid(),
                         'message' => __('Success Submit'),
-                        'type' => 'success',
+                        'type' => 'success', // 'error', 'success' ,'info'
                         'duration' => 5000
                     ]);
                     $this->redirectIntended(default: route('room.bidding', $this->room->room_code, absolute: false));
@@ -159,6 +164,13 @@ class LiveBidding extends Component
                 'amount_final' => $bid->amount
             ]);
 
+            session()->flash('toast', [ // triger notifikasi 
+                'id' => uniqid(),
+                'message' => __('Room terminated'),
+                'type' => 'success', // 'error', 'success' ,'info'
+                'duration' => 5000
+            ]);
+
             $this->redirectIntended(default: route('room.edit', $this->room->room_code, absolute: false));
 
             DB::commit();
@@ -166,7 +178,7 @@ class LiveBidding extends Component
             DB::rollBack();
             $this->dispatch(
                 'showToast',
-                message: $e,
+                message: 'Failed to terminate room',
                 type: 'error', // 'error', 'success' ,'info'
                 duration: 5000
             );

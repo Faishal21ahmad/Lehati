@@ -6,7 +6,6 @@ use App\Models\Bid;
 use App\Models\Room;
 use Illuminate\Database\Seeder;
 use App\Models\Participant;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class BidsSeeder extends Seeder
 {
@@ -15,8 +14,6 @@ class BidsSeeder extends Seeder
      */
     public function run(): void
     {
-
-
         $participants = Participant::all();
         $lastBidAmounts = [];
 

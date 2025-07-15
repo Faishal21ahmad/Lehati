@@ -1,14 +1,12 @@
 <div class="px-6 pt-2 md:p-8 md:ml-64 text-black dark:text-white">
     <x-layouts.app-header :title="__('Rooms')" :description="__('Manage all room')" />
     
-   <div class="">
+    <div class="">
         <div class="flex gap-2 items-center mb-2">
             <x-button.btnaccorlink navigate=true  href="{{ route('room.create') }}">
                 {{ __('Add Room') }}
             </x-button.btnaccorlink>
-           
             <x-input.search id="search" class="w-3/5" />
-
         </div>
         <div class="">
             <x-table.table class="lg:w-3/4">
@@ -40,12 +38,11 @@
                             <x-table.td class="flex md:flex-wrap gap-2"> 
                                 <x-button.btnaccorlink href="{{ Route('room.edit',$room->room_code) }}" color="blue" padding="px-3 py-1">Detail</x-button.btnaccorlink>
                                 <x-button.btnaccorlink href="{{ Route('room.detail', $room->room_code) }}" color="yellow" padding="px-3 py-1">Preview</x-button.btnaccorlink>
-                                {{-- <x-button.btnaccorlink href="{{ Route('room.edit',$room->room_code) }}" color="green" padding="px-3 py-1">Start</x-button.btnaccorlink> --}}
-                                <x-button.btn color="red" padding="px-3 py-1">Delete</x-button.btn>
-                            </x-table.td>  
+                                <x-button.btn wire:click="confirmDelete({{ $room->id }})" color="red" padding="px-3 py-1">Delete</x-button.btn>
+                            </x-table.td>
                         </x-table.tr>
                     @empty
-                      <x-table.tr class="w-full">
+                        <x-table.tr class="w-full">
                             <x-table.td colspan="6" class="text-center py-4">No Room found</x-table.td>
                         </x-table.tr>
                     @endforelse
@@ -54,7 +51,13 @@
             <div class="mt-4">
                 {{ $rooms->links() }}
             </div>
-
         </div>
     </div>
+    @if($showModal)
+    <!-- Modal Konfirmasi Delete -->
+    <x-modal.modal-confrim
+        message="Are you sure you want to delete this Room {{ $roomcode }} ?"
+        confirmMethod="delete"
+    />
+    @endif
 </div>

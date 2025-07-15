@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Bid extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'participan_id',
@@ -15,6 +17,8 @@ class Bid extends Model
         'amount',
         'is_winner'
     ];
+
+    protected $dates = ['deleted_at'];
 
     protected $casts = [
         'is_winner' => 'boolean',

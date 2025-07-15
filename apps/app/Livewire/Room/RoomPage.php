@@ -12,7 +12,6 @@ use Livewire\WithPagination;
 class RoomPage extends Component
 {
     use WithPagination;
-
     public $query = '';
 
     public function updatingQuery()
@@ -21,7 +20,7 @@ class RoomPage extends Component
     }
 
     public function render()
-    {
+    {   // Ambil data Room + query search
         $user = Auth::user();
 
         $partisipans = Participant::with(['room.product'])

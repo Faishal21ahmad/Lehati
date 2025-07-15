@@ -29,19 +29,20 @@ class ProductForm extends Component
             $this->quantity = $product->quantity;
             $this->units = $product->units;
             $this->description = $product->description;
-            // $this->existingImages = $product->images->pluck('image_path', 'id')->toArray();
             $this->existingImages = $product->images->map(function ($img) {
                 return ['id' => $img->id, 'image_path' => $img->image_path];
             })->toArray();
         }
     }
 
+    // Function save update atau create Product
     public function save()
     {
+        // validasi input Form Product
         $this->validate([
             'product_name' => 'required|string|max:40',
             'quantity' => 'required|integer|min:1',
-            'units' => 'required|in:kg,ton,ons,ikat',
+            'units' => 'required|in:kg,ton,ons,kuintal',
             'description' => 'nullable|string|max:200',
             'newImages.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ], [
@@ -49,29 +50,24 @@ class ProductForm extends Component
             'product_name.required' => 'Nama produk wajib diisi.',
             'product_name.string'   => 'Nama produk harus berupa teks.',
             'product_name.max'      => 'Nama produk maksimal 40 karakter.',
-
             // quantity
             'quantity.required' => 'Jumlah wajib diisi.',
             'quantity.integer'  => 'Jumlah harus berupa angka.',
             'quantity.min'      => 'Jumlah minimal adalah 1.',
-
             // units
             'units.required' => 'Satuan wajib dipilih.',
-            'units.in'       => 'Satuan harus salah satu dari: kg, ton, ons, atau ikat.',
-
+            'units.in'       => 'Satuan harus salah satu dari: kg, ton, ons, atau kuintal.',
             // description
             'description.string' => 'Deskripsi harus berupa teks.',
             'description.max'    => 'Deskripsi maksimal 200 karakter.',
-
             // newImages.*
             'newImages.*.image' => 'Setiap file harus berupa gambar.',
             'newImages.*.mimes' => 'Gambar harus berformat jpeg, png, jpg, atau gif.',
             'newImages.*.max'   => 'Ukuran setiap gambar maksimal 2MB.',
         ]);
 
-
-
         $user = Auth::user();
+
         $product = Product::updateOrCreate(
             ['id' => $this->productId],
             [
@@ -91,21 +87,21 @@ class ProductForm extends Component
             }
         }
 
-        // session()->flash('success', $this->productId ? 'Produk berhasil diupdate.' : 'Produk berhasil ditambahkan.');
-        session()->flash('toast', [
-            'id' => uniqid(), // Simpan ID di session
-            'message' => __($this->productId ? 'Produk berhasil diupdate.' : 'Produk berhasil ditambahkan.'),
-            'type' => 'success',
+        session()->flash('toast', [ // triger notifikasi 
+            'id' => uniqid(), 
+            'message' => __($this->productId ? 'Product successfully updated' : 'Product added successfully'),
+            'type' => 'success', // 'error', 'success' ,'info'
             'duration' => 5000
         ]);
-        // $this->redirectIntended(default: route('product.edit', ['id' => $product->id], absolute: false), navigate: true);
         return redirect()->route('product.edit', ['id' => $product->id]);
     }
 
+    // Menghapus image
     public function removeImage($id)
     {
         $image = ImageProduct::find($id);
         if ($image) {
+            // Simpan image ke storage 
             Storage::disk('public')->delete($image->image_path);
             $image->delete();
 
@@ -118,17 +114,17 @@ class ProductForm extends Component
                 ])
                 ->toArray();
 
-            session()->flash('toast', [
-                'id' => uniqid(), // Simpan ID di session
-                'message' => __('Gambar berhasil dihapus.'),
-                'type' => 'success',
+            session()->flash('toast', [ // triger notifikasi 
+                'id' => uniqid(), 
+                'message' => __('Image successfully deleted'),
+                'type' => 'success',  // 'error', 'success' ,'info'
                 'duration' => 5000
             ]);
         } else {
-            session()->flash('toast', [
-                'id' => uniqid(), // Simpan ID di session
-                'message' => __('Gambar Gagal dihapus.'),
-                'type' => 'danger',
+            session()->flash('toast', [ // triger notifikasi 
+                'id' => uniqid(), 
+                'message' => __('Image Failed to delete'),
+                'type' => 'danger',  // 'error', 'success' ,'info'
                 'duration' => 5000
             ]);
         }

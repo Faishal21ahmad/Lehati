@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::create('user_data', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
+            // $table->unsignedBigInteger('user_id')->constrained('users')->onDelete('restrict');;
+            // $table->foreignId('user_id')->constrained()->restrictOnDelete();
+            $table->foreignId('user_id')->references('id')->on('users')->restrictOnDelete();;
             $table->string('phone', 20)->nullable();
             $table->string('address', 100)->nullable();
             $table->string('nik')->unique();
@@ -21,12 +23,14 @@ return new class extends Migration
             $table->string('bank')->nullable();
             $table->string('bank_name')->nullable();
             $table->string('bank_number')->nullable();
-
             $table->timestamps();
+            $table->softDeletes();
 
             $table->index('user_id');
         });
     }
+
+    // $table->foreign('product_id')->references('id')->on('products')->onDelete('restrict');
 
     /**
      * Reverse the migrations.

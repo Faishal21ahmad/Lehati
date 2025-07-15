@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\Bid;
 use Illuminate\Database\Seeder;
 use App\Models\Transaction;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class TransactionSeeder extends Seeder
 {

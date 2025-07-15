@@ -6,6 +6,7 @@ namespace App\Models;
 use App\Enums\Role;
 use Illuminate\Support\Str;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -13,6 +14,7 @@ class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -37,6 +39,7 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+    protected $dates = ['deleted_at'];
 
     protected $casts = [
         'is_active' => 'boolean',

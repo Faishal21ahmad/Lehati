@@ -3,11 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Room extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'room_code',
@@ -20,6 +22,7 @@ class Room extends Model
         'start_time',
         'end_time'
     ];
+    protected $dates = ['deleted_at'];
 
     protected $casts = [
         'start_time' => 'datetime',
@@ -44,5 +47,17 @@ class Room extends Model
     public function bids()
     {
         return $this->hasMany(Bid::class);
+    }
+    // Pengecekan data relasi room -> participants || room -> bids
+    protected static function booted()
+    {
+        static::deleting(function ($product) {
+            if ($product->participants()->exists()) {
+                throw new \Exception("Produk tidak dapat dihapus karena sedang digunakan di Room.");
+            }
+            if ($product->bids()->exists()) {
+                throw new \Exception("Produk tidak dapat dihapus karena sedang digunakan di Room.");
+            }
+        });
     }
 }

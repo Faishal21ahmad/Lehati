@@ -34,8 +34,6 @@ class DashboardPage extends Component
     public function mount()
     {
         $user = Auth::user();
-        // dd($user->role->value);
-
         if ($user->role->value === 'admin') {
             $this->accounts = User::get();
             $this->accountActive = $this->accounts->where('is_active', true)->count();
@@ -61,12 +59,12 @@ class DashboardPage extends Component
             $this->transactionFailed = $this->transactions->where('status', 'failed')->count();
             $this->transactionSuccess = $this->transactions->where('status', 'success')->count();
         } else {
-
+            // Ambil data partisipan
             $this->roomPartisipan = Participant::where('user_id', $user->id)->get();
             $this->roomPartisipanJoin = $this->roomPartisipan->where('status', 'joined')->count();
             $this->roomPartisipanReject = $this->roomPartisipan->where('status', 'rejected')->count();
             $this->roomPartisipanLeave = $this->roomPartisipan->where('status', 'leave')->count();
-            
+            // Ambil data transaksi
             $this->transactions = Transaction::where('user_id', $user->id)->get();
             $this->transactionUnpaid = $this->transactions->where('status', 'unpaid')->count();
             $this->transactionProses = $this->transactions->where('status', 'payment-verification')->count();

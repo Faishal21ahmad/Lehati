@@ -19,7 +19,7 @@ class TransactionPage extends Component
     }
 
     public function render()
-    {
+    {   // Ambil data Transaksi + query search
         $user = Auth::user();
 
         $transactions = Transaction::with(['bid.room.product'])

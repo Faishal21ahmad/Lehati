@@ -29,7 +29,7 @@ class ProductSeeder extends Seeder
         ]);
         Product::factory()->create([
             'user_id' => 1,
-            'units' => 'ton',
+            'units' => 'kuintal',
             'status' => 'sold'
         ]);
     }

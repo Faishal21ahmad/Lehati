@@ -29,7 +29,7 @@ class Password extends Component
             ]);
             $this->reset('current_password', 'password', 'password_confirmation');
 
-            $this->dispatch(
+            $this->dispatch( // triger notifikasi 
                 'showToast',
                 message: 'Password updated successfully!',
                 type: 'success', // 'error', 'success' ,'info'
@@ -37,7 +37,7 @@ class Password extends Component
             );
         } catch (ValidationException $e) {
             $this->reset('current_password', 'password', 'password_confirmation');
-            $this->dispatch(
+            $this->dispatch( // triger notifikasi 
                 'showToast',
                 message: $e->validator->errors()->first(),
                 type: 'danger',

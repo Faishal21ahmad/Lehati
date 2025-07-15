@@ -16,25 +16,6 @@ class AccountPage extends Component
     public $query = '';
     public $isactive = '';
 
-    public function disableAccount($codeUser = null)
-    {
-        // dd($codeUser);
-
-        // $user = User::where('code_user', $codeUser)->first();
-        // if ($user) {
-        //     $user->is_active = '0';
-        //     $user->save();
-        //     $this->dispatch('showToast', message: __('Account disabled successfully!'), type: 'success');
-        // } else {
-        //     $this->dispatch('showToast', message: __('Account not found!'), type: 'error');
-        // }
-
-
-    }
-
-    public function enableAccount() {}
-
-
     public function render()
     {
         $query = trim(strtolower($this->query)); // Normalisasi query input

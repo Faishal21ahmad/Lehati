@@ -13,13 +13,16 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
+            // $table->unsignedBigInteger('user_id')->constrained('users')->onDelete('restrict');
+            // $table->foreignId('user_id')->constrained()->restrictOnDelete();
+            $table->foreignId('user_id')->references('id')->on('users')->restrictOnDelete();;
             $table->string('product_name', 40);
             $table->string('description', 200);
             $table->integer('quantity');
-            $table->enum('units', ['kg', 'ton', 'ons', 'ikat']);
+            $table->enum('units', ['kg', 'ton', 'ons', 'kuintal']);
             $table->enum('status', ['available', 'use', 'sold']);
             $table->timestamps();
+            $table->softDeletes();
 
             $table->index('user_id');
             $table->index('status');

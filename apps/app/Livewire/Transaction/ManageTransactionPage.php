@@ -13,7 +13,7 @@ class ManageTransactionPage extends Component
     use WithPagination;
     public $query = '';
     public function render()
-    {
+    {   // Ambil data Transaksi + query search
         $transactions = Transaction::query()
             ->with(['user', 'bid.room'])
             ->when($this->query, function ($q) {

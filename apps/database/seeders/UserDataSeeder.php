@@ -5,8 +5,6 @@ namespace Database\Seeders;
 use App\Models\User;
 use App\Models\UserData;
 use Illuminate\Database\Seeder;
-use Database\Factories\UserDataFactory;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class UserDataSeeder extends Seeder
 {

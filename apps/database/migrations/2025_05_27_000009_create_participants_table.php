@@ -13,10 +13,15 @@ return new class extends Migration
     {
         Schema::create('participants', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('room_id')->constrained('rooms');
-            $table->enum('status', ['joined', 'rejected','leave'])->default('joined');
+            // $table->unsignedBigInteger('user_id')->constrained('users')->onDelete('restrict');
+            // $table->unsignedBigInteger('room_id')->constrained('rooms')->onDelete('restrict');
+            // $table->foreignId('user_id')->constrained()->restrictOnDelete();
+            // $table->foreignId('room_id')->constrained()->restrictOnDelete();
+            $table->foreignId('user_id')->references('id')->on('users')->restrictOnDelete();;
+            $table->foreignId('room_id')->references('id')->on('rooms')->restrictOnDelete();;
+            $table->enum('status', ['joined', 'rejected', 'leave'])->default('joined');
             $table->timestamps();
+            $table->softDeletes();
 
             $table->index('room_id');
             $table->index('user_id');

@@ -35,7 +35,7 @@ class DataUser extends Component
     // Save / Update User Data
     public function updateUserData(): void
     {
-        // Validasi input
+        // Validasi input Data User
         $this->validate([
             'phone' => 'required|string|max:15',
             'address' => 'required|string|max:255',
@@ -49,31 +49,25 @@ class DataUser extends Component
             'phone.required' => 'Nomor telepon wajib diisi.',
             'phone.string'   => 'Nomor telepon harus berupa teks.',
             'phone.max'      => 'Nomor telepon maksimal 15 karakter.',
-
             // Address
             'address.required' => 'Alamat wajib diisi.',
             'address.string'   => 'Alamat harus berupa teks.',
             'address.max'      => 'Alamat maksimal 255 karakter.',
-
             // NIK
             'nik.required' => 'NIK wajib diisi.',
             'nik.string'   => 'NIK harus berupa teks.',
             'nik.size'     => 'NIK harus terdiri dari 16 digit.',
-
             // Gender
             'gender.required' => 'Jenis kelamin wajib dipilih.',
             'gender.in'       => 'Jenis kelamin harus salah satu dari: male atau female.',
-
             // Bank
             'bank.required' => 'Nama bank wajib diisi.',
             'bank.string'   => 'Nama bank harus berupa teks.',
             'bank.max'      => 'Nama bank maksimal 40 karakter.',
-
             // Bank Name (Atas Nama)
             'bank_name.required' => 'Nama pemilik rekening wajib diisi.',
             'bank_name.string'   => 'Nama pemilik rekening harus berupa teks.',
             'bank_name.max'      => 'Nama pemilik maksimal 50 karakter.',
-
             // Bank Number (No Rekening)
             'bank_number.required' => 'Nomor rekening wajib diisi.',
             'bank_number.string'   => 'Nomor rekening harus berupa teks.',
@@ -94,16 +88,14 @@ class DataUser extends Component
                     'bank_number' => $this->bank_number
                 ]
             );
-
-            $this->dispatch(
+            $this->dispatch( // triger notifikasi 
                 'showToast',
                 message: 'Updated successfully!',
                 type: 'success', // 'error', 'success' ,'info'
                 duration: 5000
             );
         } catch (\Illuminate\Validation\ValidationException $e) {
-            // Handle validation errors
-            $this->dispatch(
+            $this->dispatch( // triger notifikasi 
                 'showToast',
                 message: 'Validation failed: ' . $e->getMessage(),
                 type: 'error', // 'error', 'success' ,'info'

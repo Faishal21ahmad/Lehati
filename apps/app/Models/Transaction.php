@@ -3,11 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Transaction extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'code_transaksi',
@@ -19,6 +21,7 @@ class Transaction extends Model
         'amount_final',
         'payment_verified_at'
     ];
+    protected $dates = ['deleted_at'];
 
     protected $casts = [
         'payment_verified_at' => 'datetime',

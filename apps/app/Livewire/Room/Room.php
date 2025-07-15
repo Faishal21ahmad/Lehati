@@ -9,9 +9,8 @@ use App\Models\Participant;
 use App\Models\Room as Rooms;
 use Livewire\Attributes\Layout;
 use Illuminate\Support\Facades\Auth;
-use SebastianBergmann\CodeUnit\FunctionUnit;
 
-#[Layout('components.layouts.home', ['title' => "Home"])]
+#[Layout('components.layouts.home', ['title' => "Detail Product"])]
 class Room extends Component
 {
     public $room;
@@ -41,13 +40,16 @@ class Room extends Component
     // function button joinRoom (user join room lelang)
     public function joinRoom()
     {
+        // Pengecekan jika user belum login 
         if (!$this->user) {
             return redirect()->route('login');
+
+        // Pengecekan jika user data belum terisi / belum melengakapi data user
         } elseif (!$this->user->userdata) {
-            session()->flash('toast', [
-                'id' => uniqid(), // Simpan ID di session
+            session()->flash('toast', [ // triger notifikasi 
+                'id' => uniqid(),
                 'message' => __('Update Your Data !'),
-                'type' => 'error',
+                'type' => 'error',  // 'error', 'success' ,'info'
                 'duration' => 5000
             ]);
             $this->redirectIntended(default: route('profile.data', absolute: false), navigate: true);
@@ -63,7 +65,7 @@ class Room extends Component
             ]
         );
 
-        $this->dispatch(
+        $this->dispatch( // triger notifikasi 
             'showToast',
             message: 'Joined Room !',
             type: 'success', // 'error', 'success' ,'info'
@@ -76,18 +78,19 @@ class Room extends Component
         if (!$this->user) {
             return redirect()->route('login');
         }
-
+        // update status participan user 
         Participant::where('user_id', $this->user->id)
             ->where('room_id', $this->room->id)
             ->update(['status' => 'leave']);
-
-        $this->dispatch(
-            'showToast',
+        
+        $this->dispatch( // triger notifikasi 
+            'showToast', 
             message: 'Leave Room !',
             type: 'success', // 'error', 'success' ,'info'
             duration: 5000
         );
     }
+
     // pengecekan apakah user join room ini
     public function isJoined()
     {
@@ -102,18 +105,20 @@ class Room extends Component
     public function startbidding()
     {
         $timenow = Carbon::now();
-
+        // Pengecekan waktu mulai lelang 
         if ($timenow > $this->room->start_time) {
+            // Pengecekan status Room lelang 
             if ($this->room->status === 'ongoing') {
-                session()->flash('toast', [
-                    'id' => uniqid(), // Simpan ID di session
-                    'message' => __('start bid'),
-                    'type' => 'success',
+                session()->flash('toast', [ // triger notifikasi 
+                    'id' => uniqid(), 
+                    'message' => __('Start bid'),
+                    'type' => 'success', // 'error', 'success' ,'info'
                     'duration' => 5000
                 ]);
                 $this->redirectIntended(default: route('room.bidding', $this->room->room_code, absolute: false));
             } else {
-                $this->dispatch(
+               
+                $this->dispatch( // triger notifikasi 
                     'showToast',
                     message: "Auction has not been opened by admin, Please wait",
                     type: 'info', // 'error', 'success' ,'info'
@@ -121,8 +126,7 @@ class Room extends Component
                 );
             }
         } else {
-            // $time = "false";
-            $this->dispatch(
+            $this->dispatch( // triger notifikasi 
                 'showToast',
                 message: "It's not time yet",
                 type: 'error', // 'error', 'success' ,'info'

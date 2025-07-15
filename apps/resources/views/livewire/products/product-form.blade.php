@@ -8,7 +8,6 @@
         <div class="w-full">
             <form wire:submit.prevent="save" enctype="multipart/form-data">
                 <x-input.input type="text" id="product_name" label="Name Product" placeholder="Cabe" required error="{{ $errors->first('name_product') }}"/>
-                
                 <div class="flex gap-4 w-full">
                     <x-input.input type="number" id="quantity" name="quantity" label="Quantity" placeholder="1" required error="{{ $errors->first('quantity') }}"/>
                     <x-input.select name="units" id="units" label="Unit" placeholder="Pilih unit" 
@@ -16,11 +15,10 @@
                             ['value' => 'kg', 'label' => 'Kg'],
                             ['value' => 'ton', 'label' => 'Ton'],
                             ['value' => 'ons', 'label' => 'Ons'],
-                            ['value' => 'ikat', 'label' => 'Ikat']
+                            ['value' => 'kuintal', 'label' => 'Kuintal']
                         ]" 
                         error="{{ $errors->first('units') }}" />
                 </div>
-    
                 <x-input.textarea name="description" id="description" label="Description" placeholder="" error="{{ $errors->first('description') }}"/>
                 <x-input.file id="newImages" label="Picture Product" accept="image/*" :multiple="true" helpText="Upload your photo product (jpeg, png, jpg)" error="{{ $errors->first('newImages.*') }}"/>
     
@@ -32,7 +30,6 @@
                         @endforeach
                     </div>
                 @endif
-
                 <div class="mt-2">
                     <x-button.btn type="submit" class="">{{ $productId ? 'Update' : 'Simpan' }}</x-button.btn>
                     <x-button.btnaccorlink navigate=true type="button" href="{{ Route('products') }}" color="yellow">Back</x-button.btnaccorlink>

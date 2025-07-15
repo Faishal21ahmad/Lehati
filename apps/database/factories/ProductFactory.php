@@ -42,7 +42,7 @@ class ProductFactory extends Factory
             ]),
             'description' => $faker->randomElement($productDescriptions),
             'quantity' => $this->faker->numberBetween(1, 100),
-            'units' => $this->faker->randomElement(['kg', 'ton', 'ons', 'ikat']),
+            'units' => $this->faker->randomElement(['kg', 'ton', 'ons', 'kuintal']),
             'status' => $this->faker->randomElement(['available', 'use', 'sold']),
             'created_at' => now(),
             'updated_at' => now(),
