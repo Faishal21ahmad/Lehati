@@ -37,8 +37,8 @@ class RoomForm extends Component
             $this->user_id = $room->user_id;
             $this->product = $room->product_id;
             $this->status = $room->status;
-            $this->starting_price = $room->starting_price;
-            $this->min_bid_step = $room->min_bid_step;
+            $this->starting_price = intval($room->starting_price);
+            $this->min_bid_step = intval($room->min_bid_step);
             $this->room_notes = $room->room_notes;
             $this->start_time = $room->start_time;
             $this->end_time = $room->end_time;
@@ -111,12 +111,14 @@ class RoomForm extends Component
             'room_notes.max'    => 'Catatan maksimal 200 karakter.',
         ]);
 
-        
+
         $this->coderoom = $this->roomId ? $this->coderoom : 'RM' . fake()->unique()->numberBetween(1000, 9999);
         $this->user_id = $this->user_id ?: Auth::user()->id;
         $this->product = (int) $this->product;
 
         try {
+            DB::beginTransaction();
+
             Room::updateOrCreate(
                 ['id' => $this->roomId],
                 [
@@ -139,31 +141,32 @@ class RoomForm extends Component
                 ]
             );
 
+            DB::commit();
+
             $this->dispatch( // triger notifikasi 
                 'showToast',
-                message: $this->roomId ? __('Berhasil di Update') : __('Berhasil di Simpan'),
+                message: $this->roomId ? __('Updated successfully') : __('Successfully added'),
                 type: 'success',
                 duration: 5000
             );
 
             if (!$this->roomId) { // Jika room baru, redirect ke halaman edit dengan room_code
                 session()->flash('toast', [ // triger notifikasi 
-                    'id' => uniqid(), 
-                    'message' => __($this->roomId ? 'Produk berhasil diupdate.' : 'Produk berhasil ditambahkan.'),
+                    'id' => uniqid(),
+                    'message' => __($this->roomId ? 'Product successfully updated' : 'Product successfully added.'),
                     'type' => 'success',
                     'duration' => 5000
                 ]);
-                return redirect()->route('room.edit', ['coderoom' => $this->coderoom]);
+                $this->redirectIntended(default: route('room.edit', $this->coderoom, absolute: true), navigate: true);
             }
         } catch (\Illuminate\Validation\ValidationException $e) {
-            
+            DB::rollBack();
             $this->dispatch(
                 'showToast',
-                message: __('Gagal di simpan'),
+                message: __('Failed to save'),
                 type: 'error',
                 duration: 5000
             );
-            return;
         }
     }
 
@@ -181,20 +184,20 @@ class RoomForm extends Component
                 ]
             );
             session()->flash('toast', [  // triger notifikasi
-                'id' => uniqid(), 
-                'message' => __('Berhasil Reject'),
+                'id' => uniqid(),
+                'message' => __('Successfully Rejected'),
                 'type' => 'success',
                 'duration' => 5000
             ]);
         } catch (ValidationException $e) {
             session()->flash('toast', [  // triger notifikasi
-                'id' => uniqid(), 
-                'message' => __('Gagal Reject'),
+                'id' => uniqid(),
+                'message' => __('Failed to Reject'),
                 'type' => 'error',
                 'duration' => 5000
             ]);
         }
-        $this->redirectIntended(default: route('room.edit', $this->coderoom, absolute: false));
+        $this->redirectIntended(default: route('room.edit', $this->coderoom, absolute: true), navigate: true);
     }
 
     // Memulai Lelang oleh Admin
@@ -203,12 +206,12 @@ class RoomForm extends Component
         $timenow = Carbon::now();
         if ($this->status == 'ended') {
             session()->flash('toast', [  // triger notifikasi
-                'id' => uniqid(), 
+                'id' => uniqid(),
                 'message' => __('The Room Has Ended'),
                 'type' => 'error',
                 'duration' => 5000
             ]);
-            $this->redirectIntended(default: route('room.edit', $this->coderoom, absolute: false));
+            $this->redirectIntended(default: route('room.edit', $this->coderoom, absolute: true), navigate: true);
         } else {
             if ($timenow > $this->start_time) {
                 Room::updateOrCreate(
@@ -220,12 +223,12 @@ class RoomForm extends Component
                     ]
                 );
                 session()->flash('toast', [  // triger notifikasi
-                    'id' => uniqid(), 
+                    'id' => uniqid(),
                     'message' => __('Auction is open'),
                     'type' => 'success',
                     'duration' => 5000
                 ]);
-                $this->redirectIntended(default: route('room.bidding', $this->coderoom, absolute: false));
+                $this->redirectIntended(default: route('room.bidding', $this->coderoom, absolute: true), navigate: false);
             } else {
                 $this->dispatch(  // triger notifikasi
                     'showToast',
@@ -244,14 +247,14 @@ class RoomForm extends Component
         // update status room to cancelled
         // update status partisipan to rejected
         // update status product to available
-        if ($this->status == 'ended') { 
+        if ($this->status == 'ended') {
             session()->flash('toast', [  // triger notifikasi
-                'id' => uniqid(), 
+                'id' => uniqid(),
                 'message' => __('The Room Has Ended'),
                 'type' => 'error',
                 'duration' => 5000
             ]);
-            $this->redirectIntended(default: route('room.edit', $this->coderoom, absolute: false), navigate: false);
+            $this->redirectIntended(default: route('room.edit', $this->coderoom, absolute: true), navigate: true);
         } else {
             try {
                 DB::beginTransaction();
@@ -263,7 +266,7 @@ class RoomForm extends Component
                 ]);
                 // update status seluruh partisipan 
                 Participant::where('room_id', $this->roomId)
-                    ->where('status', 'joined') 
+                    ->where('status', 'joined')
                     ->update(['status' => 'rejected']);
                 // update status product
                 Product::updateOrCreate([
@@ -271,15 +274,14 @@ class RoomForm extends Component
                 ], [
                     'status' => 'available'
                 ]);
-                
+
                 session()->flash('toast', [ // triger notifikasi
-                    'id' => uniqid(), 
+                    'id' => uniqid(),
                     'message' => __('Room is cancelled'),
                     'type' => 'error',
                     'duration' => 5000
                 ]);
-                $this->redirectIntended(default: route('room.edit', $this->coderoom, absolute: false), navigate: false);
-
+                $this->redirectIntended(default: route('room.edit', $this->coderoom, absolute: true), navigate: true);
                 DB::commit();
             } catch (ValidationException $e) {
                 DB::rollBack();

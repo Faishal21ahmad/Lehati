@@ -105,7 +105,7 @@
                         <p>Highest Bid</p>
                         <p>Code User</p>
                         <p>Name User</p>
-                        @if( $user->code_user == $transaksiWinner->participant->user->code_user )
+                        @if( $user->code_user == $transaksiWinner->participant->user->code_user || $transaksiWinner )
                             <p>ID Transaction</p>
                         @endif
                     </div>

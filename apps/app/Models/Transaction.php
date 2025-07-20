@@ -25,6 +25,7 @@ class Transaction extends Model
 
     protected $casts = [
         'payment_verified_at' => 'datetime',
+        'amount_final' => 'decimal:2',
     ];
 
     public function bid()

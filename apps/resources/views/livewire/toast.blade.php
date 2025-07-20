@@ -1,4 +1,4 @@
-<div class="fixed top-4 right-4 z-50 space-y-3 w-full max-w-xs">
+<div class="fixed top-4 right-4 z-50 space-y-3 w-full max-w-xs shadow-sm">
     @foreach($toasts as $toast)
         <div 
             x-data="{

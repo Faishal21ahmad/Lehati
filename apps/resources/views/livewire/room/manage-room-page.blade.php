@@ -36,7 +36,7 @@
                             </x-table.td>
                             <x-table.td>{{ $room->start_time }}</x-table.td>
                             <x-table.td class="flex md:flex-wrap gap-2"> 
-                                <x-button.btnaccorlink href="{{ Route('room.edit',$room->room_code) }}" color="blue" padding="px-3 py-1">Detail</x-button.btnaccorlink>
+                                <x-button.btnaccorlink href="{{ Route('room.edit',$room->room_code) }}" color="blue" navigate="true" padding="px-3 py-1">Detail</x-button.btnaccorlink>
                                 <x-button.btnaccorlink href="{{ Route('room.detail', $room->room_code) }}" color="yellow" padding="px-3 py-1">Preview</x-button.btnaccorlink>
                                 <x-button.btn wire:click="confirmDelete({{ $room->id }})" color="red" padding="px-3 py-1">Delete</x-button.btn>
                             </x-table.td>

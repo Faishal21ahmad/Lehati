@@ -22,6 +22,7 @@ class Bid extends Model
 
     protected $casts = [
         'is_winner' => 'boolean',
+        'amount' => 'decimal:2',
     ];
 
     public function participant()

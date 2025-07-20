@@ -27,6 +27,8 @@ class Room extends Model
     protected $casts = [
         'start_time' => 'datetime',
         'end_time' => 'datetime',
+        'starting_price' => 'decimal:2',
+        'min_bid_step' => 'decimal:2',
     ];
 
     public function user()

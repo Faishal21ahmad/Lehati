@@ -15,7 +15,7 @@ class ProductForm extends Component
 {
     use WithFileUploads;
 
-    public $productId;
+    public $productId, $product;
     public $product_name, $quantity, $units = 'kg', $description;
     public $newImages = [];
     public $existingImages = [];
@@ -23,16 +23,21 @@ class ProductForm extends Component
     public function mount($id = null)
     {
         if ($id) {
-            $product = Product::with('images')->findOrFail($id);
-            $this->productId = $product->id;
-            $this->product_name = $product->product_name;
-            $this->quantity = $product->quantity;
-            $this->units = $product->units;
-            $this->description = $product->description;
-            $this->existingImages = $product->images->map(function ($img) {
-                return ['id' => $img->id, 'image_path' => $img->image_path];
-            })->toArray();
+            $this->product = Product::with('images')->findOrFail($id);
+            $this->productId = $this->product->id;
+            $this->product_name = $this->product->product_name;
+            $this->quantity = $this->product->quantity;
+            $this->units = $this->product->units;
+            $this->description = $this->product->description;
+            $this->loadimage();
         }
+    }
+
+    public function loadimage()
+    {
+        $this->existingImages = $this->product->images->map(function ($img) {
+            return ['id' => $img->id, 'image_path' => $img->image_path];
+        })->toArray();
     }
 
     // Function save update atau create Product
@@ -88,12 +93,12 @@ class ProductForm extends Component
         }
 
         session()->flash('toast', [ // triger notifikasi 
-            'id' => uniqid(), 
+            'id' => uniqid(),
             'message' => __($this->productId ? 'Product successfully updated' : 'Product added successfully'),
             'type' => 'success', // 'error', 'success' ,'info'
             'duration' => 5000
         ]);
-        return redirect()->route('product.edit', ['id' => $product->id]);
+        $this->redirectIntended(default: route('product.edit', $product->id, absolute: false), navigate: false);
     }
 
     // Menghapus image
@@ -115,20 +120,20 @@ class ProductForm extends Component
                 ->toArray();
 
             session()->flash('toast', [ // triger notifikasi 
-                'id' => uniqid(), 
+                'id' => uniqid(),
                 'message' => __('Image successfully deleted'),
                 'type' => 'success',  // 'error', 'success' ,'info'
                 'duration' => 5000
             ]);
         } else {
             session()->flash('toast', [ // triger notifikasi 
-                'id' => uniqid(), 
+                'id' => uniqid(),
                 'message' => __('Image Failed to delete'),
                 'type' => 'danger',  // 'error', 'success' ,'info'
                 'duration' => 5000
             ]);
         }
-        $this->redirectIntended(default: route('product.edit', $this->productId, absolute: false));
+        $this->redirectIntended(default: route('product.edit', $this->productId, absolute: false), navigate: false);
     }
 
 

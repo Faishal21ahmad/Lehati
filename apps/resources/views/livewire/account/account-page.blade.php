@@ -1,11 +1,8 @@
 <div class="px-6 pt-2 md:p-8 md:ml-64 text-black dark:text-white">
     <x-layouts.app-header :title="__('Account')" :description="__('Manage all account user')" />
-    
+
     <div class="flex flex-col gap-2">
-
         <x-input.search id="search"  />
-
-
         <x-table.table class="lg:w-3/4">
             <x-table.thead>
                 <x-table.th>no</x-table.th>
@@ -30,9 +27,7 @@
                             @endif
                         </x-table.td>
                         <x-table.td class="flex md:flex-wrap gap-2"> 
-                            <x-button.btnaccorlink href="{{ Route('account.edit', $account->code_user) }}" color="blue" padding="px-3 py-1">Detail</x-button.btnaccorlink>
-                            
-                        
+                            <x-button.btnaccorlink href="{{ Route('account.edit', $account->code_user) }}" color="blue" navigate="true" padding="px-3 py-1">Detail</x-button.btnaccorlink>
                         </x-table.td>  
                     </x-table.tr>
                 @empty

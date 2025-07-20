@@ -1,7 +1,7 @@
 <div class="px-6 pt-2 md:p-8 md:ml-64 text-black dark:text-white">
     <x-layouts.app-header
-    :title="$productId ? __('Detail Produk') : __('Add Produk')"
-    :description="__('Create New Your Product')" />
+    :title="$productId ? __('Detail Product') : __('Add Product')"
+    :description="$productId ? __('Detail Your Product') : __('Create New Your Product')" />
 
     <div class="max-w-7xl flex lg:flex-row flex-col-reverse gap-4 mt-4">
         {{-- Form untuk menambah atau mengedit produk --}}

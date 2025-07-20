@@ -15,16 +15,12 @@ return new class extends Migration
 
             $table->id();
             $table->string('code_transaksi', 13)->unique();
-            // $table->unsignedBigInteger('bid_id')->constrained('bids')->onDelete('restrict');
-            // $table->unsignedBigInteger('user_id')->constrained('users')->onDelete('restrict');
-            // $table->foreignId('bid_id')->constrained()->restrictOnDelete();
-            // $table->foreignId('user_id')->constrained()->restrictOnDelete();
             $table->foreignId('bid_id')->references('id')->on('bids')->restrictOnDelete();;
             $table->foreignId('user_id')->references('id')->on('users')->restrictOnDelete();;
             $table->enum('status', ['unpaid', 'payment-verification', 'failed', 'success']);
             $table->string('payment_proof', 100)->nullable();
             $table->text('notes')->nullable();
-            $table->decimal('amount_final', 15, 2);
+            $table->decimal('amount_final', 15, 0);
             $table->timestamp('payment_verified_at')->nullable();
             $table->timestamps();
             $table->softDeletes();

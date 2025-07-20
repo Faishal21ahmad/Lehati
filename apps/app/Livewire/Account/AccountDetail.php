@@ -73,7 +73,6 @@ class AccountDetail extends Component
                 type: 'danger',
                 duration: 5000
             );
-            return;
         }
     }
 
@@ -108,7 +107,6 @@ class AccountDetail extends Component
                 type: 'danger',
                 duration: 5000
             );
-            return;
         }
     }
 

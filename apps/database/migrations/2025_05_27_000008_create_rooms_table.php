@@ -12,16 +12,12 @@ return new class extends Migration
         Schema::create('rooms', function (Blueprint $table) {
             $table->id();
             $table->string('room_code', 8)->unique();
-            // $table->unsignedBigInteger('user_id')->constrained('users')->onDelete('restrict');
-            // $table->unsignedBigInteger('product_id')->constrained('products')->onDelete('restrict');
-            // $table->foreignId('user_id')->constrained()->restrictOnDelete();
-            // $table->foreignId('product_id')->constrained()->restrictOnDelete();
             $table->foreignId('user_id')->references('id')->on('users')->restrictOnDelete();;
             $table->foreignId('product_id')->references('id')->on('products')->restrictOnDelete();;
             $table->string('room_notes', 200);
             $table->enum('status', ['upcoming', 'ongoing', 'ended', 'cancelled']);
-            $table->decimal('starting_price', 15, 2);
-            $table->decimal('min_bid_step', 15, 2);
+            $table->decimal('starting_price', 15, 0);
+            $table->decimal('min_bid_step', 15, 0);
             $table->dateTime('start_time');
             $table->dateTime('end_time');
             $table->timestamps();

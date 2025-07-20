@@ -47,6 +47,7 @@ Route::middleware('auth')->group(function () {
     Route::get('profile/password', Password::class)->name('profile.password');
     Route::get('logout', Logout::class)->name('logout');
     Route::get('room/{coderoom}/roombidding', LiveBidding::class)->name('room.bidding');
+    Route::get('transaction/{codetransaksi}/detail', TransactionForm::class)->name('transaction.detail');
 });
 
 // Route yang hanya dapat di akses oleh admin
@@ -60,7 +61,6 @@ Route::middleware(['auth', 'can:admin'])->group(function () {
     Route::get('accounts', AccountPage::class)->name('accounts');
     Route::get('account/{usercode}/edit', AccountDetail::class)->name('account.edit');
     Route::get('transactions', ManageTransactionPage::class)->name('transaction.manage');
-    Route::get('transaction/{codetransaksi}/detail', TransactionForm::class)->name('transaction.detail');
 });
 
 // Route Yang hanya dapat di akses oleh bidder

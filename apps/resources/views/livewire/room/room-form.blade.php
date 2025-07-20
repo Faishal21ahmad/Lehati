@@ -45,10 +45,14 @@
                         <p>ID Transaction</p>
                     </div>
                     <div class="">
-                        <p>: Rp. {{ number_format($transaksiWinner->amount, 0, ',', '.') }}</p>
-                        <p>: {{ $transaksiWinner->participant->user->code_user }}</p>
-                        <p>: {{ $transaksiWinner->participant->user->name }}</p>
-                        <p class="">: <x-button.accorlink class="font-semibold" href="{{ Route('transaction.detail', $transaksiWinner->transaction->code_transaksi) }}">{{ $transaksiWinner->transaction->code_transaksi }}</x-button.accorlink></p>
+                        <p>: Rp. {{ number_format($transaksiWinner->amount ?? 0, 0, ',', '.') }}</p>
+                        <p>: {{ $transaksiWinner->participant->user->code_user ?? '' }}</p>
+                        <p>: {{ $transaksiWinner->participant->user->name ?? '' }}</p>
+                        <p class="">: 
+                            @if ($transaksiWinner)
+                                <x-button.accorlink class="font-semibold" href="{{ Route('transaction.detail', $transaksiWinner->transaction->code_transaksi) }}">{{ $transaksiWinner->transaction->code_transaksi }}</x-button.accorlink>
+                            @endif
+                        </p>
                     </div>
                 </div>
             </section>

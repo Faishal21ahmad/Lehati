@@ -33,8 +33,11 @@
         <div id="bid" class="w-full md:w-[70%] flex flex-col gap-4">
             {{-- Informasi TopBid / Bid Tertinggi --}}
             <div id="topbid" class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                <div wire:poll.10s="refreshbid">
+                    <x-button.btn wire:click.poll.5s="refreshbid" >Refresh</x-button.btn>
+                </div>
                 <div class="w-full h-[100px] flex flex-col items-center justify-center ">
-                    <h1 class="text-3xl font-bold">Rp. {{ number_format($this->topBidAmount ?? 0 , 0, ',', '.') }}</h1>
+                    <h1 class="text-3xl font-bold">Rp. {{ number_format($bidmount ?? 0 , 0, ',', '.') }}</h1>
                     <span class="">Top Bid</span>
                 </div>
                 <div class="w-full h-[50px] flex flex-row gap-4 text-xl font-semibold items-center justify-center ">
@@ -46,15 +49,15 @@
             {{-- Form Bid Submit --}}
             @can('bidder')
                 <div id="form-bid" class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
-                    <form wire:submit="saveNewBid">
-                        <x-input.input type="number" id="bidnew" label="Bid" placeholder="10000" error="{{ $errors->first('password') }}"/>
+                    <form wire:submit="submitNewBid">
+                        <x-input.input type="number" id="bidnew" label="Bid" placeholder="10000" error="{{ $errors->first('bidnew') }}"/>
                         <x-button.btn type="submit" class="w-full">Submit</x-button.btn>
                     </form>
                 </div>
             @endcan
 
             {{-- Tabel Informasi Bid history --}}
-            <x-table.table class="w-full">
+            <x-table.table id="infobidlog" class="w-full">
                 <x-table.thead>
                     <x-table.th>no</x-table.th>
                     <x-table.th>Code User</x-table.th>
@@ -62,7 +65,7 @@
                 </x-table.thead>
                 <x-table.tbody>
                     @forelse($bids as $bid)
-                        <x-table.tr>
+                        <x-table.tr wire:key="bid-row-{{ $bid->id }}">
                             <x-table.td>{{ $loop->iteration }}</x-table.td>
                             <x-table.td>{{ $bid->participant->user->code_user }}</x-table.td>
                             <x-table.td>Rp. {{ number_format($bid->amount, 0, ',', '.') }}</x-table.td>
@@ -76,4 +79,15 @@
             </x-table.table>
         </div>
     </section>
+  @push('scripts')
+<script>
+    document.addEventListener('livewire:initialized', () => {
+        Livewire.on('refresh-bids', () => {
+            // Memaksa refresh komponen jika diperlukan
+            Livewire.dispatch('refresh');
+        });
+    });
+</script>
+@endpush
 </div>
+

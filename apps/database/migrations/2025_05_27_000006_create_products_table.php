@@ -13,8 +13,6 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            // $table->unsignedBigInteger('user_id')->constrained('users')->onDelete('restrict');
-            // $table->foreignId('user_id')->constrained()->restrictOnDelete();
             $table->foreignId('user_id')->references('id')->on('users')->restrictOnDelete();;
             $table->string('product_name', 40);
             $table->string('description', 200);
