@@ -3,6 +3,7 @@
     'color' => 'blue', // blue, red, green, gray, yellow
     'fullWidth' => false,
     'padding' => 'px-4 py-2',
+    'class' => '',
 ])
 
 {{-- 
@@ -30,7 +31,7 @@ full Width = w-full
 
 <button 
     type="{{ $type }}"
-    {{ $attributes->merge(['class' => "$baseClasses $colorClasses $widthClass $padding"]) }}
+    {{ $attributes->merge(['class' => "$class $baseClasses $colorClasses $widthClass $padding "]) }}
 >
     {{ $slot }}
 </button>

@@ -33,8 +33,11 @@
         <div id="bid" class="w-full md:w-[70%] flex flex-col gap-4">
             {{-- Informasi TopBid / Bid Tertinggi --}}
             <div id="topbid" class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
-                <div wire:poll.10s="refreshbid">
-                    <x-button.btn wire:click.poll.5s="refreshbid" >Refresh</x-button.btn>
+                <div wire:poll.7s="refreshbid" class="absolute">
+                    <x-button.btn wire:click="refreshbid" color="none" class="w-[55px] h-[55px]">
+                        <x-dynamic-component 
+                        :component="'icon.' . 'refresh'" class="text-gray-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+                    </x-button.btn>
                 </div>
                 <div class="w-full h-[100px] flex flex-col items-center justify-center ">
                     <h1 class="text-3xl font-bold">Rp. {{ number_format($bidmount ?? 0 , 0, ',', '.') }}</h1>
