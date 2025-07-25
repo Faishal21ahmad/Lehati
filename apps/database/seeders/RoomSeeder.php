@@ -15,38 +15,49 @@ class RoomSeeder extends Seeder
      */
     public function run(): void
     {
-        // $products = Product::all();
+        $productsAvailable = Product::where('status', 'available')->get();
+        $productsUse = Product::where('status', 'use')->get();
+        $productsSold = Product::where('status', 'sold')->get();
 
         $timenow = Carbon::now();
 
-        Room::factory()->create([
-            'user_id' => 1,
-            'product_id' => 1,
-            'status' => 'cancelled',
-            'start_time' => $timenow->copy()->subDays(3),
-            'end_time' => $timenow->copy()->addDays(2)
-        ]);
-        Room::factory()->create([
-            'user_id' => 1,
-            'product_id' => 2,
-            'status' => 'upcoming',
-            'start_time' => $timenow->copy()->addDays(4),
-            'end_time' => $timenow->copy()->addDays(7)
-        ]);
-        Room::factory()->create([
-            'user_id' => 1,
-            'product_id' => 3,
-            'status' => 'ongoing',
-            'start_time' => $timenow->copy()->subDays(2),
-            'end_time' => $timenow->copy()->addDays(2),
-        ]);
-        Room::factory()->create([
-            'user_id' => 1,
-            'product_id' => 4,
-            'status' => 'ended',
-            'start_time' => $timenow->copy()->subDays(5),
-            'end_time' => $timenow->copy()->subDays(4),
-        ]);
+
+        foreach ($productsUse->values() as $index => $product) {
+            $status = $index % 2 === 0 ? 'upcoming' : 'ongoing';
+
+            Room::factory()->create([
+                'user_id' => 1,
+                'product_id' => $product->id,
+                'status' => $status,
+                'start_time' => $status === 'upcoming'
+                    ? $timenow->copy()->addDays(rand(1, 3))
+                    : $timenow->copy()->subDays(rand(1, 2)),
+                'end_time' => $timenow->copy()->addDays(rand(2, 4)),
+            ]);
+        }
+
+
+        foreach ($productsSold as $product) {
+            Room::factory()->create([
+                'user_id' => 1,
+                'product_id' => $product->id,
+                'status' => 'ended',
+                'start_time' => $timenow->copy()->subDays(5),
+                'end_time' => $timenow->copy()->subDays(4),
+            ]);
+        }
+
+        // Available
+        $cancelledRooms = $productsAvailable->take(5);
+        foreach ($cancelledRooms as $product) {
+            Room::factory()->create([
+                'user_id' => 1,
+                'product_id' => $product->id,
+                'status' => 'cancelled',
+                'start_time' => $timenow->copy()->subDays(rand(2, 5)),
+                'end_time' => $timenow->copy()->addDays(rand(1, 3)),
+            ]);
+        }
     }
 }
 

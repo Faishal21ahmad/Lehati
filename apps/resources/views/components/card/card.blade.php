@@ -3,13 +3,10 @@
     ])
 
 <a href="{{ Route('room.detail', $data->room_code) }}"  >
-    <div class="
-    max-w-44
-    min-w-40
-    {{-- max-w-52 --}}
+    <div class="w-44 md:w-[204px]
     max-h-64 bg-white border border-gray-200 rounded-md shadow-sm dark:bg-gray-800 dark:border-gray-700  mx-auto">
         <div class="h-32 overflow-hidden flex justify-center items-center rounded-t-md">
-            <img  src="{{ asset('storage/'.$data->product->images[0]->image_path ) }}" alt="" />
+            <img  src="{{ asset('storage/'. $data->product->images[0]->image_path ) }}" />
         </div>
         
         <div class="p-2.5 overflow ">

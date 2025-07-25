@@ -12,7 +12,6 @@ use Livewire\WithPagination;
 class AccountPage extends Component
 {
     use WithPagination;
-
     public $query = '';
     public $isactive = '';
 

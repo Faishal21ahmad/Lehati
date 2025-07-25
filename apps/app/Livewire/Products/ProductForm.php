@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Storage;
 class ProductForm extends Component
 {
     use WithFileUploads;
-
     public $productId, $product;
     public $product_name, $quantity, $units = 'kg', $description;
     public $newImages = [];
@@ -32,14 +31,13 @@ class ProductForm extends Component
             $this->loadimage();
         }
     }
-
+    // Function untuk memuat gambar yang sudah ada
     public function loadimage()
     {
         $this->existingImages = $this->product->images->map(function ($img) {
             return ['id' => $img->id, 'image_path' => $img->image_path];
         })->toArray();
     }
-
     // Function save update atau create Product
     public function save()
     {
@@ -72,7 +70,6 @@ class ProductForm extends Component
         ]);
 
         $user = Auth::user();
-
         $product = Product::updateOrCreate(
             ['id' => $this->productId],
             [
@@ -85,12 +82,17 @@ class ProductForm extends Component
             ]
         );
 
+
         if (!empty($this->newImages)) {
             foreach ($this->newImages as $image) {
                 $path = $image->store('products', 'public');
                 $product->images()->create(['image_path' => $path]);
             }
+        } else {
+            // Simpan gambar default jika tidak ada upload
+            $product->images()->create(['image_path' => 'products.png']);
         }
+
 
         session()->flash('toast', [ // triger notifikasi 
             'id' => uniqid(),
@@ -135,7 +137,6 @@ class ProductForm extends Component
         }
         $this->redirectIntended(default: route('product.edit', $this->productId, absolute: false), navigate: false);
     }
-
 
     public function render()
     {

@@ -18,12 +18,10 @@ use Illuminate\Validation\ValidationException;
 class RoomForm extends Component
 {
     use WithPagination;
-
-    public $roomId;
+    public $roomId, $transaksiWinner;
     public $coderoom, $partisipantjoin, $status, $room_notes, $user_id, $starting_price,  $min_bid_step, $product, $start_time, $end_time;
     public $products = [];
     public $partisipans, $countpartisipantjoin, $countpartisipantleave, $countpartisipantrejected;
-    public $transaksiWinner;
 
     public function mount($coderoom = null)
     {
@@ -111,14 +109,13 @@ class RoomForm extends Component
             'room_notes.max'    => 'Catatan maksimal 200 karakter.',
         ]);
 
-
         $this->coderoom = $this->roomId ? $this->coderoom : 'RM' . fake()->unique()->numberBetween(1000, 9999);
         $this->user_id = $this->user_id ?: Auth::user()->id;
         $this->product = (int) $this->product;
 
         try {
             DB::beginTransaction();
-
+            // Update or create Room and Product
             Room::updateOrCreate(
                 ['id' => $this->roomId],
                 [
@@ -133,14 +130,14 @@ class RoomForm extends Component
                     'end_time' => $this->end_time,
                 ]
             );
-
+            // Update or create Product status
             Product::updateOrCreate(
                 ['id' => $this->product],
                 [
                     'status' => 'use',
                 ]
             );
-
+            
             DB::commit();
 
             $this->dispatch( // triger notifikasi 

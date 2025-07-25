@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Livewire\Home;
+
 use Carbon\Carbon;
 use App\Models\Room;
 use Livewire\Component;
@@ -22,14 +23,15 @@ class HomePage extends Component
         $this->roomupcoming = Room::with('product')
             ->where('start_time', '>', $time)
             ->where('status', 'upcoming')
+            ->orderBy('end_time', 'asc')
             ->get();
         // Ambil data room Ongoing
         $this->ongoing = Room::with('product')
             ->where('start_time', '<=', $time)
             ->where('end_time', '>=', $time)
             ->where('status', 'ongoing')
+            ->orderBy('start_time', 'asc')
             ->get();
-
         // All Room + Search
         $rooms = Room::with('product') // eager load relasi
             ->when($this->query, function ($queryBuilder) {

@@ -10,19 +10,12 @@ use Illuminate\Support\Facades\Auth;
 #[Layout('components.layouts.app', ['title' => "Profile Data"])]
 class DataUser extends Component
 {
-    public string $phone = '';
-    public string $address = '';
-    public string $nik = '';
-    public string $gender = '';
-    public string $bank = '';
-    public string $bank_name = '';
-    public string $bank_number = '';
-
+    public $phone, $address, $nik, $gender, $bank, $bank_name, $bank_number;
+    
     public function mount(): void
     {
         $user = Auth::user();
         $userData = UserData::where('user_id', $user->id)->first();
-
         $this->phone = $userData->phone ?? '';
         $this->address = $userData->address ?? '';
         $this->nik = $userData->nik ?? '';

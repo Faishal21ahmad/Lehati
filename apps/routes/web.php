@@ -35,7 +35,7 @@ Route::middleware('guest')->group(function () {
     Route::get('register', Register::class)->name('register');
     Route::get('forgot-password', ForgotPassword::class)->name('forgot-password');
     Route::get('reset-password', ResetPassword::class)->name('reset-password.post');
-    Route::get('reset-password/{token}', ResetPassword::class)->name('password.reset');
+    Route::get('reset-password/{token}/reset', ResetPassword::class)->name('password.reset');
     Route::get('resend-otp', Otp::class)->name('resend-otp');
 });
 

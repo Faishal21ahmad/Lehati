@@ -42,7 +42,7 @@ class RoomPage extends Component
                         );
                 });
             })
-            ->orderBy('status', 'asc')
+            ->orderBy('created_at', 'asc')
             ->paginate(10);
 
         return view('livewire.room.room-page', [

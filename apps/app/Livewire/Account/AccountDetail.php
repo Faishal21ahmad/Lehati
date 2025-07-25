@@ -13,10 +13,9 @@ use phpDocumentor\Reflection\Types\This;
 class AccountDetail extends Component
 {
     public $account, $codeUser, $name, $email, $role, $verified, $status;
-    public $userdata, $phone, $address, $nik, $gender;
-    public string $bank = '';
-    public string $bank_name = '';
-    public string $bank_number = '';
+    public $userdata, $gender;
+    public $phone, $address, $nik;
+    public $bank, $bank_name, $bank_number;
 
     public function mount($usercode = null): void
     {
@@ -29,7 +28,6 @@ class AccountDetail extends Component
         } else {
             abort(404, 'No user code provided');
         }
-
         $this->codeUser = $this->account->code_user;
         $this->name = $this->account->name;
         $this->email = $this->account->email;
@@ -59,7 +57,6 @@ class AccountDetail extends Component
                     'is_active' => $this->status,
                 ]
             );
-
             $this->dispatch( // triger notifikasi 
                 'showToast',
                 message: __('Account updated successfully!'),
@@ -93,7 +90,6 @@ class AccountDetail extends Component
                     'bank_number' => $this->bank_number
                 ]
             );
-
             $this->dispatch( // triger notifikasi 
                 'showToast',
                 message: __('User data updated successfully!'),

@@ -14,16 +14,6 @@ use Illuminate\Support\Facades\Auth;
 #[Layout('components.layouts.app', ['title' => "Dashboard"])]
 class DashboardPage extends Component
 {
-    // Admin
-    // Count Account ( Active, Disable )
-    // Count Product (Available, Use, Sold)
-    // Count Room (Upcoming, Ongoing, Ended, Cancelled)
-    // Count Transaksi (Unpaid, Proses, Failed, Success)
-
-    // Bidder
-    // Count Partisipan Join Room
-    // Count Transaksi Bidder (Unpaid, Proses, Failed, Success)
-
     // public $user;
     public $accounts, $accountActive, $accountInActive;
     public $products, $productAvailable, $productUse, $productSold;
@@ -34,7 +24,15 @@ class DashboardPage extends Component
     public function mount()
     {
         $user = Auth::user();
+
         if ($user->role->value === 'admin') {
+            // Admin
+            // Count Account ( Active, Disable )
+            // Count Product (Available, Use, Sold)
+            // Count Room (Upcoming, Ongoing, Ended, Cancelled)
+            // Count Transaksi (Unpaid, Proses, Failed, Success)
+
+            // Ambil semua akun user
             $this->accounts = User::get();
             $this->accountActive = $this->accounts->where('is_active', true)->count();
             $this->accountInActive = $this->accounts->where('is_active', false)->count();
@@ -59,6 +57,10 @@ class DashboardPage extends Component
             $this->transactionFailed = $this->transactions->where('status', 'failed')->count();
             $this->transactionSuccess = $this->transactions->where('status', 'success')->count();
         } else {
+            // Bidder
+            // Count Partisipan Join Room
+            // Count Transaksi Bidder (Unpaid, Proses, Failed, Success)
+
             // Ambil data partisipan
             $this->roomPartisipan = Participant::where('user_id', $user->id)->get();
             $this->roomPartisipanJoin = $this->roomPartisipan->where('status', 'joined')->count();
@@ -70,7 +72,7 @@ class DashboardPage extends Component
             $this->transactionProses = $this->transactions->where('status', 'payment-verification')->count();
             $this->transactionFailed = $this->transactions->where('status', 'failed')->count();
             $this->transactionSuccess = $this->transactions->where('status', 'success')->count();
-        }   
+        }
     }
 
     public function render()

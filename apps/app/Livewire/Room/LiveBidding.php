@@ -1,8 +1,6 @@
 <?php
-
 namespace App\Livewire\Room;
 
-use App\Events\BidNew;
 use App\Models\Bid;
 use App\Models\Room;
 use Livewire\Component;

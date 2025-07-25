@@ -23,7 +23,7 @@ class ProductsPage extends Component
         $this->deleteId = $id;
         $this->produk = Product::find($id)->product_name;
         $this->showModal = true;
-    }   
+    }
     // Action delete data product
     public function delete()
     {
@@ -31,7 +31,6 @@ class ProductsPage extends Component
             Product::findOrFail($this->deleteId)->delete();
             $this->deleteId = null;
             $this->showModal = false;
-
             $this->dispatch( // triger notifikasi 
                 'showToast',
                 message: 'Delete success !',
@@ -58,7 +57,7 @@ class ProductsPage extends Component
                     ->orWhere('status', 'like', '%' . $this->query . '%')
                     ->orWhere('units', 'like', '%' . $this->query . '%');
             })
-            ->orderBy('product_name', 'asc')
+            ->orderBy('status', 'asc')
             ->paginate(10);
 
         return view('livewire.products.products-page', [

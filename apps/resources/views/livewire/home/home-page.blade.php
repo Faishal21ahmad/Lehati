@@ -5,7 +5,7 @@
         @if(empty($query))
             @if($ongoing->isNotEmpty())
                 <h1 class="text-xl dark:text-white py-4 pl-7">On Going</h1>
-                <section class="w-full flex flex-nowrap overflow-auto overflow-x-visible gap-4 mx-auto p-4 scrollbar-hide ">
+                <section class="w-full flex flex-nowrap overflow-auto overflow-x-visible gap-3 mx-auto p-4 scrollbar-hide ">
                     @foreach ($ongoing as $item)
                         <x-card.card :data="$item" />
                     @endforeach
@@ -14,7 +14,7 @@
 
             @if ($roomupcoming->isNotEmpty())
                 <h1 class="text-xl dark:text-white py-4 pl-7">Up Coming</h1>
-                <section class="w-full flex flex-nowrap overflow-auto overflow-x-visible gap-4 mx-auto p-4 scrollbar-hide">
+                <section class="w-full flex flex-nowrap overflow-auto overflow-x-visible gap-3 mx-auto p-4 scrollbar-hide">
                     @foreach ($roomupcoming as $item)
                         <x-card.card :data="$item" />
                     @endforeach
@@ -27,7 +27,7 @@
             <h1 class="text-xl dark:text-white py-4 pl-7">
                 {{ empty($query) ? 'All Product' : 'Search Result' }}
             </h1>
-            <section class="w-full flex flex-wrap justify-center sm:justify-start items-center gap-4 mx-auto p-4 ">
+            <section class="w-full flex flex-wrap justify-center items-center gap-3 mx-auto p-4 ">
                 @foreach($rooms as $item)
                     <x-card.card :data="$item" />
                 @endforeach

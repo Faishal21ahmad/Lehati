@@ -17,18 +17,17 @@ use Livewire\Attributes\Layout;
 #[Layout('components.layouts.auth', ['title' => "Login"])]
 class Login extends Component
 {
-
-    #[Validate('required|string|email')]
     public string $email = '';
-
-    #[Validate('required|string')]
     public string $password = '';
-
     public bool $remember = false;
 
     public function login(): void
     {
-        $this->validate();
+        $this->validate([
+            'email' => ['required', 'string', 'email', 'max:255'],
+            'password' => ['required', 'string', 'min:8'],
+        ]);
+
         $this->ensureIsNotRateLimited();
 
         $user = User::where('email', $this->email)->first();

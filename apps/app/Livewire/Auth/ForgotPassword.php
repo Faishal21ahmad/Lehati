@@ -37,3 +37,4 @@ class ForgotPassword extends Component
         return view('livewire.auth.forgot-password');
     }
 }
+

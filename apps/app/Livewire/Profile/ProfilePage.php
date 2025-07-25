@@ -10,10 +10,7 @@ use Illuminate\Support\Facades\Auth;
 #[Layout('components.layouts.app', ['title' => "Profile"])]
 class ProfilePage extends Component
 {
-    public string $name = '';
-    public string $code_user = '';
-    public string $email = '';
-    public string $role = '';
+    public $name, $code_user, $email, $role;
 
     public function mount()
     {

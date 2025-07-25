@@ -12,9 +12,7 @@ use Illuminate\Validation\Rules\Password as PasswordRule;
 #[Layout('components.layouts.app', ['title' => "Profile Password"])]
 class Password extends Component
 {
-    public string $current_password = '';
-    public string $password = '';
-    public string $password_confirmation = '';
+    public $current_password, $password, $password_confirmation;
 
     public function updatePassword(): void
     {
@@ -28,7 +26,6 @@ class Password extends Component
                 'password' => Hash::make($validated['password']),
             ]);
             $this->reset('current_password', 'password', 'password_confirmation');
-
             $this->dispatch( // triger notifikasi 
                 'showToast',
                 message: 'Password updated successfully!',
