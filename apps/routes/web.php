@@ -1,6 +1,5 @@
 <?php
 
-use App\Livewire\Auth\Otp;
 use App\Livewire\Room\Room;
 use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Register;
@@ -36,7 +35,6 @@ Route::middleware('guest')->group(function () {
     Route::get('forgot-password', ForgotPassword::class)->name('forgot-password');
     Route::get('reset-password', ResetPassword::class)->name('reset-password.post');
     Route::get('reset-password/{token}/reset', ResetPassword::class)->name('password.reset');
-    Route::get('resend-otp', Otp::class)->name('resend-otp');
 });
 
 // Route Yang dapat di oleh user yang sudah autentikai 

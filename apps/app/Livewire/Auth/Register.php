@@ -35,6 +35,13 @@ class Register extends Component
 
         Auth::login($user);
 
+        session()->flash('toast', [
+            'id' => uniqid(), // Simpan ID di session
+            'message' => __('Registration successful!'),
+            'type' => 'success',
+            'duration' => 5000
+        ]);
+
         $this->redirect(route('dashboard', absolute: false), navigate: true);
     }
 }

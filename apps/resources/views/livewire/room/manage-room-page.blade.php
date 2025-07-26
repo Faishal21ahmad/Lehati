@@ -9,7 +9,7 @@
             <x-input.search id="search" class="w-3/5" />
         </div>
         <div class="">
-            <x-table.table class="lg:w-3/4">
+            <x-table.table class="w-full ">
                 <x-table.thead>
                     <x-table.th>No</x-table.th>
                     <x-table.th>Code Room</x-table.th>
@@ -48,7 +48,7 @@
                     @endforelse
                 </x-table.tbody>
             </x-table.table>
-            <div class="mt-4">
+            <div class="mt-4 w-full ">
                 {{ $rooms->links() }}
             </div>
         </div>

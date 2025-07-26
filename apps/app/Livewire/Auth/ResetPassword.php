@@ -18,7 +18,7 @@ class ResetPassword extends Component
     public function mount($token): void
     {
         $this->token = $token;
-        if(! $this->token) {
+        if (! $this->token) {
             abort(404, 'Token tidak ditemukan.');
         }
         // Ambil email dari request jika ada
@@ -49,7 +49,12 @@ class ResetPassword extends Component
         );
 
         if ($status === Password::PASSWORD_RESET) {
-            session()->flash('success', 'Password berhasil direset. Silakan login dengan password baru.');
+            session()->flash('toast', [
+                'id' => uniqid(), // Simpan ID di session
+                'message' => __('Password berhasil direset. Silakan login dengan password baru.'),
+                'type' => 'success',
+                'duration' => 5000
+            ]);
             return redirect()->route('login');
         } else {
             $this->addError('email', __($status));
