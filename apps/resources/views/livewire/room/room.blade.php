@@ -73,8 +73,8 @@
                 @elseif($room->status =="ended")
                     <p class="w-full bg-gray-600 rounded-md py-2 shadow-sm">Room Ended</p>
                 @else
-                    @can('bidder')
-                        @auth
+                    @auth
+                        @can('bidder')
                             @if ($this->isJoined())
                             {{-- Tombol keluar --}}
                             <x-button.btn class="w-full" color="red" wire:click="leaveRoom">
@@ -89,12 +89,12 @@
                                 Join Room
                             </x-button.btn>
                             @endif
-                        @else
+                        @endcan
+                    @else
                         <x-button.btn class="w-full" color="green" wire:click="joinRoom">
                             Join Room
                         </x-button.btn>
-                        @endauth
-                    @endcan
+                    @endauth
                 @endif
             </div>
             @if($room->status =="ended")
