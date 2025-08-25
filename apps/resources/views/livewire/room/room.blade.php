@@ -67,15 +67,16 @@
             <div class="bg-white dark:bg-gray-800 rounded-md shadow-sm p-3 md:p-4 gap-2 flex flex-col items-center text-center">
                 <p class="text-xl font-semibold text-gray-800 dark:text-white mb-2">Jumlah Peserta</p>
                 <p class="text-4xl font-bold text-green-500 mb-4">{{  $room->participants()->where('status', 'joined')->count() }}</p>
-                
-                @if ($room->status == "cancelled")
+
+                {{-- Button Join/Leave Room --}}
+                @if ($room->status == "cancelled") 
                     <p class="w-full bg-red-600 rounded-md py-2 shadow-sm">Room Cancelled</p>
                 @elseif($room->status =="ended")
                     <p class="w-full bg-gray-600 rounded-md py-2 shadow-sm">Room Ended</p>
                 @else
-                    @auth
-                        @can('bidder')
-                            @if ($this->isJoined())
+                    @auth {{-- terautentikasi --}}
+                        @can('bidder') {{-- bidder akses --}}
+                            @if ($this->isJoined()) {{-- jika sudah bergabung --}}
                             {{-- Tombol keluar --}}
                             <x-button.btn class="w-full" color="red" wire:click="leaveRoom">
                                 Cancel Join
@@ -83,21 +84,22 @@
                             <x-button.btn class="w-full" color="green" wire:click="startbidding">
                                 Start Bidding
                             </x-button.btn>
-                            @else
+                            @else 
                             {{-- Tombol gabung --}}
                             <x-button.btn class="w-full" color="green" wire:click="joinRoom">
                                 Join Room
                             </x-button.btn>
                             @endif
                         @endcan
-                    @else
+                    @else {{-- belum terautentikasi --}}
                         <x-button.btn class="w-full" color="green" wire:click="joinRoom">
                             Join Room
                         </x-button.btn>
                     @endauth
                 @endif
             </div>
-            @if($room->status =="ended")
+        
+            @if($room->status =="ended") {{-- jika status room ended tampilkan detail pemenang --}}
             <div class="bg-white dark:bg-gray-800 text-black dark:text-white rounded-md shadow-sm">
                 <h1 class="p-4 w-full text-center font-semibold">Winner</h1>
                 <div class="px-4 pb-4 flex w-full gap-2 ">
@@ -105,7 +107,8 @@
                         <p>Highest Bid</p>
                         <p>Code User</p>
                         <p>Name User</p>
-                        @if( $user->code_user == $transaksiWinner->participant->user->code_user || $transaksiWinner )
+                        {{-- Tampilkan ID Transaksi bagi bidder yang menang --}}
+                        @if( $user->code_user == $transaksiWinner->participant->user->code_user || $transaksiWinner ) 
                             <p>ID Transaction</p>
                         @endif
                     </div>

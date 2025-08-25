@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 #[Layout('components.layouts.app', ['title' => "Room Information"])]
-class RoomForm extends Component
+class RoomForm extends Component // Form Manage Room oleh Admin
 {
     use WithPagination;
     public $roomId, $transaksiWinner;
@@ -23,13 +23,15 @@ class RoomForm extends Component
     public $products = [];
     public $partisipans, $countpartisipantjoin, $countpartisipantleave, $countpartisipantrejected;
 
+    // Load Inisialisasi data Livewire RoomForm
     public function mount($coderoom = null)
-    {
+    {   // Ambil data user yang sedang login
         $user = Auth::user();
-
+        // Jika ada parameter coderoom maka load data room berdasarkan room_code
         if ($coderoom) {
+            // Ambil data room berdasarkan room_code dari parameter
             $room = Room::where('room_code', $coderoom)->firstOrFail();
-            // Load room data i f coderoom is provided
+            // inisialisasi properti dengan data room
             $this->roomId = $room->id;
             $this->coderoom = $room->room_code;
             $this->user_id = $room->user_id;
@@ -41,17 +43,20 @@ class RoomForm extends Component
             $this->start_time = $room->start_time;
             $this->end_time = $room->end_time;
 
+            // Ambil data partisipan joined pada room tersebut
             $this->partisipantjoin = $room->participants->where('status', 'joined');
-
+            // Hitung jumlah partisipan berdasarkan status
             $this->countpartisipantjoin     = $room->participants->where('status', 'joined')->count();
             $this->countpartisipantleave    = $room->participants->where('status', 'leave')->count();
             $this->countpartisipantrejected = $room->participants->where('status', 'rejected')->count();
 
+            // Ambil data transaksi pemenang pada room tersebut
             $this->transaksiWinner = Bid::where('room_id', $this->roomId)
                 ->where('is_winner', true)
                 ->latest('created_at') // urutkan dari yang terbaru
                 ->first();
 
+            // Ambil data Product     
             $this->products = Product::where(['user_id' => $user->id])
                 ->get()
                 ->map(function ($product) {
@@ -63,6 +68,7 @@ class RoomForm extends Component
                 ->toArray();
         } else {
             $this->product = '';
+            // Ambil data Product yang status available
             $this->products = Product::where(['user_id' => $user->id, 'status' => 'available'])
                 ->get()
                 ->map(function ($product) {
@@ -137,7 +143,7 @@ class RoomForm extends Component
                     'status' => 'use',
                 ]
             );
-            
+
             DB::commit();
 
             $this->dispatch( // triger notifikasi 
@@ -171,6 +177,7 @@ class RoomForm extends Component
     public function rejectpartisipan($code = null)
     {
         try {
+            // update status partisipan to rejected
             Participant::updateOrCreate(
                 [
                     'user_id' => $code,
@@ -201,6 +208,7 @@ class RoomForm extends Component
     public function startbidding()
     {
         $timenow = Carbon::now();
+        // cek status room apakah sudah ended ?
         if ($this->status == 'ended') {
             session()->flash('toast', [  // triger notifikasi
                 'id' => uniqid(),
@@ -210,7 +218,9 @@ class RoomForm extends Component
             ]);
             $this->redirectIntended(default: route('room.edit', $this->coderoom, absolute: true), navigate: true);
         } else {
+            // cek waktu mulai lelang apakah sudah waktunya ?
             if ($timenow > $this->start_time) {
+                // update status room to ongoing
                 Room::updateOrCreate(
                     [
                         'room_code' => $this->coderoom,
@@ -225,8 +235,9 @@ class RoomForm extends Component
                     'type' => 'success',
                     'duration' => 5000
                 ]);
+                // direct to halaman Livebidding
                 $this->redirectIntended(default: route('room.bidding', $this->coderoom, absolute: true), navigate: false);
-            } else {
+            } else { // jika belum waktunya 
                 $this->dispatch(  // triger notifikasi
                     'showToast',
                     message: "It's not time yet",

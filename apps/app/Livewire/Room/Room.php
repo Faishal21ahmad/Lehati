@@ -11,7 +11,7 @@ use Livewire\Attributes\Layout;
 use Illuminate\Support\Facades\Auth;
 
 #[Layout('components.layouts.home', ['title' => "Detail Product"])]
-class Room extends Component
+class Room extends Component // Halaman Detail Room User 
 {
     public $room;
     public $images = [];
@@ -19,17 +19,23 @@ class Room extends Component
     public $transaksiWinner;
     public $user;
 
+    // Load Inisialisasi data Livewire Room
     public function mount($coderoom)
     {
+        // Ambil data room berdasarkan room_code dari parameter
         $this->room = Rooms::where('room_code', $coderoom)->first();
-        if (!$this->room) {
+        if (!$this->room) { // jika room tidak ditemukan maka tampilkan 404
             abort(404, 'Room not found');
         }
+        // Ambil data partisipan dari room
         $this->partisipants = $this->room->partisipants;
+        // Ambil data user yang sedang login
         $this->user = Auth::user();
+        // Ambil data Images dari product pada room tersebut
         $this->images = $this->room->product->images->map(function ($img) {
             return ['id' => $img->id, 'image_path' => $img->image_path];
         })->toArray();
+        // Ambil data transaksi pemenang pada room tersebut
         $this->transaksiWinner = Bid::where('room_id', $this->room->id)
             ->where('is_winner', true)
             ->latest('created_at') // urutkan dari yang terbaru
@@ -40,7 +46,9 @@ class Room extends Component
     {
         // Pengecekan jika user belum login 
         if (!$this->user) {
+            // direct ke halaman login
             return redirect()->route('login');
+
             // Pengecekan jika user data belum terisi / belum melengakapi data user
         } elseif (!$this->user->userdata) {
             session()->flash('toast', [ // triger notifikasi 
@@ -51,11 +59,14 @@ class Room extends Component
             ]);
             $this->redirectIntended(default: route('profile.data', absolute: false), navigate: true);
         }
+
         // update atau create data partisipan user di room ini
-        Participant::updateOrCreate([
+        Participant::updateOrCreate(
+            [
                 'user_id' => $this->user->id,
                 'room_id' => $this->room->id,
-            ], [
+            ],
+            [
                 'status' => 'joined',
             ]
         );
@@ -71,7 +82,9 @@ class Room extends Component
     // function button leaveRoom (keluar room)
     public function leaveRoom()
     {
+        // Pengecekan jika user belum login
         if (!$this->user) {
+            // direct ke halaman login
             return redirect()->route('login');
         }
         // update status participan user 
@@ -95,15 +108,16 @@ class Room extends Component
         if ($timenow > $this->room->start_time) {
             // Pengecekan status Room lelang 
             if ($this->room->status === 'ongoing') {
+
                 session()->flash('toast', [ // triger notifikasi 
                     'id' => uniqid(),
                     'message' => __('Start bid'),
                     'type' => 'success', // 'error', 'success' ,'info'
                     'duration' => 5000
                 ]);
+                // direct ke halaman Livebidding
                 $this->redirectIntended(default: route('room.bidding', $this->room->room_code, absolute: false));
-            } else {
-
+            } else { // jika status room belum di buka oleh admin
                 $this->dispatch( // triger notifikasi 
                     'showToast',
                     message: "Auction has not been opened by admin, Please wait",

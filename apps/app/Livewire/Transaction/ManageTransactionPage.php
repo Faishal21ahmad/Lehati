@@ -8,7 +8,7 @@ use Livewire\WithPagination;
 use Livewire\Attributes\Layout;
 
 #[Layout('components.layouts.app',  ['title' => "Transaction"])]
-class ManageTransactionPage extends Component
+class ManageTransactionPage extends Component // Halaman Data Semua Transaksi Admin
 {
     use WithPagination;
     public $query = '';

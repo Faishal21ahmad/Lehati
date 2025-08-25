@@ -14,7 +14,7 @@ view
   |   |   |=navgroup
   |   |   |=navlink  # component pecahan list link pada sidebar
   |   |=/icon
-  |=/livewire 
+  |=/livewire
   |   |=/auth
   |   |   |=login
   |   |   |=register
@@ -28,3 +28,14 @@ view
   |   |=/account
   |   |=/profile
   |   |=/userup
+
+
+
+  =/Controller
+    =/app/livewire
+      =/Room/LiveBidding
+
+
+  =/view
+    =/resources/views/livewire
+      =/Room/LiveBidding

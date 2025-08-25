@@ -14,12 +14,10 @@
             <x-table.tbody>
                 @forelse($transactions as $transaction)
                     <x-table.tr>
-                        {{-- <x-table.td>{{ $loop->iteration }}</x-table.td> --}}
                         <x-table.td>{{ ($transactions->currentPage() - 1) * $transactions->perPage() + $loop->iteration }}</x-table.td>
-                        
                         <x-table.td>{{ $transaction->code_transaksi }}</x-table.td>
                         <x-table.td>
-                           <span @class(['rounded-full text-white px-3 py-1',
+                            <span @class(['rounded-full text-white px-3 py-1',
                                 'bg-red-700' => in_array($transaction->status, ['unpaid', 'failed']),
                                 'bg-yellow-700' => $transaction->status === 'payment-verification',
                                 'bg-green-700' => $transaction->status === 'success',

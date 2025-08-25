@@ -3,9 +3,11 @@
     
     <div class="">
         <div class="flex gap-2 items-center mb-2">
+            {{-- add Room --}}
             <x-button.btnaccorlink navigate=true  href="{{ route('room.create') }}">
                 {{ __('Add Room') }}
             </x-button.btnaccorlink>
+            {{-- component input search --}}
             <x-input.search id="search" class="w-3/5" />
         </div>
         <div class="">

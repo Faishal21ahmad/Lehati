@@ -16,16 +16,20 @@ class TransactionForm extends Component
     use WithFileUploads;
     public $transaksi, $codetransaksi, $filepayment, $imagepayprof, $notes, $status;
 
+    // Load inisialisasi data transaksi
     public function mount($codetransaksi = null)
     {
+        // Load data transaksi berdasarkan code transaksi
         $this->transaksi = Transaction::where('code_transaksi', $codetransaksi)->first();
+        // Jika data transaksi tidak ditemukan, tampilkan halaman 404
         if (!$this->transaksi) {
             abort(404, 'Transaksi not found');
         }
+        // Inisialisasi bukti transaksi dari data transaksi
         $this->imagepayprof = $this->transaksi->payment_proof ?? null;
     }
 
-    // Upload Bukti Pembayaran
+    // action Upload Bukti Pembayaran
     public function paymenproof()
     {   // validasi input bukti pembayaran
         $this->validate([
@@ -39,6 +43,7 @@ class TransactionForm extends Component
 
         try {
             DB::beginTransaction();
+            // Jika ada file bukti pembayaran yang diunggah
             if (!empty($this->filepayment)) {
                 // Simpan Image ke storage 
                 $path = $this->filepayment->store('payproof', 'public');
@@ -71,7 +76,7 @@ class TransactionForm extends Component
         }
     }
 
-    // Verfikasi Pembayaran oleh Admin
+    // action Verfikasi Pembayaran oleh Admin
     public function paymenVerification()
     {   // validasi input verfikasi pembayaran 
         $this->validate([
@@ -84,16 +89,18 @@ class TransactionForm extends Component
 
         try {
             DB::beginTransaction();
-
+            // load data product dari transaksi 
             $product = $this->transaksi->bid->room->product;
             $status = $this->status === 'approve' ? 'success' : 'failed';
             $productStatus = $this->status === 'approve' ? 'sold' : 'available';
 
+            // update status product dan transaksi
             Product::updateOrCreate(
                 ['id' => $product->id],
                 ['status' => $productStatus]
             );
 
+            // update data transaksi 
             Transaction::updateOrCreate([
                 'code_transaksi' => $this->transaksi->code_transaksi
             ], [
@@ -108,10 +115,12 @@ class TransactionForm extends Component
                 'type' => 'success',
                 'duration' => 5000
             ]);
-
+            // direct ke halaman detail transaksi
             $this->redirectIntended(default: route('transaction.detail', $this->transaksi->code_transaksi, absolute: false));
 
             DB::commit();
+
+            // jika data gagal di proses tampilkan pesan error 
         } catch (ValidationException $e) {
             DB::rollBack();
             $this->dispatch( // triger notifikasi 

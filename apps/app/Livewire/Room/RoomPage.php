@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\WithPagination;
 
 #[Layout('components.layouts.app', ['title' => "Room"])]
-class RoomPage extends Component
+class RoomPage extends Component // Halaman List Room User
 {
     use WithPagination;
     public $query = '';

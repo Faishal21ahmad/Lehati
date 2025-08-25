@@ -19,6 +19,7 @@ class ProductForm extends Component
     public $newImages = [];
     public $existingImages = [];
 
+    // Load inisialisasi data 
     public function mount($id = null)
     {
         if ($id) {
@@ -38,6 +39,7 @@ class ProductForm extends Component
             return ['id' => $img->id, 'image_path' => $img->image_path];
         })->toArray();
     }
+
     // Function save update atau create Product
     public function save()
     {
@@ -68,8 +70,9 @@ class ProductForm extends Component
             'newImages.*.mimes' => 'Gambar harus berformat jpeg, png, jpg, atau gif.',
             'newImages.*.max'   => 'Ukuran setiap gambar maksimal 2MB.',
         ]);
-
+        // ambil data user yang sedang login
         $user = Auth::user();
+        // simpan data product
         $product = Product::updateOrCreate(
             ['id' => $this->productId],
             [
@@ -81,8 +84,7 @@ class ProductForm extends Component
                 'status' => 'available',
             ]
         );
-
-
+        // Simpan gambar baru jika ada upload
         if (!empty($this->newImages)) {
             foreach ($this->newImages as $image) {
                 $path = $image->store('products', 'public');
@@ -93,22 +95,24 @@ class ProductForm extends Component
             $product->images()->create(['image_path' => 'products.png']);
         }
 
-
         session()->flash('toast', [ // triger notifikasi 
             'id' => uniqid(),
             'message' => __($this->productId ? 'Product successfully updated' : 'Product added successfully'),
             'type' => 'success', // 'error', 'success' ,'info'
             'duration' => 5000
         ]);
+        // Redirect ke halaman edit product
         $this->redirectIntended(default: route('product.edit', $product->id, absolute: false), navigate: false);
     }
 
     // Menghapus image
     public function removeImage($id)
     {
+        // Load image bedasarkan id
         $image = ImageProduct::find($id);
+        // jika image ada maka hapus dari storage dan database
         if ($image) {
-            // Simpan image ke storage 
+            // delete image from storage
             Storage::disk('public')->delete($image->image_path);
             $image->delete();
 
@@ -127,7 +131,7 @@ class ProductForm extends Component
                 'type' => 'success',  // 'error', 'success' ,'info'
                 'duration' => 5000
             ]);
-        } else {
+        } else { // jika image tidak ada
             session()->flash('toast', [ // triger notifikasi 
                 'id' => uniqid(),
                 'message' => __('Image Failed to delete'),
@@ -135,6 +139,7 @@ class ProductForm extends Component
                 'duration' => 5000
             ]);
         }
+        // Redirect ke halaman edit product
         $this->redirectIntended(default: route('product.edit', $this->productId, absolute: false), navigate: false);
     }
 

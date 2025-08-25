@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 class DataUser extends Component
 {
     public $phone, $address, $nik, $gender, $bank, $bank_name, $bank_number;
-    
+    // Load inisialisasi data user
     public function mount(): void
     {
         $user = Auth::user();
@@ -25,7 +25,7 @@ class DataUser extends Component
         $this->bank_number = $userData->bank_number ?? '';
     }
 
-    // Save / Update User Data
+    // Save or Update User Data
     public function updateUserData(): void
     {
         // Validasi input Data User
@@ -68,7 +68,9 @@ class DataUser extends Component
         ]);
 
         try {
+            // load data user dari auth
             $user = Auth::user();
+            // update atau simpan data user
             UserData::updateOrCreate(
                 ['user_id' => $user->id],
                 [
@@ -87,6 +89,8 @@ class DataUser extends Component
                 type: 'success', // 'error', 'success' ,'info'
                 duration: 5000
             );
+
+            // jika perubahan gagal tampilkan pesan error
         } catch (\Illuminate\Validation\ValidationException $e) {
             $this->dispatch( // triger notifikasi 
                 'showToast',

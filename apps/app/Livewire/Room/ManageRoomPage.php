@@ -10,7 +10,7 @@ use Livewire\Attributes\Layout;
 use Illuminate\Support\Facades\Auth;
 
 #[Layout('components.layouts.app', ['title' => "Rooms"])]
-class ManageRoomPage extends Component
+class ManageRoomPage extends Component // Halaman list Manajemen Room User
 {
     use WithPagination;
 
@@ -19,7 +19,7 @@ class ManageRoomPage extends Component
     public $deleteId = '';
     public $roomcode = '';
 
-    // function konfirmasi delete 
+    // function button konfirmasi delete 
     public function confirmDelete($id)
     {
         $this->deleteId = $id;
@@ -27,7 +27,7 @@ class ManageRoomPage extends Component
         $this->showModal = true;
     }
 
-    // Function Delete 
+    // Function button Delete 
     public function delete()
     {
         try {
@@ -46,6 +46,8 @@ class ManageRoomPage extends Component
                 type: 'success', // 'error', 'success' ,'info'
                 duration: 5000
             );
+
+        // jika data tidak bisa dihapus karena sudah ada relasi dengan table lain    
         } catch (\Exception $e) {
             $this->dispatch( // triger notifikasi 
                 'showToast',
@@ -56,6 +58,7 @@ class ManageRoomPage extends Component
         }
     }
 
+    // Render data ke view
     public function render()
     {   // Ambil data Room + query search
         $user = Auth::user();

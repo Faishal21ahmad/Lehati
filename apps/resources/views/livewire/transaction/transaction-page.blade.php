@@ -13,9 +13,8 @@
                 <x-table.th>action</x-table.th>
             </x-table.thead>
             <x-table.tbody>
-                @forelse($transactions as $transaction)
+                @forelse($transactions as $transaction) 
                     <x-table.tr>
-                        {{-- <x-table.td>{{ $loop->iteration }}</x-table.td> --}}
                         <x-table.td>{{ ($transactions->currentPage() - 1) * $transactions->perPage() + $loop->iteration }}</x-table.td>
                         <x-table.td>{{ $transaction->code_transaksi }}</x-table.td>
                         <x-table.td>

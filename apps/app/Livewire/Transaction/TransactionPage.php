@@ -8,8 +8,8 @@ use Livewire\Attributes\Layout;
 use Illuminate\Support\Facades\Auth;
 use Livewire\WithPagination;
 
-#[Layout('components.layouts.app',  ['title' => "Transaction"])]
-class TransactionPage extends Component
+#[Layout('components.layouts.app',  ['title' => "Transaction"])] 
+class TransactionPage extends Component // Halaman Data Transaksi User
 {
     use WithPagination;
     public $query = '';
